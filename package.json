@@ -1,6 +1,11 @@
 {
   "name": "data-table",
   "description": "A JavaScript library that creates HTML tables",
+  "homepage": "https://github.com/ashermorgan/data-table#readme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ashermorgan/data-table.git"
+  },
   "main": "src/data-table.js",
   "scripts": {
     "test": "node ./node_modules/mocha/bin/mocha tests"
