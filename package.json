@@ -6,12 +6,17 @@
     "type": "git",
     "url": "https://github.com/ashermorgan/data-table.git"
   },
-  "main": "src/data-table.js",
+  "main": "dist/data-table.js",
   "scripts": {
-    "test": "node ./node_modules/mocha/bin/mocha tests"
+    "test": "node ./node_modules/mocha/bin/mocha tests",
+    "build": "node ./node_modules/gulp/bin/gulp"
   },
   "devDependencies": {
     "chai": "^4.3.4",
+    "gulp": "^4.0.2",
+    "gulp-clean-css": "^4.3.0",
+    "gulp-rename": "^2.0.0",
+    "gulp-uglify": "^3.0.2",
     "jsdom": "^16.5.2",
     "mocha": "^8.3.2",
     "sinon": "^10.0.1"
