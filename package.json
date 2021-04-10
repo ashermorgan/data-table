@@ -1,5 +1,14 @@
 {
   "name": "data-table",
   "description": "A JavaScript library that creates HTML tables",
-  "main": "src/data-table.js"
+  "main": "src/data-table.js",
+  "scripts": {
+    "test": "node ./node_modules/mocha/bin/mocha tests"
+  },
+  "devDependencies": {
+    "chai": "^4.3.4",
+    "jsdom": "^16.5.2",
+    "mocha": "^8.3.2",
+    "sinon": "^10.0.1"
+  }
 }

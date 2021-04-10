@@ -30,14 +30,15 @@ let DataTable = function(selector, data) {
 
         // Add table header
         if (this.data.length > 0) {
-            divHTML += "<tr>"
+            divHTML += "<thead><tr>"
             for (let i = 0; i < this.data[0].length; i++) {
                 divHTML += `<th>${this.data[0][i]}</th>`;
             }
-            divHTML += "</tr>";
+            divHTML += "</thead></tr>";
         }
 
         // Add table body
+        divHTML += "<tbody>";
         for (let row of this.data.slice(1)) {
             divHTML += "<tr>";
             for (let column of row) {
@@ -45,6 +46,7 @@ let DataTable = function(selector, data) {
             }
             divHTML += "</tr>";
         }
+        divHTML += "</tbody>";
 
         // Set div content
         divHTML += "</table>";
