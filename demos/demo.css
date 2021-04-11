@@ -1,0 +1,31 @@
+body, h1, h2, code, p, noscript, ul, li {
+    margin: 0px;
+    padding: 0px;
+}
+body {
+    font-family: Segoe UI, sans-serif;
+    background-color: #ffffff;
+    color: #000000;
+    padding: 20px;
+}
+h1 {
+    margin-bottom: 10px;
+}
+h2 {
+    margin-top: 15px;
+    margin-bottom: 5px;
+}
+code {
+    display: inline-block;
+    padding: 10px;
+    background-color: #f0f0f0;
+    box-shadow: 0 0 15px #c0c0c0;
+}
+noscript {
+    text-align: center;
+    color: #ff0000;
+}
+ul {
+    margin-top: 10px;
+    padding-left: 20px;
+}

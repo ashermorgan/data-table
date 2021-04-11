@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width">
+        <title>Basic demo - data-table</title>
+        <link rel="stylesheet" href="demo.css">
+        <script src="demo.js"></script>
+
+        <!-- External scripts aren't loaded by createDemo() method -->
+        <script src="../dist/data-table.min.js"></script>
+    </head>
+    <body>
+        <noscript>
+            <p>This demo requires JavaScript</p>
+        </noscript>
+        <div id="content"></div>
+        <script>
+            let html = `
+                <script src="../dist/data-table.min.js"><\/script>
+                <link rel="stylesheet" href="../dist/data-table.min.css">
+                <div id="mytable"></div>
+            `;
+            let js = `
+                const data = [
+                \t["a1", "a2", "a3"],
+                \t["b1", "b2", "b3"],
+                \t["c1", "c2", "c3"]
+                ];
+                new DataTable("#mytable", data);
+            `;
+            let css = `
+                #mytable {
+                \twidth: 300px;
+                }
+            `;
+            createDemo("#content", "data-table basic demo", html, js, css);
+        </script>
+    </body>
+</html>

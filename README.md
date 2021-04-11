@@ -3,6 +3,11 @@ A JavaScript library that creates HTML tables
 
 
 
+## Demos
+Demos of data-table are avilable [here](https://ashermorgan.github.io/data-table/demos)
+
+
+
 ## Getting Started
 1. Download `data-table.min.css` and `data-table.min.js` from the [releases page](https://github.com/ashermorgan/data-table/releases) or the [dist directory](https://github.com/ashermorgan/data-table/tree/master/dist)
 
