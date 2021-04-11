@@ -1,5 +1,5 @@
 /*
- * data-table
+ * data-table 0.1.0
  * (c) 2021 Asher Morgan (MIT)
  * https://github.com/ashermorgan/data-table
  */

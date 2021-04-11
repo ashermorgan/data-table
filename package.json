@@ -1,6 +1,7 @@
 {
   "name": "data-table",
   "description": "A JavaScript library that creates HTML tables",
+  "version": "0.1.0",
   "license": "MIT",
   "homepage": "https://github.com/ashermorgan/data-table#readme",
   "repository": {
