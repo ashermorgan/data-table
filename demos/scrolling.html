@@ -50,7 +50,10 @@
                 \t["Y01", "Y02", "Y03", "Y04", "Y05", "Y06", "Y07", "Y08", "Y09", "Y10", "Y11", "Y12", "Y13", "Y14", "Y15"],
                 \t["Z01", "Z02", "Z03", "Z04", "Z05", "Z06", "Z07", "Z08", "Z09", "Z10", "Z11", "Z12", "Z13", "Z14", "Z15"]
                 ];
-                new DataTable("#mytable", data);
+                new DataTable("#mytable", {
+                \theaders: data[0],
+                \tdata: data.slice(1)
+                });
             `;
             let css = `
                 #mytable {

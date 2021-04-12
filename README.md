@@ -36,10 +36,26 @@ Demos of data-table are avilable [here](https://ashermorgan.github.io/data-table
 
 ## Documentation
 ### Constructor
-Creates a new table. This method takes two arguments, `selector` and `data`.
-`selector` is the table selector string and `data` is a two dimensional array that contains the table data.
+Creates a new table. This method takes two arguments, `selector` and `options`.
+`selector` is the table selector string and `options` is an object that contains the table settings (see below). If no value is provided for an option, the default value will be used.
+
+#### data
+A two dimensional array that contains the table data. The default value is an empty array.
 ```JS
-let myDataTable = new DataTable("#selector", [["a1", "b1"], ["a2", "b2"]]);
+let myDataTable = new DataTable("#selector", {
+    data: [
+        ["a1", "b1"],
+        ["a2", "b2"]
+    ]
+});
+```
+
+#### headers
+An array that contains the table headers. The default value is an empty array.
+```JS
+let myDataTable = new DataTable("#selector", {
+    headers: ["header 1", "header 2"]
+});
 ```
 
 
@@ -49,15 +65,25 @@ A two dimensional array that contains the table data.
 The table will update automatically when this property is modified.
 ```JS
 let data = [["a1", "b1"], ["a2", "b2"]];
-let myDataTable = new DataTable("#selector", data);
+let myDataTable = new DataTable("#selector", { data: data });
 console.log(myDataTable.data);  // [["a1", "b1"], ["a2", "b2"]]
 myDataTable.data = [["c3", "d3"], ["c4", "d4"]];
+```
+
+#### headers
+An array that contains the table headers.
+The table will update automatically when this property is modified.
+```JS
+let data = ["header 1", "header 2"];
+let myDataTable = new DataTable("#selector", { headers: headers });
+console.log(myDataTable.headers);  // ["header 1", "header 2"]
+myDataTable.headers = ["header 3", "header 4"];
 ```
 
 #### selector
 A string that contains the table selector. This property cannot be modified.
 ```JS
-let myDataTable = new DataTable("#selector", data);
+let myDataTable = new DataTable("#selector");
 console.log(myDataTable.selector);  // "#selector"
 ```
 
@@ -74,6 +100,6 @@ Renders the table. This method doesn't take any arguments.
 If there is already content inside the table it will be overwritten.
 NOTE: The table will be rendered automatically on initialization and whenever the `data` property is modified.
 ```JS
-let myDataTable = new DataTable("#selector", data);
+let myDataTable = new DataTable("#selector");
 myDataTable.render()
 ```
