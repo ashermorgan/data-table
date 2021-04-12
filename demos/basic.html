@@ -8,7 +8,7 @@
         <script src="demo.js"></script>
 
         <!-- External scripts aren't loaded by createDemo() method -->
-        <script src="../dist/data-table.min.js"></script>
+        <script src="../src/data-table.js"></script>
     </head>
     <body>
         <noscript>
@@ -17,8 +17,8 @@
         <div id="content"></div>
         <script>
             let html = `
-                <script src="../dist/data-table.min.js"><\/script>
-                <link rel="stylesheet" href="../dist/data-table.min.css">
+                <script src="../src/data-table.js"><\/script>
+                <link rel="stylesheet" href="../src/data-table.css">
                 <div id="mytable"></div>
             `;
             let js = `

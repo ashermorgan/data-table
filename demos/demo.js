@@ -38,8 +38,8 @@ function format(string) {
     string = string.replaceAll("\t", "&emsp;");
 
     // Simplify JS and CSS urls
-    string = string.replaceAll("src=\"..\/dist\/data-table.min.js\"", "src=\"data-table.min.js\"");
-    string = string.replaceAll("href=\"..\/dist\/data-table.min.css\"", "href=\"data-table.min.css\"");
+    string = string.replaceAll("src=\"..\/src\/data-table.js\"", "src=\"data-table.min.js\"");
+    string = string.replaceAll("href=\"..\/src\/data-table.css\"", "href=\"data-table.min.css\"");
 
     // Return formated string
     return string;
