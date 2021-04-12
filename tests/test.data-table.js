@@ -15,27 +15,6 @@ describe("DataTable class", function() {
         global.document = oldDocument;
     });
 
-    describe("Selector property", function() {
-        it("Should be equal to the table selector", function() {
-            // Create table
-            let dt = new DataTable("#mytable", []);
-
-            // Assert selector property is correct
-            expect(dt.selector).to.equal("#mytable");
-        });
-
-        it("Should not be changeable", function() {
-            // Create table
-            let dt = new DataTable("#mytable", []);
-
-            // Attempt to change selector
-            dt.selector = "#mytable2";
-
-            // Assert selector property not set
-            expect(dt.selector).to.equal("#mytable");
-        });
-    });
-
     describe("Data property", function() {
         it("Should be equal to the table data", function() {
             // Create table
@@ -72,6 +51,33 @@ describe("DataTable class", function() {
                 render.restore();
             }
         });
+    });
+
+    describe("Selector property", function() {
+        it("Should be equal to the table selector", function() {
+            // Create table
+            let dt = new DataTable("#mytable", []);
+
+            // Assert selector property is correct
+            expect(dt.selector).to.equal("#mytable");
+        });
+
+        it("Should not be changeable", function() {
+            // Create table
+            let dt = new DataTable("#mytable", []);
+
+            // Attempt to change selector
+            dt.selector = "#mytable2";
+
+            // Assert selector property not set
+            expect(dt.selector).to.equal("#mytable");
+        });
+    });
+
+    describe("Version static property", function() {
+        it("Should be equal to the version in package.json", function() {
+            expect(DataTable.version).to.equal(require("../package.json").version);
+        })
     });
 
     describe("Render method", function() {

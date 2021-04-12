@@ -4,17 +4,21 @@
  * @param {Array} data The table data
  */
 let DataTable = function(selector, data) {
-    // Fields
-    let _selector = selector;
+    /**
+     * The table data
+     */
     let _data = data;
-
-    // Properties
-    Object.defineProperty(this, "selector", {
-        get: function() { return _selector; }
-    });
     Object.defineProperty(this, "data", {
         get: function() { return _data; },
         set: function(value) { _data=value; this.render(); }
+    });
+
+    /**
+     * The table selector
+     */
+    let _selector = selector;
+    Object.defineProperty(this, "selector", {
+        get: function() { return _selector; }
     });
 
     /**
@@ -56,6 +60,15 @@ let DataTable = function(selector, data) {
     // Render table
     this.render();
 }
+
+
+
+/**
+ * The library version
+ */
+Object.defineProperty(DataTable, "version", {
+    get: function() { return "0.1.0"; }
+});
 
 
 
