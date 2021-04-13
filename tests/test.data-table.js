@@ -29,7 +29,7 @@ describe("DataTable class", function() {
             let dt = new DataTable("#mytable");
 
             // Assert properties are correct
-            expect(dt.data).to.deep.equal([]);
+            expect(dt.body).to.deep.equal([]);
             expect(dt.headers).to.deep.equal([]);
         });
 
@@ -38,7 +38,7 @@ describe("DataTable class", function() {
             let dt = new DataTable("#mytable", {});
 
             // Assert properties are correct
-            expect(dt.data).to.deep.equal([]);
+            expect(dt.body).to.deep.equal([]);
             expect(dt.headers).to.deep.equal([]);
         });
 
@@ -46,7 +46,7 @@ describe("DataTable class", function() {
             // Create table
             let dt = new DataTable("#mytable", {
                 headers: ["a", "b", "c"],
-                data: [
+                body: [
                     ["a1", "b1", "c1"],
                     ["a2", "b2", "c2"],
                     ["a3", "b3", "c3"]
@@ -54,7 +54,7 @@ describe("DataTable class", function() {
             });
 
             // Assert properties are correct
-            expect(dt.data).to.deep.equal([
+            expect(dt.body).to.deep.equal([
                 ["a1", "b1", "c1"],
                 ["a2", "b2", "c2"],
                 ["a3", "b3", "c3"]
@@ -63,7 +63,7 @@ describe("DataTable class", function() {
         });
     });
 
-    describe("Data property", function() {
+    describe("Body property", function() {
         it("Should call render method when updated", function() {
             // Create table
             let dt = new DataTable("#mytable");
@@ -72,14 +72,14 @@ describe("DataTable class", function() {
             let render = sinon.stub(dt, "render");
 
             try {
-                // Set data property
-                dt.data = [["a1", "b1", "c1"]];
+                // Set body property
+                dt.body = [["a1", "b1", "c1"]];
 
                 // Assert DataTable.render called
                 expect(render.calledOnce).to.be.true;
 
-                // Assert data property is correct
-                expect(dt.data).to.deep.equal([["a1", "b1", "c1"]]);
+                // Assert body property is correct
+                expect(dt.body).to.deep.equal([["a1", "b1", "c1"]]);
             }
             finally {
                 // Restore DataTable.render method
@@ -137,7 +137,7 @@ describe("DataTable class", function() {
             // Create table (calls render method)
             new DataTable("#mytable", {
                 headers: ["h1", "h2", "h3"],
-                data: [
+                body: [
                     ["a1", "b1", "c1"],
                     ["a2", "b2", "c2"],
                     ["a3", "b3", "c3"],
@@ -178,7 +178,7 @@ describe("DataTable class", function() {
         it("Should create table without headers correctly", function() {
             // Create table (calls render method)
             new DataTable("#mytable", {
-                data: [
+                body: [
                     ["a1", "b1", "c1"],
                     ["a2", "b2", "c2"],
                     ["a3", "b3", "c3"],
@@ -209,7 +209,7 @@ describe("DataTable class", function() {
             expect(global.document.querySelector("div.data-table").innerHTML).to.equal(expected);
         });
 
-        it("Should create table without data correctly", function() {
+        it("Should create table without body correctly", function() {
             // Create table (calls render method)
             new DataTable("#mytable", {
                 headers: ["h1", "h2", "h3"],

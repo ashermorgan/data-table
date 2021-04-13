@@ -5,12 +5,12 @@
  */
 let DataTable = function(selector, options) {
     /**
-     * The table data
+     * The table body data
      */
-    let _data = [];
-    Object.defineProperty(this, "data", {
-        get: function() { return _data; },
-        set: function(value) { _data=value; this.render(); }
+    let _body = [];
+    Object.defineProperty(this, "body", {
+        get: function() { return _body; },
+        set: function(value) { _body=value; this.render(); }
     });
 
     /**
@@ -43,7 +43,7 @@ let DataTable = function(selector, options) {
         // Set options
         if (options) {
             if (options.headers) _headers = options.headers;
-            if (options.data) _data = options.data;
+            if (options.body) _body = options.body;
         }
 
         // Render table
@@ -71,9 +71,9 @@ let DataTable = function(selector, options) {
         }
 
         // Add table body
-        if (this.data.length > 0) {
+        if (this.body.length > 0) {
             divHTML += "<tbody>";
-            for (let row of this.data) {
+            for (let row of this.body) {
                 divHTML += "<tr>";
                 for (let column of row) {
                     divHTML += `<td>${column}</td>`;
