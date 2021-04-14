@@ -16,6 +16,14 @@ describe("DataTable class", function() {
     });
 
     describe("Constructor", function() {
+        it("Should set searchQuery property", function() {
+            // Create table
+            let dt = new DataTable("#mytable");
+
+            // Assert searchQuery property is correct
+            expect(dt.searchQuery).to.equal("");
+        });
+
         it("Should set selector property", function() {
             // Create table
             let dt = new DataTable("#mytable");
@@ -110,6 +118,19 @@ describe("DataTable class", function() {
                 // Restore DataTable.render method
                 render.restore();
             }
+        });
+    });
+
+    describe("SearchQuery property", function() {
+        it("Should not be changeable", function() {
+            // Create table
+            let dt = new DataTable("#mytable");
+
+            // Attempt to change searchQuery
+            dt.searchQuery = "query2";
+
+            // Assert searchQuery not set
+            expect(dt.searchQuery).to.equal("");
         });
     });
 
@@ -238,6 +259,128 @@ describe("DataTable class", function() {
             <table>
             </table>`.replace(/\s/g, "");
             expect(global.document.querySelector("div.data-table").innerHTML).to.equal(expected);
+        });
+    });
+
+    describe("Search method", function() {
+        it("Should correctly show and hide rows", function() {
+            // Create table
+            let dt = new DataTable("#mytable", {
+                headers: ["English", "Spanish"],
+                body: [
+                    ["Red",     "Rojo"],
+                    ["Orange",  "Anaranjado"],
+                    ["Yellow",  "Amarillo"],
+                    ["Green",   "Verde"],
+                    ["Blue",    "Azúl"],
+                    ["Purple",  "Morado"]
+                ]
+            });
+
+            // Call search method
+            dt.search("or");
+
+            // Assert table is correct
+            let expected = `
+            <table>
+                <thead>
+                    <tr>
+                        <th>English</th>
+                        <th>Spanish</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Orange</td>
+                        <td>Anaranjado</td>
+                    </tr>
+                    <tr>
+                        <td>Purple</td>
+                        <td>Morado</td>
+                    </tr>
+                </tbody>
+            </table>`.replace(/\s/g, "");
+            expect(global.document.querySelector("div.data-table").innerHTML).to.equal(expected);
+        });
+
+        it("Should show all rows if query is empty", function() {
+            // Create table
+            let dt = new DataTable("#mytable", {
+                headers: ["English", "Spanish"],
+                body: [
+                    ["Red",     "Rojo"],
+                    ["Orange",  "Anaranjado"],
+                    ["Yellow",  "Amarillo"],
+                    ["Green",   "Verde"],
+                    ["Blue",    "Azúl"],
+                    ["Purple",  "Morado"]
+                ]
+            });
+            
+            // Search for a string that doesn't exist to hide rows
+            dt.search("x");
+
+            // Call search method with empty query
+            dt.search("");
+
+            // Assert table is correct
+            let expected = `
+            <table>
+                <thead>
+                    <tr>
+                        <th>English</th>
+                        <th>Spanish</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Red</td>
+                        <td>Rojo</td>
+                    </tr>
+                    <tr>
+                        <td>Orange</td>
+                        <td>Anaranjado</td>
+                    </tr>
+                    <tr>
+                        <td>Yellow</td>
+                        <td>Amarillo</td>
+                    </tr>
+                    <tr>
+                        <td>Green</td>
+                        <td>Verde</td>
+                    </tr>
+                    <tr>
+                        <td>Blue</td>
+                        <td>Azúl</td>
+                    </tr>
+                    <tr>
+                        <td>Purple</td>
+                        <td>Morado</td>
+                    </tr>
+                </tbody>
+            </table>`.replace(/\s/g, "");
+            expect(global.document.querySelector("div.data-table").innerHTML).to.equal(expected);
+        });
+
+        it("Should update searchQuery property", function() {
+            // Create table
+            let dt = new DataTable("#mytable", {
+                headers: ["English", "Spanish"],
+                body: [
+                    ["Red",     "Rojo"],
+                    ["Orange",  "Anaranjado"],
+                    ["Yellow",  "Amarillo"],
+                    ["Green",   "Verde"],
+                    ["Blue",    "Azúl"],
+                    ["Purple",  "Morado"]
+                ]
+            });
+
+            // Call search method
+            dt.search("or");
+
+            // Assert searchQuery is correct
+            expect(dt.searchQuery).to.equal("or");
         });
     });
 });

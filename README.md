@@ -79,6 +79,14 @@ console.log(myDataTable.headers);  // ["header 1", "header 2"]
 myDataTable.headers = ["header 3", "header 4"];
 ```
 
+#### searchQuery
+A string that contains the current search query. This property cannot be modified.
+```JS
+let myDataTable = new DataTable("#selector");
+myDataTable.search("my query");
+console.log(myDataTable.searchQuery);  // "my query"
+```
+
 #### selector
 A string that contains the table selector. This property cannot be modified.
 ```JS
@@ -100,5 +108,12 @@ If there is already content inside the table it will be overwritten.
 NOTE: The table will be rendered automatically on initialization and whenever the `body` and `headers` properties are modified.
 ```JS
 let myDataTable = new DataTable("#selector");
-myDataTable.render()
+myDataTable.render();
+```
+
+#### search
+Searches for a query in the table and hides rows that do not contain a match. This method takes one argument: `query`. If the query is an empty string, all rows will be shown.
+```JS
+let myDataTable = new DataTable("#selector");
+myDataTable.search("my query");
 ```

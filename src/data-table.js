@@ -10,7 +10,11 @@ let DataTable = function(selector, options) {
     let _body = [];
     Object.defineProperty(this, "body", {
         get: function() { return _body; },
-        set: function(value) { _body=value; this.render(); }
+        set: function(value) {
+            _body=value;
+            loadTableData();
+            this.render();
+        }
     });
 
     /**
@@ -19,7 +23,19 @@ let DataTable = function(selector, options) {
     let _headers = [];
     Object.defineProperty(this, "headers", {
         get: function() { return _headers; },
-        set: function(value) { _headers=value; this.render(); }
+        set: function(value) {
+            _headers=value;
+            loadTableData();
+            this.render();
+        }
+    });
+
+    /**
+     * The current search query
+     */
+    let _searchQuery = "";
+    Object.defineProperty(this, "searchQuery", {
+        get: function() { return _searchQuery; }
     });
 
     /**
@@ -29,6 +45,11 @@ let DataTable = function(selector, options) {
     Object.defineProperty(this, "selector", {
         get: function() { return _selector; }
     });
+
+    /**
+     * The processed table data
+     */
+    let tableData = { headers: [], body: [] };
 
     /**
      * Initialize the table
@@ -46,9 +67,32 @@ let DataTable = function(selector, options) {
             if (options.body) _body = options.body;
         }
 
+        // Load tableData
+        loadTableData();
+
         // Render table
         instance.render();
-    }
+    };
+
+    /**
+     * Load table data from the body and headers properties
+     */
+    let loadTableData = function() {
+        // Load table headers
+        tableData.headers = _headers;
+
+        // Load table body
+        tableData.body = [];
+        for (let row of _body) {
+            tableData.body.push({
+                visible: true,
+                columns: row,
+            });
+        }
+
+        // Update row visibilities
+        _search(_searchQuery);
+    };
 
     /**
      * Render the table
@@ -62,20 +106,24 @@ let DataTable = function(selector, options) {
         let divHTML = "<table>";
 
         // Add table header
-        if (this.headers.length > 0) {
-            divHTML += "<thead><tr>"
-            for (let i = 0; i < this.headers.length; i++) {
-                divHTML += `<th>${this.headers[i]}</th>`;
+        if (tableData.headers.length > 0) {
+            divHTML += "<thead><tr>";
+            for (let i = 0; i < tableData.headers.length; i++) {
+                divHTML += `<th>${tableData.headers[i]}</th>`;
             }
             divHTML += "</thead></tr>";
         }
 
         // Add table body
-        if (this.body.length > 0) {
+        if (tableData.body.length > 0) {
             divHTML += "<tbody>";
-            for (let row of this.body) {
+            for (let row of tableData.body) {
+                // Make sure row is visible
+                if (!row.visible) continue;
+
+                // Add row
                 divHTML += "<tr>";
-                for (let column of row) {
+                for (let column of row.columns) {
                     divHTML += `<td>${column}</td>`;
                 }
                 divHTML += "</tr>";
@@ -86,6 +134,33 @@ let DataTable = function(selector, options) {
         // Set div content
         divHTML += "</table>";
         div.innerHTML = divHTML;
+    };
+
+    /**
+     * Search for a query in the table and hide rows that do not contain a match
+     * @param {String} query The search query
+     */
+    let _search = function(query) {
+        // Search for query in table data
+        for (let row of tableData.body) {
+            row.visible = false;
+            for (let column of row.columns) {
+                if (column.toLowerCase().includes(query.toLowerCase())) {
+                    row.visible = true;
+                    break;
+                }
+            }
+        }
+
+        // Update searchQuery property
+        _searchQuery = query;
+    };
+    this.search = function(query) {
+        // Search for query
+        _search(query);
+
+        // Render table
+        this.render();
     }
 
     // Initialize the table

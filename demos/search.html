@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width">
+        <title>Search demo - data-table</title>
+        <link rel="stylesheet" href="demo.css">
+        <script src="demo.js"></script>
+
+        <!-- External scripts aren't loaded by createDemo() method -->
+        <script src="../src/data-table.js"></script>
+    </head>
+    <body>
+        <noscript>
+            <p>This demo requires JavaScript</p>
+        </noscript>
+        <div id="content"></div>
+        <script>
+            let html = `
+                <script src="../src/data-table.js"><\/script>
+                <link rel="stylesheet" href="../src/data-table.css">
+                <input id="searchBar" type="text" placeholder="Search" oninput="table.search(document.getElementById('searchBar').value)">
+                <div id="mytable"></div>
+            `;
+            let js = `
+                window.table = new DataTable("#mytable", {
+                \theaders: ["English", "Spanish"], 
+                \tbody: [
+                \t\t["Red", "Rojo"],
+                \t\t["Orange", "Anaranjado"],
+                \t\t["Yellow", "Amarillo"],
+                \t\t["Green", "Verde"],
+                \t\t["Blue", "Azúl"],
+                \t\t["Purple", "Morado"]
+                \t]
+                });
+            `;
+            let css = `
+                #searchBar {
+                \tmargin-bottom: 10px;
+                }
+                #mytable {
+                \twidth: 250px;
+                \theight: 250px;
+                }
+            `;
+            createDemo("#content", "data-table search demo", html, js, css);
+        </script>
+    </body>
+</html>
