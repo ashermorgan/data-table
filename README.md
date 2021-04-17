@@ -4,7 +4,7 @@ A JavaScript library that creates HTML tables
 
 
 ## Demos
-Demos of data-table are avilable [here](https://ashermorgan.github.io/data-table/demos)
+Demos of data-table are available [here](https://ashermorgan.github.io/data-table/demos)
 
 
 
@@ -94,6 +94,24 @@ let myDataTable = new DataTable("#selector");
 console.log(myDataTable.selector);  // "#selector"
 ```
 
+#### sortAscending
+A boolean that indicates whether the table is currently sorted in ascending order. If the table isn't sorted, it will be `null`. This property cannot be modified.
+```JS
+let myDataTable = new DataTable("#selector");
+console.log(myDataTable.sortAscending);  // null
+myDataTable.sort(2, false);
+console.log(myDataTable.sortAscending);  // false
+```
+
+#### sortIndex
+The (zero-based) index of the column that the table is currently sorted by. If the table isn't sorted, it will be `null`. This property cannot be modified.
+```JS
+let myDataTable = new DataTable("#selector");
+console.log(myDataTable.sortIndex);  // null
+myDataTable.sort(2, false);
+console.log(myDataTable.sortIndex);  // 2
+```
+
 #### version
 The current library version. This is a static property and cannot be modified.
 ```JS
@@ -116,4 +134,11 @@ Searches for a query in the table and hides rows that do not contain a match. Th
 ```JS
 let myDataTable = new DataTable("#selector");
 myDataTable.search("my query");
+```
+
+#### sort
+Sorts the table by the values in a column. This method takes two arguments: `index` and `ascending`. `index` is the (zero-based) index of the column to sort by and `ascending` is whether to sort in ascending order. If `ascending` is `null`, the original table ordering will be restored.
+```JS
+let myDataTable = new DataTable("#selector");
+myDataTable.sort(2, false);
 ```

@@ -47,6 +47,22 @@ let DataTable = function(selector, options) {
     });
 
     /**
+     * Whether the table is sorted in ascending order
+     */
+    let _sortAscending = null;
+    Object.defineProperty(this, "sortAscending", {
+        get: function() { return _sortAscending; }
+    });
+
+    /**
+     * The index of the column that the table is sorted by
+     */
+    let _sortIndex = null;
+    Object.defineProperty(this, "sortIndex", {
+        get: function() { return _sortIndex; }
+    });
+
+    /**
      * The processed table data
      */
     let tableData = { headers: [], body: [] };
@@ -83,15 +99,28 @@ let DataTable = function(selector, options) {
 
         // Load table body
         tableData.body = [];
-        for (let row of _body) {
+        for (let i = 0; i < _body.length; i++) {
             tableData.body.push({
                 visible: true,
-                columns: row,
+                columns: _body[i],
+                row: i,
             });
         }
 
         // Update row visibilities
         _search(_searchQuery);
+
+        // Save current sort properties
+        let sortIndex = _sortIndex;
+        let sortAscending = _sortAscending;
+
+        // Update sort properties
+        // _sort method will not sort rows if they already appear to be sorted
+        _sortIndex = null;
+        _sortAscending = null;
+
+        // Sort rows
+        _sort(sortIndex, sortAscending);
     };
 
     /**
@@ -158,6 +187,52 @@ let DataTable = function(selector, options) {
     this.search = function(query) {
         // Search for query
         _search(query);
+
+        // Render table
+        this.render();
+    }
+
+    /**
+     * Sort the table by the values in a column
+     * @param {Number} index The column index
+     * @param {Boolean} ascending Whether to sort the column in ascending order
+     */
+    let _sort = function(index, ascending) {
+        if (_sortIndex === index && _sortAscending === ascending) { 
+            // Data is already sorted by correct column AND in correct direction
+        }
+        else if (index < 0 || index >= tableData.headers.length || ascending === null) {
+            // Restore original order
+            tableData.body.sort((a, b) => {
+                if (a.row < b.row) return -1;
+                else return 1;
+            });
+
+            // Set sort properties
+            index = null;
+            ascending = null;
+        }
+        else if (_sortIndex === index && _sortAscending !== ascending) {
+            // Data is sorted by correct column but in wrong direction
+            tableData.body.reverse();
+        }
+        else {
+            // Data is sorted by incorrect column
+            tableData.body.sort((a, b) => {
+                if (a.columns[index] === b.columns[index]) return 0;
+                else if (a.columns[index] < b.columns[index]) return -1;
+                else return 1;
+            });
+            if (!ascending) tableData.body.reverse();
+        }
+
+        // Set sort properties
+        _sortIndex = index;
+        _sortAscending = ascending;
+    }
+    this.sort = function(index, ascending) {
+        // Sort table
+        _sort(index, ascending);
 
         // Render table
         this.render();

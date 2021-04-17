@@ -32,6 +32,22 @@ describe("DataTable class", function() {
             expect(dt.selector).to.equal("#mytable");
         });
 
+        it("Should set sortAscending property", function() {
+            // Create table
+            let dt = new DataTable("#mytable");
+
+            // Assert sortAscending property is correct
+            expect(dt.sortAscending).to.equal(null);
+        });
+
+        it("Should set sortIndex property", function() {
+            // Create table
+            let dt = new DataTable("#mytable");
+
+            // Assert sortIndex property is correct
+            expect(dt.sortIndex).to.equal(null);
+        });
+
         it("Should set properties to default values if options is undefined", function() {
             // Create table
             let dt = new DataTable("#mytable");
@@ -94,6 +110,62 @@ describe("DataTable class", function() {
                 render.restore();
             }
         });
+
+        it("Should not modify search query or sort properties when updated", function() {
+            // Create table
+            let dt = new DataTable("#mytable", {
+                headers: ["English", "Spanish"],
+                body: [
+                    ["Red",     "Rojo"],
+                    ["Orange",  "Anaranjado"],
+                    ["Yellow",  "Amarillo"],
+                    ["Green",   "Verde"],
+                    ["Blue",    "Azúl"],
+                    ["Purple",  "Morado"]
+                ]
+            });
+
+            // Sort and filter table
+            dt.search("or");
+            dt.sort(1, false);
+
+            // Set body property
+            dt.body = [
+                ["Red",     "Roja"],
+                ["Orange",  "Anaranjada"],
+                ["Yellow",  "Amarilla"],
+                ["Green",   "Verde"],
+                ["Blue",    "Azúl"],
+                ["Purple",  "Morada"]
+            ];
+
+            // Assert search query and sort properties are correct
+            expect(dt.searchQuery).to.equal("or");
+            expect(dt.sortIndex).to.equal(1);
+            expect(dt.sortAscending).to.equal(false);
+
+            // Assert table is correct
+            let expected = `
+            <table>
+                <thead>
+                    <tr>
+                        <th>English</th>
+                        <th>Spanish</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Purple</td>
+                        <td>Morada</td>
+                    </tr>
+                    <tr>
+                        <td>Orange</td>
+                        <td>Anaranjada</td>
+                    </tr>
+                </tbody>
+            </table>`.replace(/\s/g, "");
+            expect(global.document.querySelector("div.data-table").innerHTML).to.equal(expected);
+        });
     });
 
     describe("Headers property", function() {
@@ -119,6 +191,55 @@ describe("DataTable class", function() {
                 render.restore();
             }
         });
+
+        it("Should not modify search query or sort properties when updated", function() {
+            // Create table
+            let dt = new DataTable("#mytable", {
+                headers: ["English", "Spanish"],
+                body: [
+                    ["Red",     "Rojo"],
+                    ["Orange",  "Anaranjado"],
+                    ["Yellow",  "Amarillo"],
+                    ["Green",   "Verde"],
+                    ["Blue",    "Azúl"],
+                    ["Purple",  "Morado"]
+                ]
+            });
+
+            // Sort and filter table
+            dt.search("or");
+            dt.sort(1, false);
+
+            // Set headers property
+            dt.headers = ["English", "Español"];
+
+            // Assert search query and sort properties are correct
+            expect(dt.searchQuery).to.equal("or");
+            expect(dt.sortIndex).to.equal(1);
+            expect(dt.sortAscending).to.equal(false);
+
+            // Assert table is correct
+            let expected = `
+            <table>
+                <thead>
+                    <tr>
+                        <th>English</th>
+                        <th>Español</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Purple</td>
+                        <td>Morado</td>
+                    </tr>
+                    <tr>
+                        <td>Orange</td>
+                        <td>Anaranjado</td>
+                    </tr>
+                </tbody>
+            </table>`.replace(/\s/g, "");
+            expect(global.document.querySelector("div.data-table").innerHTML).to.equal(expected);
+        });
     });
 
     describe("SearchQuery property", function() {
@@ -142,8 +263,34 @@ describe("DataTable class", function() {
             // Attempt to change selector
             dt.selector = "#mytable2";
 
-            // Assert selector property not set
+            // Assert selector not set
             expect(dt.selector).to.equal("#mytable");
+        });
+    });
+
+    describe("sortAscending property", function() {
+        it("Should not be changeable", function() {
+            // Create table
+            let dt = new DataTable("#mytable");
+
+            // Attempt to change sortAscending
+            dt.sortAscending = false;
+
+            // Assert sortAscending not set
+            expect(dt.sortAscending).to.equal(null);
+        });
+    });
+
+    describe("SortIndex property", function() {
+        it("Should not be changeable", function() {
+            // Create table
+            let dt = new DataTable("#mytable");
+
+            // Attempt to change sortIndex
+            dt.sortIndex = 2;
+
+            // Assert sortIndex not set
+            expect(dt.sortIndex).to.equal(null);
         });
     });
 
@@ -316,7 +463,7 @@ describe("DataTable class", function() {
                     ["Purple",  "Morado"]
                 ]
             });
-            
+
             // Search for a string that doesn't exist to hide rows
             dt.search("x");
 
@@ -381,6 +528,131 @@ describe("DataTable class", function() {
 
             // Assert searchQuery is correct
             expect(dt.searchQuery).to.equal("or");
+        });
+    });
+
+    describe("Sort method", function() {
+        it("Should correctly sort table", function() {
+            // Create table
+            let dt = new DataTable("#mytable", {
+                headers: ["English", "Spanish"],
+                body: [
+                    ["Red",     "Rojo"],
+                    ["Orange",  "Anaranjado"],
+                    ["Yellow",  "Amarillo"],
+                    ["Green",   "Verde"],
+                    ["Blue",    "Azúl"],
+                    ["Purple",  "Morado"]
+                ]
+            });
+
+            // Sort tables
+            dt.sort(1, false);
+
+            // Assert table is correct
+            let expected = `
+            <table>
+                <thead>
+                    <tr>
+                        <th>English</th>
+                        <th>Spanish</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Green</td>
+                        <td>Verde</td>
+                    </tr>
+                    <tr>
+                        <td>Red</td>
+                        <td>Rojo</td>
+                    </tr>
+                    <tr>
+                        <td>Purple</td>
+                        <td>Morado</td>
+                    </tr>
+                    <tr>
+                        <td>Blue</td>
+                        <td>Azúl</td>
+                    </tr>
+                    <tr>
+                        <td>Orange</td>
+                        <td>Anaranjado</td>
+                    </tr>
+                    <tr>
+                        <td>Yellow</td>
+                        <td>Amarillo</td>
+                    </tr>
+                </tbody>
+            </table>`.replace(/\s/g, "");
+            expect(global.document.querySelector("div.data-table").innerHTML).to.equal(expected);
+
+            // Assert sort properties are correct
+            expect(dt.sortIndex).to.equal(1);
+            expect(dt.sortAscending).to.equal(false);
+        });
+
+        it("Should reset order if the ascending parameter is null", function() {
+            // Create table
+            let dt = new DataTable("#mytable", {
+                headers: ["English", "Spanish"],
+                body: [
+                    ["Red",     "Rojo"],
+                    ["Orange",  "Anaranjado"],
+                    ["Yellow",  "Amarillo"],
+                    ["Green",   "Verde"],
+                    ["Blue",    "Azúl"],
+                    ["Purple",  "Morado"]
+                ]
+            });
+
+            // Sort tables
+            dt.sort(1, true);
+
+            // Reset order
+            dt.sort(1, null);
+
+            // Assert table is correct
+            let expected = `
+            <table>
+                <thead>
+                    <tr>
+                        <th>English</th>
+                        <th>Spanish</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Red</td>
+                        <td>Rojo</td>
+                    </tr>
+                    <tr>
+                        <td>Orange</td>
+                        <td>Anaranjado</td>
+                    </tr>
+                    <tr>
+                        <td>Yellow</td>
+                        <td>Amarillo</td>
+                    </tr>
+                    <tr>
+                        <td>Green</td>
+                        <td>Verde</td>
+                    </tr>
+                    <tr>
+                        <td>Blue</td>
+                        <td>Azúl</td>
+                    </tr>
+                    <tr>
+                        <td>Purple</td>
+                        <td>Morado</td>
+                    </tr>
+                </tbody>
+            </table>`.replace(/\s/g, "");
+            expect(global.document.querySelector("div.data-table").innerHTML).to.equal(expected);
+
+            // Assert sort properties are correct
+            expect(dt.sortIndex).to.equal(null);
+            expect(dt.sortAscending).to.equal(null);
         });
     });
 });
