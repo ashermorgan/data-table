@@ -59,6 +59,14 @@ let myDataTable = new DataTable("#selector", {
 });
 ```
 
+#### sortable
+A boolean that indicates whether the table can be sorted by the user. The default value is `false`.
+```JS
+let myDataTable = new DataTable("#selector", {
+    sortable: true
+});
+```
+
 
 ### Properties
 #### body
@@ -77,6 +85,14 @@ The table will update automatically when this property is modified.
 let myDataTable = new DataTable("#selector", { headers: ["header 1", "header 2"] });
 console.log(myDataTable.headers);  // ["header 1", "header 2"]
 myDataTable.headers = ["header 3", "header 4"];
+```
+
+#### isSortable
+A boolean that indicates whether the table can currently be sorted by the user.
+```JS
+let myDataTable = new DataTable("#selector");
+console.log(myDataTable.isSortable);  // false
+myDataTable.isSortable = true;
 ```
 
 #### searchQuery

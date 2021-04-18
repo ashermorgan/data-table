@@ -31,6 +31,15 @@ let DataTable = function(selector, options) {
     });
 
     /**
+     * The table icons
+     */
+    let icons = {
+        up:     `<svg viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="updown"><polyline points="18 16 12 8 6 16 18 16"></polyline></svg>`,
+        down:   `<svg viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="updown"><polyline points="18 8 12 16 6 8 18 8"></polyline></svg>`,
+        updown: `<svg viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="updown"><polyline points="15 10 12 6 9 10 15 10"></polyline><polyline points="15 14 12 18 9 14 15 14"></polyline></svg>`
+    };
+
+    /**
      * The current search query
      */
     let _searchQuery = "";
@@ -44,6 +53,18 @@ let DataTable = function(selector, options) {
     let _selector = null;
     Object.defineProperty(this, "selector", {
         get: function() { return _selector; }
+    });
+
+    /**
+     * Whether the table can be sorted by the user
+     */
+    let _isSortable = false;
+    Object.defineProperty(this, "isSortable", {
+        get: function() { return _isSortable; },
+        set: function(value) {
+            _isSortable=value;
+            this.render();
+        }
     });
 
     /**
@@ -79,8 +100,9 @@ let DataTable = function(selector, options) {
 
         // Set options
         if (options) {
-            if (options.headers) _headers = options.headers;
             if (options.body) _body = options.body;
+            if (options.headers) _headers = options.headers;
+            if (options.sortable !== undefined) _isSortable = options.sortable;
         }
 
         // Load tableData
@@ -138,7 +160,13 @@ let DataTable = function(selector, options) {
         if (tableData.headers.length > 0) {
             divHTML += "<thead><tr>";
             for (let i = 0; i < tableData.headers.length; i++) {
-                divHTML += `<th>${tableData.headers[i]}</th>`;
+                divHTML += `<th>${tableData.headers[i]}`;
+                if (_isSortable) {
+                    if (_sortIndex !== i) divHTML += `<button>${icons.updown}</button>`;
+                    else if (_sortIndex === i && _sortAscending === true) divHTML += `<button>${icons.up}</button>`;
+                    else if (_sortIndex === i && _sortAscending === false) divHTML += `<button>${icons.down}</button>`;
+                }
+                divHTML += "</th>";
             }
             divHTML += "</thead></tr>";
         }
@@ -163,6 +191,18 @@ let DataTable = function(selector, options) {
         // Set div content
         divHTML += "</table>";
         div.innerHTML = divHTML;
+
+        // Add event handlers
+        if (_isSortable) {
+            let headers = document.querySelectorAll(`${this.selector} th`);
+            for (let i = 0; i < headers.length; i++) {
+                headers[i].addEventListener("click", () => {
+                    if (_sortIndex !== i) this.sort(i, true);
+                    else if (_sortIndex === i && _sortAscending === true) this.sort(i, false);
+                    else if (_sortIndex === i && _sortAscending === false) this.sort(i, null);
+                });
+            }
+        }
     };
 
     /**
@@ -198,7 +238,7 @@ let DataTable = function(selector, options) {
      * @param {Boolean} ascending Whether to sort the column in ascending order
      */
     let _sort = function(index, ascending) {
-        if (_sortIndex === index && _sortAscending === ascending) { 
+        if (_sortIndex === index && _sortAscending === ascending) {
             // Data is already sorted by correct column AND in correct direction
         }
         else if (index < 0 || index >= tableData.headers.length || ascending === null) {
