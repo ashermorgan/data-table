@@ -9,12 +9,7 @@ let DataTable = function(selector, options) {
      */
     let _body = [];
     Object.defineProperty(this, "body", {
-        get: function() { return _body; },
-        set: function(value) {
-            _body=value;
-            loadTableData();
-            this.render();
-        }
+        get: function() { return _body; }
     });
 
     /**
@@ -22,12 +17,7 @@ let DataTable = function(selector, options) {
      */
     let _headers = [];
     Object.defineProperty(this, "headers", {
-        get: function() { return _headers; },
-        set: function(value) {
-            _headers=value;
-            loadTableData();
-            this.render();
-        }
+        get: function() { return _headers; }
     });
 
     /**
@@ -229,6 +219,26 @@ let DataTable = function(selector, options) {
         _search(query);
 
         // Render table
+        this.render();
+    }
+
+    /**
+     * Set the table body data
+     * @param {Array} value The table body data
+     */
+    this.setBody = function(value) {
+        _body = value;
+        loadTableData();
+        this.render();
+    }
+
+    /**
+     * Set the table headers
+     * @param {Array} value The table headers
+     */
+    this.setHeaders = function(value) {
+        _headers = value;
+        loadTableData();
         this.render();
     }
 

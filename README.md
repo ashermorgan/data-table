@@ -70,21 +70,17 @@ let myDataTable = new DataTable("#selector", {
 
 ### Properties
 #### body
-A two dimensional array that contains the table body data.
-The table will update automatically when this property is modified.
+A two dimensional array that contains the table body data. This property cannot be modified.
 ```JS
 let myDataTable = new DataTable("#selector", { body: [["a1", "b1"], ["a2", "b2"]] });
 console.log(myDataTable.body);  // [["a1", "b1"], ["a2", "b2"]]
-myDataTable.body = [["c3", "d3"], ["c4", "d4"]];
 ```
 
 #### headers
-An array that contains the table headers.
-The table will update automatically when this property is modified.
+An array that contains the table headers. This property cannot be modified.
 ```JS
 let myDataTable = new DataTable("#selector", { headers: ["header 1", "header 2"] });
 console.log(myDataTable.headers);  // ["header 1", "header 2"]
-myDataTable.headers = ["header 3", "header 4"];
 ```
 
 #### isSortable
@@ -139,7 +135,7 @@ console.log(DataTable.version);  // "0.1.0"
 #### render
 Renders the table. This method doesn't take any arguments.
 If there is already content inside the table it will be overwritten.
-NOTE: The table will be rendered automatically on initialization and whenever the `body` and `headers` properties are modified.
+NOTE: The table will be rendered automatically on initialization and whenever its properties are modified.
 ```JS
 let myDataTable = new DataTable("#selector");
 myDataTable.render();
@@ -150,6 +146,24 @@ Searches for a query in the table and hides rows that do not contain a match. Th
 ```JS
 let myDataTable = new DataTable("#selector");
 myDataTable.search("my query");
+```
+
+#### setBody
+Sets the table body data. This method takes one argument: `value`. `value` is a two dimensional array that contains the table body data.
+```JS
+let myDataTable = new DataTable("#selector");
+myDataTable.search("my query");
+myDataTable.setBody([["a1", "b1"], ["a2", "b2"]]);
+console.log(myDataTable.body);  // [["a1", "b1"], ["a2", "b2"]]
+```
+
+#### setHeaders
+Sets the table headers. This method takes one argument: `value`. `value` is an array that contains the table headers.
+```JS
+let myDataTable = new DataTable("#selector");
+myDataTable.search("my query");
+myDataTable.setHeaders(["header 1", "header 2"]);
+console.log(myDataTable.headers);  // ["header 1", "header 2"]
 ```
 
 #### sort
