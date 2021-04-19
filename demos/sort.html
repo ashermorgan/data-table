@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width">
-        <title>Basic demo - data-table</title>
+        <title>Sort demo - data-table</title>
         <link rel="stylesheet" href="demo.css">
         <script src="demo.js"></script>
 
@@ -22,13 +22,17 @@
                 <div id="mytable"></div>
             `;
             let js = `
-                new DataTable("#mytable", {
-                \theaders: ["header 1", "header 2", "header 3"],
+                window.table = new DataTable("#mytable", {
+                \theaders: ["English", "Spanish"], 
                 \tbody: [
-                \t\t["a1", "a2", "a3"],
-                \t\t["b1", "b2", "b3"],
-                \t\t["c1", "c2", "c3"]
-                \t]
+                \t\t["Red", "Rojo"],
+                \t\t["Orange", "Anaranjado"],
+                \t\t["Yellow", "Amarillo"],
+                \t\t["Green", "Verde"],
+                \t\t["Blue", "Azúl"],
+                \t\t["Purple", "Morado"]
+                \t],
+                \tsortable: true
                 });
             `;
             let css = `
@@ -36,7 +40,7 @@
                 \twidth: 300px;
                 }
             `;
-            createDemo("#content", "data-table basic demo", html, js, css);
+            createDemo("#content", "data-table sort demo", html, js, css);
         </script>
     </body>
 </html>

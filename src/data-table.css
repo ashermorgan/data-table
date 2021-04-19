@@ -29,3 +29,15 @@
     position: -webkit-sticky;
     top: 0;
 }
+.data-table table th button {
+    margin: 0px;
+    padding: 0px;
+    border: none;
+    background: none;
+    cursor: pointer;
+    vertical-align: middle;
+}
+.data-table table th button svg {
+    height: 24px;
+    width: 24px;
+}

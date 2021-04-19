@@ -8,7 +8,7 @@
         <script src="demo.js"></script>
 
         <!-- External scripts aren't loaded by createDemo() method -->
-        <script src="../dist/data-table.min.js"></script>
+        <script src="../src/data-table.js"></script>
     </head>
     <body>
         <noscript>
@@ -17,8 +17,8 @@
         <div id="content"></div>
         <script>
             let html = `
-                <script src="../dist/data-table.min.js"><\/script>
-                <link rel="stylesheet" href="../dist/data-table.min.css">
+                <script src="../src/data-table.js"><\/script>
+                <link rel="stylesheet" href="../src/data-table.css">
                 <div id="mytable"></div>
             `;
             let js = `
@@ -50,7 +50,10 @@
                 \t["Y01", "Y02", "Y03", "Y04", "Y05", "Y06", "Y07", "Y08", "Y09", "Y10", "Y11", "Y12", "Y13", "Y14", "Y15"],
                 \t["Z01", "Z02", "Z03", "Z04", "Z05", "Z06", "Z07", "Z08", "Z09", "Z10", "Z11", "Z12", "Z13", "Z14", "Z15"]
                 ];
-                new DataTable("#mytable", data);
+                new DataTable("#mytable", {
+                \theaders: data[0],
+                \tbody: data.slice(1)
+                });
             `;
             let css = `
                 #mytable {
