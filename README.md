@@ -127,7 +127,7 @@ console.log(myDataTable.sortIndex);  // 2
 #### version
 The current library version. This is a static property and cannot be modified.
 ```JS
-console.log(DataTable.version);  // "0.1.0"
+console.log(DataTable.version);  // "0.2.0"
 ```
 
 

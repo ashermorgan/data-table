@@ -1,6 +1,6 @@
 /*
- * data-table 0.1.0
+ * data-table 0.2.0
  * (c) 2021 Asher Morgan (MIT)
  * https://github.com/ashermorgan/data-table
  */
-.data-table{overflow-x:auto;overflow-y:auto}.data-table table{border:1px solid #000;width:100%;border-collapse:separate;border-spacing:0;text-align:left}.data-table table td{border:1px solid #000;color:#000}.data-table table th{border:1px solid #000;color:#000;background-color:#e8e8e8;font-weight:700;position:sticky;position:-webkit-sticky;top:0}
+.data-table{overflow-x:auto;overflow-y:auto}.data-table table{border:1px solid #000;width:100%;border-collapse:separate;border-spacing:0;text-align:left}.data-table table td{border:1px solid #000;color:#000}.data-table table th{border:1px solid #000;color:#000;background-color:#e8e8e8;font-weight:700;position:sticky;position:-webkit-sticky;top:0}.data-table table th button{margin:0;padding:0;border:none;background:0 0;cursor:pointer;vertical-align:middle}.data-table table th button svg{height:24px;width:24px}

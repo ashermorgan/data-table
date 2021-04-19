@@ -298,7 +298,7 @@ let DataTable = function(selector, options) {
  * The library version
  */
 Object.defineProperty(DataTable, "version", {
-    get: function() { return "0.1.0"; }
+    get: function() { return "0.2.0"; }
 });
 
 
