@@ -38,90 +38,89 @@ Demos of data-table are available [here](https://ashermorgan.github.io/data-tabl
 ## Documentation
 ### Constructor
 Creates a new table. This method takes two arguments, `selector` and `options`.
-`selector` is the table selector string and `options` is an object that contains the table settings (see below). If no value is provided for an option, the default value will be used.
+`selector` is the table selector string and `options` is an object that contains the table options (see below). If no value is provided for an option, the default value will be used.
 
-#### body
-A two dimensional array that contains the table body data. The default value is an empty array.
-```JS
-let myDataTable = new DataTable("#selector", {
-    body: [
-        ["a1", "b1"],
-        ["a2", "b2"]
-    ]
-});
-```
+Available options:
+- `body`
+- `headers`
+- `sortable`
+- `searchQuery`
+- `sortAscending`
+- `sortIndex`
 
-#### headers
-An array that contains the table headers. The default value is an empty array.
 ```JS
-let myDataTable = new DataTable("#selector", {
-    headers: ["header 1", "header 2"]
+let myTable = new DataTable("#my-selector", {
+    body: [["a1", "b1"], ["a2", "b2"]],
+    headers: ["header 1", "header 2"],
+    sortable: true,
+    searchQuery: "my query",
+    sortAscending: false,
+    sortIndex: 1
 });
-```
-
-#### sortable
-A boolean that indicates whether the table can be sorted by the user. The default value is `false`.
-```JS
-let myDataTable = new DataTable("#selector", {
-    sortable: true
-});
+console.log(myTable.selector)       // "#my-selector"
+console.log(myTable.body)           // [["a1", "b1"], ["a2", "b2"]]
+console.log(myTable.headers)        // ["header 1", "header 2"]
+console.log(myTable.sortable)       // true
+console.log(myTable.searchQuery)    // "my query"
+console.log(myTable.sortAscending)  // false
+console.log(myTable.sortIndex)      // 1
 ```
 
 
 ### Properties
 #### body
-A two dimensional array that contains the table body data. This property cannot be modified.
+A two dimensional array that contains the table body data. This property cannot be modified. The default value is an empty array (`[]`).
 ```JS
-let myDataTable = new DataTable("#selector", { body: [["a1", "b1"], ["a2", "b2"]] });
-console.log(myDataTable.body);  // [["a1", "b1"], ["a2", "b2"]]
+let myTable = new DataTable("#my-selector", { body: [["a1", "b1"], ["a2", "b2"]] });
+console.log(myTable.body);  // [["a1", "b1"], ["a2", "b2"]]
 ```
 
 #### headers
-An array that contains the table headers. This property cannot be modified.
+An array that contains the table headers. This property cannot be modified. The default value is an empty array (`[]`).
 ```JS
-let myDataTable = new DataTable("#selector", { headers: ["header 1", "header 2"] });
-console.log(myDataTable.headers);  // ["header 1", "header 2"]
+let myTable = new DataTable("#my-selector", { headers: ["header 1", "header 2"] });
+console.log(myTable.headers);  // ["header 1", "header 2"]
 ```
 
-#### isSortable
-A boolean that indicates whether the table can currently be sorted by the user.
+#### sortable
+A boolean that indicates whether the table can currently be sorted by the user. The default value is `false`.
 ```JS
-let myDataTable = new DataTable("#selector");
-console.log(myDataTable.isSortable);  // false
-myDataTable.isSortable = true;
+let myTable = new DataTable("#my-selector");
+console.log(myTable.sortable);  // false
+myTable.sortable = true;
 ```
 
 #### searchQuery
-A string that contains the current search query. This property cannot be modified.
+A string that contains the current search query. This property cannot be modified. The default value is an empty string (`""`).
 ```JS
-let myDataTable = new DataTable("#selector");
-myDataTable.search("my query");
-console.log(myDataTable.searchQuery);  // "my query"
+let myTable = new DataTable("#my-selector");
+myTable.search("my query");
+console.log(myTable.searchQuery);  // "my query"
 ```
 
 #### selector
 A string that contains the table selector. This property cannot be modified.
 ```JS
-let myDataTable = new DataTable("#selector");
-console.log(myDataTable.selector);  // "#selector"
+let myTable = new DataTable("#my-selector");
+console.log(myTable.selector);  // "#my-selector"
 ```
 
 #### sortAscending
-A boolean that indicates whether the table is currently sorted in ascending order. If the table isn't sorted, it will be `null`. This property cannot be modified.
+A boolean that indicates whether the table is currently sorted in ascending order. If the table isn't sorted, it will be `null`. This property cannot be modified. The default value is `null`.
 ```JS
-let myDataTable = new DataTable("#selector");
-console.log(myDataTable.sortAscending);  // null
-myDataTable.sort(2, false);
-console.log(myDataTable.sortAscending);  // false
+let myTable = new DataTable("#my-selector");
+console.log(myTable.sortAscending);  // null
+myTable.sort(2, false);
+console.log(myTable.sortAscending);  // false
 ```
 
 #### sortIndex
-The (zero-based) index of the column that the table is currently sorted by. If the table isn't sorted, it will be `null`. This property cannot be modified.
+The (zero-based) index of the column that the table is currently sorted by. If the table isn't sorted, it will be `null`. This property cannot be modified. The default value is `null`.
 ```JS
-let myDataTable = new DataTable("#selector");
-console.log(myDataTable.sortIndex);  // null
-myDataTable.sort(2, false);
-console.log(myDataTable.sortIndex);  // 2
+let myTable = new DataTable("#my-selector");
+console.log(myTable.sortIndex);  // null
+myTable.sort(2, false);
+console.log(myTable.sortIndex);  // 2
 ```
 
 #### version
@@ -137,38 +136,38 @@ Renders the table. This method doesn't take any arguments.
 If there is already content inside the table it will be overwritten.
 NOTE: The table will be rendered automatically on initialization and whenever its properties are modified.
 ```JS
-let myDataTable = new DataTable("#selector");
-myDataTable.render();
+let myTable = new DataTable("#my-selector");
+myTable.render();
 ```
 
 #### search
 Searches for a query in the table and hides rows that do not contain a match. This method takes one argument: `query`. If the query is an empty string, all rows will be shown.
 ```JS
-let myDataTable = new DataTable("#selector");
-myDataTable.search("my query");
+let myTable = new DataTable("#my-selector");
+myTable.search("my query");
 ```
 
 #### setBody
 Sets the table body data. This method takes one argument: `value`. `value` is a two dimensional array that contains the table body data.
 ```JS
-let myDataTable = new DataTable("#selector");
-myDataTable.search("my query");
-myDataTable.setBody([["a1", "b1"], ["a2", "b2"]]);
-console.log(myDataTable.body);  // [["a1", "b1"], ["a2", "b2"]]
+let myTable = new DataTable("#my-selector");
+myTable.search("my query");
+myTable.setBody([["a1", "b1"], ["a2", "b2"]]);
+console.log(myTable.body);  // [["a1", "b1"], ["a2", "b2"]]
 ```
 
 #### setHeaders
 Sets the table headers. This method takes one argument: `value`. `value` is an array that contains the table headers.
 ```JS
-let myDataTable = new DataTable("#selector");
-myDataTable.search("my query");
-myDataTable.setHeaders(["header 1", "header 2"]);
-console.log(myDataTable.headers);  // ["header 1", "header 2"]
+let myTable = new DataTable("#my-selector");
+myTable.search("my query");
+myTable.setHeaders(["header 1", "header 2"]);
+console.log(myTable.headers);  // ["header 1", "header 2"]
 ```
 
 #### sort
 Sorts the table by the values in a column. This method takes two arguments: `index` and `ascending`. `index` is the (zero-based) index of the column to sort by and `ascending` is whether to sort in ascending order. If `ascending` is `null`, the original table ordering will be restored.
 ```JS
-let myDataTable = new DataTable("#selector");
-myDataTable.sort(2, false);
+let myTable = new DataTable("#my-selector");
+myTable.sort(2, false);
 ```

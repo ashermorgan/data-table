@@ -48,11 +48,11 @@ let DataTable = function(selector, options) {
     /**
      * Whether the table can be sorted by the user
      */
-    let _isSortable = false;
-    Object.defineProperty(this, "isSortable", {
-        get: function() { return _isSortable; },
+    let _sortable = false;
+    Object.defineProperty(this, "sortable", {
+        get: function() { return _sortable; },
         set: function(value) {
-            _isSortable=value;
+            _sortable=value;
             this.render();
         }
     });
@@ -90,9 +90,12 @@ let DataTable = function(selector, options) {
 
         // Set options
         if (options) {
-            if (options.body) _body = options.body;
-            if (options.headers) _headers = options.headers;
-            if (options.sortable !== undefined) _isSortable = options.sortable;
+            if (options.body !== undefined) _body = options.body;
+            if (options.headers !== undefined) _headers = options.headers;
+            if (options.sortable !== undefined) _sortable = options.sortable;
+            if (options.searchQuery !== undefined) _searchQuery = options.searchQuery;
+            if (options.sortAscending !== undefined) _sortAscending = options.sortAscending;
+            if (options.sortIndex !== undefined) _sortIndex = options.sortIndex;
         }
 
         // Load tableData
@@ -151,7 +154,7 @@ let DataTable = function(selector, options) {
             divHTML += "<thead><tr>";
             for (let i = 0; i < tableData.headers.length; i++) {
                 divHTML += `<th>${tableData.headers[i]}`;
-                if (_isSortable) {
+                if (_sortable) {
                     if (_sortIndex !== i) divHTML += `<button>${icons.updown}</button>`;
                     else if (_sortIndex === i && _sortAscending === true) divHTML += `<button>${icons.up}</button>`;
                     else if (_sortIndex === i && _sortAscending === false) divHTML += `<button>${icons.down}</button>`;
@@ -183,7 +186,7 @@ let DataTable = function(selector, options) {
         div.innerHTML = divHTML;
 
         // Add event handlers
-        if (_isSortable) {
+        if (_sortable) {
             let headers = document.querySelectorAll(`${this.selector} th`);
             for (let i = 0; i < headers.length; i++) {
                 headers[i].addEventListener("click", () => {

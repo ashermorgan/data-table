@@ -16,90 +16,62 @@ describe("DataTable class", function() {
     });
 
     describe("Constructor", function() {
-        it("Should set isSortable property", function() {
-            // Create table
-            let dt = new DataTable("#mytable");
-
-            // Assert isSortable property is correct
-            expect(dt.isSortable).to.equal(false);
-        });
-
-        it("Should set searchQuery property", function() {
-            // Create table
-            let dt = new DataTable("#mytable");
-
-            // Assert searchQuery property is correct
-            expect(dt.searchQuery).to.equal("");
-        });
-
-        it("Should set selector property", function() {
-            // Create table
-            let dt = new DataTable("#mytable");
-
-            // Assert selector property is correct
-            expect(dt.selector).to.equal("#mytable");
-        });
-
-        it("Should set sortAscending property", function() {
-            // Create table
-            let dt = new DataTable("#mytable");
-
-            // Assert sortAscending property is correct
-            expect(dt.sortAscending).to.equal(null);
-        });
-
-        it("Should set sortIndex property", function() {
-            // Create table
-            let dt = new DataTable("#mytable");
-
-            // Assert sortIndex property is correct
-            expect(dt.sortIndex).to.equal(null);
-        });
-
-        it("Should set properties to default values if options is undefined", function() {
+        it("Should not set properties if options is undefined", function() {
             // Create table
             let dt = new DataTable("#mytable");
 
             // Assert properties are correct
             expect(dt.body).to.deep.equal([]);
             expect(dt.headers).to.deep.equal([]);
-            expect(dt.isSortable).to.be.false;
+            expect(dt.sortable).to.be.false;
+            expect(dt.searchQuery).to.equal("");
+            expect(dt.sortAscending).to.be.null;
+            expect(dt.sortIndex).to.be.null;
         });
 
-        it("Should set properties to default values if options is empty", function() {
+        it("Should not set properties if options is empty", function() {
             // Create table
             let dt = new DataTable("#mytable", {});
 
             // Assert properties are correct
             expect(dt.body).to.deep.equal([]);
             expect(dt.headers).to.deep.equal([]);
-            expect(dt.isSortable).to.be.false;
+            expect(dt.sortable).to.be.false;
+            expect(dt.searchQuery).to.equal("");
+            expect(dt.sortAscending).to.be.null;
+            expect(dt.sortIndex).to.be.null;
         });
 
         it("Should set properties to values in options parameter", function() {
             // Create table
             let dt = new DataTable("#mytable", {
-                headers: ["a", "b", "c"],
-                body: [
-                    ["a1", "b1", "c1"],
-                    ["a2", "b2", "c2"],
-                    ["a3", "b3", "c3"]
-                ],
-                sortable: true
+                body: [["a1", "b1"], ["a2", "b2"]],
+                headers: ["header 1", "header 2"],
+                sortable: true,
+                searchQuery: "my query",
+                sortAscending: false,
+                sortIndex: 1
             });
 
             // Assert properties are correct
-            expect(dt.body).to.deep.equal([
-                ["a1", "b1", "c1"],
-                ["a2", "b2", "c2"],
-                ["a3", "b3", "c3"]
-            ]);
-            expect(dt.headers).to.deep.equal(["a", "b", "c"]);
-            expect(dt.isSortable).to.be.true;
+            expect(dt.body).to.deep.equal([["a1", "b1"], ["a2", "b2"]]);
+            expect(dt.headers).to.deep.equal(["header 1", "header 2"]);
+            expect(dt.sortable).to.be.true;
+            expect(dt.searchQuery).to.equal("my query");
+            expect(dt.sortAscending).to.be.false;
+            expect(dt.sortIndex).to.equal(1);
         });
     });
 
     describe("body property", function() {
+        it("Should be empty by default", function() {
+            // Create table
+            let dt = new DataTable("#mytable");
+
+            // Assert body is correct
+            expect(dt.body).to.deep.equal([]);
+        });
+
         it("Should not be changeable", function() {
             // Create table
             let dt = new DataTable("#mytable");
@@ -113,6 +85,14 @@ describe("DataTable class", function() {
     });
 
     describe("headers property", function() {
+        it("Should be empty by default", function() {
+            // Create table
+            let dt = new DataTable("#mytable");
+
+            // Assert headers is correct
+            expect(dt.headers).to.deep.equal([]);
+        });
+
         it("Should not be changeable", function() {
             // Create table
             let dt = new DataTable("#mytable");
@@ -125,7 +105,15 @@ describe("DataTable class", function() {
         });
     });
 
-    describe("isSortable property", function() {
+    describe("sortable property", function() {
+        it("Should be false by default", function() {
+            // Create table
+            let dt = new DataTable("#mytable");
+
+            // Assert sortable is correct
+            expect(dt.sortable).to.be.false;
+        });
+
         it("Should call render method when updated", function() {
             // Create table
             let dt = new DataTable("#mytable");
@@ -134,14 +122,14 @@ describe("DataTable class", function() {
             let render = sinon.stub(dt, "render");
 
             try {
-                // Set isSortable
-                dt.isSortable = true;
+                // Set sortable
+                dt.sortable = true;
 
                 // Assert DataTable.render called
                 expect(render.calledOnce).to.be.true;
 
-                // Assert isSortable is correct
-                expect(dt.isSortable).to.be.true;
+                // Assert sortable is correct
+                expect(dt.sortable).to.be.true;
             }
             finally {
                 // Restore DataTable.render method
@@ -151,6 +139,14 @@ describe("DataTable class", function() {
     });
 
     describe("searchQuery property", function() {
+        it("Should be empty by default", function() {
+            // Create table
+            let dt = new DataTable("#mytable");
+
+            // Assert searchQuery is correct
+            expect(dt.searchQuery).to.equal("");
+        });
+
         it("Should not be changeable", function() {
             // Create table
             let dt = new DataTable("#mytable");
@@ -177,6 +173,14 @@ describe("DataTable class", function() {
     });
 
     describe("sortAscending property", function() {
+        it("Should be null by default", function() {
+            // Create table
+            let dt = new DataTable("#mytable");
+
+            // Assert sortAscending is correct
+            expect(dt.sortAscending).to.be.null;
+        });
+
         it("Should not be changeable", function() {
             // Create table
             let dt = new DataTable("#mytable");
@@ -185,11 +189,19 @@ describe("DataTable class", function() {
             dt.sortAscending = false;
 
             // Assert sortAscending not set
-            expect(dt.sortAscending).to.equal(null);
+            expect(dt.sortAscending).to.be.null;
         });
     });
 
     describe("sortIndex property", function() {
+        it("Should be null by default", function() {
+            // Create table
+            let dt = new DataTable("#mytable");
+
+            // Assert sortIndex is correct
+            expect(dt.sortIndex).to.be.null;
+        });
+
         it("Should not be changeable", function() {
             // Create table
             let dt = new DataTable("#mytable");
@@ -198,14 +210,22 @@ describe("DataTable class", function() {
             dt.sortIndex = 2;
 
             // Assert sortIndex not set
-            expect(dt.sortIndex).to.equal(null);
+            expect(dt.sortIndex).to.be.null;
         });
     });
 
     describe("version static property", function() {
         it("Should be equal to the version in package.json", function() {
             expect(DataTable.version).to.equal(require("../package.json").version);
-        })
+        });
+
+        it("Should not be changeable", function() {
+            // Attempt to change version
+            DataTable.version = 2;
+
+            // Assert version not set
+            expect(DataTable.version).to.equal(require("../package.json").version);
+        });
     });
 
     describe("render method", function() {
@@ -316,7 +336,7 @@ describe("DataTable class", function() {
             expect(global.document.querySelector("div.data-table").innerHTML).to.equal(expected);
         });
 
-        it("Should add sorting controls if isSortable is true", function() {
+        it("Should add sorting controls if sortable is true", function() {
             // Create table (calls render method)
             let dt = new DataTable("#mytable", {
                 headers: ["One", "Two"],
@@ -794,8 +814,8 @@ describe("DataTable class", function() {
             expect(global.document.querySelector("div.data-table").innerHTML).to.equal(expected);
 
             // Assert sort properties are correct
-            expect(dt.sortIndex).to.equal(null);
-            expect(dt.sortAscending).to.equal(null);
+            expect(dt.sortIndex).to.be.null;
+            expect(dt.sortAscending).to.be.null;
         });
     });
 });
