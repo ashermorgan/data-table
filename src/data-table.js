@@ -4,6 +4,8 @@
  * @param {Array} options The table options
  */
 let DataTable = function(selector, options) {
+    "use strict";
+
     /**
      * The table body data
      */
