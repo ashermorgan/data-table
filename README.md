@@ -42,11 +42,14 @@ Creates a new table. This method takes two arguments, `selector` and `options`.
 
 Available options:
 - `body`
+- `downIcon`
 - `headers`
 - `sortable`
 - `searchQuery`
 - `sortAscending`
 - `sortIndex`
+- `upIcon`
+- `updownIcon`
 
 ```JS
 let myTable = new DataTable("#my-selector", {
@@ -73,6 +76,14 @@ A two dimensional array that contains the table body data. This property cannot 
 ```JS
 let myTable = new DataTable("#my-selector", { body: [["a1", "b1"], ["a2", "b2"]] });
 console.log(myTable.body);  // [["a1", "b1"], ["a2", "b2"]]
+```
+
+#### downIcon
+A string containing the HTML code for the down icon, which is used to help the user sort the table.
+```JS
+let myTable = new DataTable("#my-selector");
+console.log(myTable.downIcon);  // "<svg viewBox=...</svg>"
+myTable.downIcon = "my icon";
 ```
 
 #### headers
@@ -121,6 +132,22 @@ let myTable = new DataTable("#my-selector");
 console.log(myTable.sortIndex);  // null
 myTable.sort(2, false);
 console.log(myTable.sortIndex);  // 2
+```
+
+#### upIcon
+A string containing the HTML code for the up icon, which is used to help the user sort the table.
+```JS
+let myTable = new DataTable("#my-selector");
+console.log(myTable.upIcon);  // "<svg viewBox=...</svg>"
+myTable.upIcon = "my icon";
+```
+
+#### updownIcon
+A string containing the HTML code for the updown icon, which is used to help the user sort the table.
+```JS
+let myTable = new DataTable("#my-selector");
+console.log(myTable.updownIcon);  // "<svg viewBox=...</svg>"
+myTable.updownIcon = "my icon";
 ```
 
 #### version

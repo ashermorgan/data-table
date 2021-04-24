@@ -46,20 +46,26 @@ describe("DataTable class", function() {
             // Create table
             let dt = new DataTable("#mytable", {
                 body: [["a1", "b1"], ["a2", "b2"]],
+                downIcon: "down-icon HTML",
                 headers: ["header 1", "header 2"],
                 sortable: true,
                 searchQuery: "my query",
                 sortAscending: false,
-                sortIndex: 1
+                sortIndex: 1,
+                upIcon: "up-icon HTML",
+                updownIcon: "up-down-icon HTML"
             });
 
             // Assert properties are correct
             expect(dt.body).to.deep.equal([["a1", "b1"], ["a2", "b2"]]);
+            expect(dt.downIcon).to.equal("down-icon HTML");
             expect(dt.headers).to.deep.equal(["header 1", "header 2"]);
             expect(dt.sortable).to.be.true;
             expect(dt.searchQuery).to.equal("my query");
             expect(dt.sortAscending).to.be.false;
             expect(dt.sortIndex).to.equal(1);
+            expect(dt.upIcon).to.equal("up-icon HTML");
+            expect(dt.updownIcon).to.equal("up-down-icon HTML");
         });
     });
 
@@ -81,6 +87,31 @@ describe("DataTable class", function() {
 
             // Assert body not set
             expect(dt.body).to.deep.equal([]);
+        });
+    });
+
+    describe("downIcon property", function() {
+        it("Should call render method when updated", function() {
+            // Create table
+            let dt = new DataTable("#mytable");
+
+            // Mock DataTable.render method
+            let render = sinon.stub(dt, "render");
+
+            try {
+                // Set downIcon
+                dt.downIcon = "<svg></svg>";
+
+                // Assert DataTable.render called
+                expect(render.calledOnce).to.be.true;
+
+                // Assert downIcon is correct
+                expect(dt.downIcon).to.equal("<svg></svg>");
+            }
+            finally {
+                // Restore DataTable.render method
+                render.restore();
+            }
         });
     });
 
@@ -211,6 +242,56 @@ describe("DataTable class", function() {
 
             // Assert sortIndex not set
             expect(dt.sortIndex).to.be.null;
+        });
+    });
+
+    describe("upIcon property", function() {
+        it("Should call render method when updated", function() {
+            // Create table
+            let dt = new DataTable("#mytable");
+
+            // Mock DataTable.render method
+            let render = sinon.stub(dt, "render");
+
+            try {
+                // Set upIcon
+                dt.upIcon = "<svg></svg>";
+
+                // Assert DataTable.render called
+                expect(render.calledOnce).to.be.true;
+
+                // Assert upIcon is correct
+                expect(dt.upIcon).to.equal("<svg></svg>");
+            }
+            finally {
+                // Restore DataTable.render method
+                render.restore();
+            }
+        });
+    });
+
+    describe("updownIcon property", function() {
+        it("Should call render method when updated", function() {
+            // Create table
+            let dt = new DataTable("#mytable");
+
+            // Mock DataTable.render method
+            let render = sinon.stub(dt, "render");
+
+            try {
+                // Set updownIcon
+                dt.updownIcon = "<svg></svg>";
+
+                // Assert DataTable.render called
+                expect(render.calledOnce).to.be.true;
+
+                // Assert updownIcon is correct
+                expect(dt.updownIcon).to.equal("<svg></svg>");
+            }
+            finally {
+                // Restore DataTable.render method
+                render.restore();
+            }
         });
     });
 
@@ -351,13 +432,13 @@ describe("DataTable class", function() {
                         <th>
                             One
                             <button>
-                                <svg viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="data-table-updown"><polyline points="15 10 12 6 9 10 15 10"></polyline><polyline points="15 14 12 18 9 14 15 14"></polyline></svg>
+                                ${dt.updownIcon}
                             </button>
                         </th>
                         <th>
                             Two
                             <button>
-                                <svg viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="data-table-updown"><polyline points="15 10 12 6 9 10 15 10"></polyline><polyline points="15 14 12 18 9 14 15 14"></polyline></svg>
+                                ${dt.updownIcon}
                             </button>
                         </th>
                     </tr>
@@ -376,13 +457,13 @@ describe("DataTable class", function() {
                         <th>
                             One
                             <button>
-                                <svg viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="data-table-up"><polyline points="18 16 12 8 6 16 18 16"></polyline></svg>
+                                ${dt.upIcon}
                             </button>
                         </th>
                         <th>
                             Two
                             <button>
-                                <svg viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="data-table-updown"><polyline points="15 10 12 6 9 10 15 10"></polyline><polyline points="15 14 12 18 9 14 15 14"></polyline></svg>
+                                ${dt.updownIcon}
                             </button>
                         </th>
                     </tr>
@@ -401,13 +482,13 @@ describe("DataTable class", function() {
                         <th>
                             One
                             <button>
-                                <svg viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="data-table-down"><polyline points="18 8 12 16 6 8 18 8"></polyline></svg>
+                                ${dt.downIcon}
                             </button>
                         </th>
                         <th>
                             Two
                             <button>
-                                <svg viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="data-table-updown"><polyline points="15 10 12 6 9 10 15 10"></polyline><polyline points="15 14 12 18 9 14 15 14"></polyline></svg>
+                                ${dt.updownIcon}
                             </button>
                         </th>
                     </tr>

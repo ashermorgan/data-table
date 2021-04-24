@@ -28,6 +28,27 @@ let DataTable = function(selector, options) {
         down:   `<svg viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="data-table-down"><polyline points="18 8 12 16 6 8 18 8"></polyline></svg>`,
         updown: `<svg viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="data-table-updown"><polyline points="15 10 12 6 9 10 15 10"></polyline><polyline points="15 14 12 18 9 14 15 14"></polyline></svg>`
     };
+    Object.defineProperty(this, "downIcon", {
+        get: function() { return icons.down; },
+        set: function(value) {
+            icons.down = value;
+            this.render();
+        }
+    });
+    Object.defineProperty(this, "upIcon", {
+        get: function() { return icons.up; },
+        set: function(value) {
+            icons.up = value;
+            this.render();
+        }
+    });
+    Object.defineProperty(this, "updownIcon", {
+        get: function() { return icons.updown; },
+        set: function(value) {
+            icons.updown = value;
+            this.render();
+        }
+    });
 
     /**
      * The current search query
@@ -96,6 +117,9 @@ let DataTable = function(selector, options) {
             if (options.searchQuery !== undefined) _searchQuery = options.searchQuery;
             if (options.sortAscending !== undefined) _sortAscending = options.sortAscending;
             if (options.sortIndex !== undefined) _sortIndex = options.sortIndex;
+            if (options.downIcon !== undefined) icons.down = options.downIcon;
+            if (options.upIcon !== undefined) icons.up = options.upIcon;
+            if (options.updownIcon !== undefined) icons.updown = options.updownIcon;
         }
 
         // Load tableData
