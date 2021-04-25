@@ -75,7 +75,19 @@ let DataTable = function(selector, options) {
     Object.defineProperty(this, "sortable", {
         get: function() { return _sortable; },
         set: function(value) {
-            _sortable=value;
+            _sortable = value;
+            this.render();
+        }
+    });
+
+    /**
+     * Whether the table order can be reset by the user
+     */
+    let _unsortable = true;
+    Object.defineProperty(this, "unsortable", {
+        get: function() { return _unsortable; },
+        set: function(value) {
+            _unsortable = value;
             this.render();
         }
     });
@@ -114,12 +126,13 @@ let DataTable = function(selector, options) {
         // Set options
         if (options) {
             if (options.body !== undefined) _body = options.body;
+            if (options.downIcon !== undefined) icons.down = options.downIcon;
             if (options.headers !== undefined) _headers = options.headers;
             if (options.sortable !== undefined) _sortable = options.sortable;
             if (options.searchQuery !== undefined) _searchQuery = options.searchQuery;
             if (options.sortAscending !== undefined) _sortAscending = options.sortAscending;
             if (options.sortIndex !== undefined) _sortIndex = options.sortIndex;
-            if (options.downIcon !== undefined) icons.down = options.downIcon;
+            if (options.unsortable !== undefined) _unsortable = options.unsortable;
             if (options.upIcon !== undefined) icons.up = options.upIcon;
             if (options.updownIcon !== undefined) icons.updown = options.updownIcon;
         }
@@ -217,8 +230,9 @@ let DataTable = function(selector, options) {
             for (let i = 0; i < headers.length; i++) {
                 headers[i].addEventListener("click", () => {
                     if (_sortIndex !== i) this.sort(i, true);
-                    else if (_sortIndex === i && _sortAscending === true) this.sort(i, false);
-                    else if (_sortIndex === i && _sortAscending === false) this.sort(i, null);
+                    else if (_sortAscending === true) this.sort(i, false);
+                    else if (_unsortable) this.sort(i, null);
+                    else this.sort(i, true);
                 });
             }
         }

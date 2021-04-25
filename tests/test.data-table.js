@@ -27,6 +27,7 @@ describe("DataTable class", function() {
             expect(dt.searchQuery).to.equal("");
             expect(dt.sortAscending).to.be.null;
             expect(dt.sortIndex).to.be.null;
+            expect(dt.unsortable).to.be.true;
         });
 
         it("Should not set properties if options is empty", function() {
@@ -40,6 +41,7 @@ describe("DataTable class", function() {
             expect(dt.searchQuery).to.equal("");
             expect(dt.sortAscending).to.be.null;
             expect(dt.sortIndex).to.be.null;
+            expect(dt.unsortable).to.be.true;
         });
 
         it("Should set properties to values in options parameter", function() {
@@ -52,6 +54,7 @@ describe("DataTable class", function() {
                 searchQuery: "my query",
                 sortAscending: false,
                 sortIndex: 1,
+                unsortable: false,
                 upIcon: "up-icon HTML",
                 updownIcon: "up-down-icon HTML"
             });
@@ -64,6 +67,7 @@ describe("DataTable class", function() {
             expect(dt.searchQuery).to.equal("my query");
             expect(dt.sortAscending).to.be.false;
             expect(dt.sortIndex).to.equal(1);
+            expect(dt.unsortable).to.be.false;
             expect(dt.upIcon).to.equal("up-icon HTML");
             expect(dt.updownIcon).to.equal("up-down-icon HTML");
         });
@@ -287,6 +291,39 @@ describe("DataTable class", function() {
 
                 // Assert updownIcon is correct
                 expect(dt.updownIcon).to.equal("<svg></svg>");
+            }
+            finally {
+                // Restore DataTable.render method
+                render.restore();
+            }
+        });
+    });
+
+    describe("unsortable property", function() {
+        it("Should be true by default", function() {
+            // Create table
+            let dt = new DataTable("#mytable");
+
+            // Assert unsortable is correct
+            expect(dt.unsortable).to.be.true;
+        });
+
+        it("Should call render method when updated", function() {
+            // Create table
+            let dt = new DataTable("#mytable");
+
+            // Mock DataTable.render method
+            let render = sinon.stub(dt, "render");
+
+            try {
+                // Set unsortable
+                dt.unsortable = false;
+
+                // Assert DataTable.render called
+                expect(render.calledOnce).to.be.true;
+
+                // Assert unsortable is correct
+                expect(dt.unsortable).to.be.false;
             }
             finally {
                 // Restore DataTable.render method

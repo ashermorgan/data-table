@@ -48,6 +48,7 @@ Available options:
 - `searchQuery`
 - `sortAscending`
 - `sortIndex`
+- `unsortable`
 - `upIcon`
 - `updownIcon`
 
@@ -58,7 +59,8 @@ let myTable = new DataTable("#my-selector", {
     sortable: true,
     searchQuery: "my query",
     sortAscending: false,
-    sortIndex: 1
+    sortIndex: 1,
+    unsortable: false,
 });
 console.log(myTable.selector)       // "#my-selector"
 console.log(myTable.body)           // [["a1", "b1"], ["a2", "b2"]]
@@ -67,6 +69,7 @@ console.log(myTable.sortable)       // true
 console.log(myTable.searchQuery)    // "my query"
 console.log(myTable.sortAscending)  // false
 console.log(myTable.sortIndex)      // 1
+console.log(myTable.unsortable)     // false
 ```
 
 
@@ -132,6 +135,14 @@ let myTable = new DataTable("#my-selector");
 console.log(myTable.sortIndex);  // null
 myTable.sort(2, false);
 console.log(myTable.sortIndex);  // 2
+```
+
+#### unsortable
+A boolean that indicates whether the table order can currently be reset by the user. This property has no effect when `sortable` is `false`. The default value is `true`.
+```JS
+let myTable = new DataTable("#my-selector");
+console.log(myTable.unsortable);  // true
+myTable.unsortable = false;
 ```
 
 #### upIcon
