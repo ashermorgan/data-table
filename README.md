@@ -42,8 +42,10 @@ Creates a new table. This method takes two arguments, `selector` and `options`.
 
 Available options:
 - `body`
+- `bodyClasses`
 - `downIcon`
 - `headers`
+- `headerClasses`
 - `sortable`
 - `searchQuery`
 - `sortAscending`
@@ -55,16 +57,20 @@ Available options:
 ```JS
 let myTable = new DataTable("#my-selector", {
     body: [["a1", "b1"], ["a2", "b2"]],
+    bodyClasses: [["class-1", "class-2"], ["class-2", "class-1"]],
     headers: ["header 1", "header 2"],
+    headerClasses: ["class-1", "class-2"],
     sortable: true,
     searchQuery: "my query",
     sortAscending: false,
     sortIndex: 1,
-    unsortable: false,
+    unsortable: false
 });
 console.log(myTable.selector);       // "#my-selector"
 console.log(myTable.body);           // [["a1", "b1"], ["a2", "b2"]]
+console.log(myTable.bodyClasses);    // [["class-1", "class-2"], ["class-2", "class-1"]]
 console.log(myTable.headers);        // ["header 1", "header 2"]
+console.log(myTable.headerClasses);  // ["class-1", "class-2"]
 console.log(myTable.sortable);       // true
 console.log(myTable.searchQuery);    // "my query"
 console.log(myTable.sortAscending);  // false
@@ -75,12 +81,22 @@ console.log(myTable.unsortable);     // false
 
 ### Properties
 #### body
-A two dimensional array that contains the table body data. This property cannot be modified. The default value is an empty array (`[]`).
+A two dimensional array that contains the table body data. This property cannot be modified directly, use the `setData` method instead. The default value is an empty array (`[]`).
 ```JS
 let myTable = new DataTable("#my-selector", {
     body: [["a1", "b1"], ["a2", "b2"]]
 });
 console.log(myTable.body);  // [["a1", "b1"], ["a2", "b2"]]
+```
+
+#### bodyClasses
+A two dimensional array that contains classes for the table body data. Classes allow you to apply different CSS styles to different body cells. `bodyClasses` should have the same dimentions as `body`. If `bodyClasses` is `null`, no classes will be added. This property cannot be modified directly, use the `setData` method instead. The default value is `null`.
+```JS
+let myTable = new DataTable("#my-selector", {
+    body: [["a1", "b1"], ["a2", "b2"]],
+    bodyClasses: [["class-1", "class-2"], ["class-2", "class-1"]]
+});
+console.log(myTable.bodyClasses);  // [["class-1", "class-2"], ["class-2", "class-1"]]
 ```
 
 #### downIcon
@@ -92,12 +108,22 @@ myTable.downIcon = "my icon";
 ```
 
 #### headers
-An array that contains the table headers. This property cannot be modified. The default value is an empty array (`[]`).
+An array that contains the table headers. This property cannot be modified directly, use the `setData` method instead. The default value is an empty array (`[]`).
 ```JS
 let myTable = new DataTable("#my-selector", {
     headers: ["header 1", "header 2"]
 });
 console.log(myTable.headers);  // ["header 1", "header 2"]
+```
+
+#### headerClasses
+An array that contains classes for the table headers. Classes allow you to apply different CSS styles to different headers. `headerClasses` should be the same length as `headers`. If `headerClasses` is `null`, no classes will be added. This property cannot be modified directly, use the `setData` method instead. The default value is `null`.
+```JS
+let myTable = new DataTable("#my-selector", {
+    headers: ["header 1", "header 2"],
+    headerClasses: ["class-1", "class-2"]
+});
+console.log(myTable.headerClasses);  // ["class-1", "class-2"]
 ```
 
 #### sortable
@@ -190,15 +216,19 @@ myTable.search("my query");
 ```
 
 #### setData
-Sets the table data properties (`body` and `headers`). This method takes one argument: `value`. `value` is an object that can contain values for any of the data properties. If no value is provided for a property, it will not be modified.
+Sets the table data properties (`body`, `bodyClasses`, `headers`, and `headerClasses`). This method takes one argument: `value`. `value` is an object that can contain values for any of the data properties. If no value is provided for a property, it will not be modified.
 ```JS
 let myTable = new DataTable("#my-selector");
 myTable.setData({
     body: [["a1", "b1"], ["a2", "b2"]],
-    headers: ["header 1", "header 2"]
+    bodyClasses: [["class-1", "class-2"], ["class-2", "class-1"]],
+    headers: ["header 1", "header 2"],
+    headerClasses: ["class-1", "class-2"]
 });
-console.log(myTable.body);     // [["a1", "b1"], ["a2", "b2"]]
-console.log(myTable.headers);  // ["header 1", "header 2"]
+console.log(myTable.body);           // [["a1", "b1"], ["a2", "b2"]]
+console.log(myTable.bodyClasses);    // [["class-1", "class-2"], ["class-2", "class-1"]]
+console.log(myTable.headers);        // ["header 1", "header 2"]
+console.log(myTable.headerClasses);  // ["class-1", "class-2"]
 ```
 
 #### sort

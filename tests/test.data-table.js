@@ -22,7 +22,9 @@ describe("DataTable class", function() {
 
             // Assert properties are correct
             expect(dt.body).to.deep.equal([]);
+            expect(dt.bodyClasses).to.be.null;
             expect(dt.headers).to.deep.equal([]);
+            expect(dt.headerClasses).to.be.null;
             expect(dt.sortable).to.be.false;
             expect(dt.searchQuery).to.equal("");
             expect(dt.sortAscending).to.be.null;
@@ -36,7 +38,9 @@ describe("DataTable class", function() {
 
             // Assert properties are correct
             expect(dt.body).to.deep.equal([]);
+            expect(dt.bodyClasses).to.be.null;
             expect(dt.headers).to.deep.equal([]);
+            expect(dt.headerClasses).to.be.null;
             expect(dt.sortable).to.be.false;
             expect(dt.searchQuery).to.equal("");
             expect(dt.sortAscending).to.be.null;
@@ -48,8 +52,10 @@ describe("DataTable class", function() {
             // Create table
             let dt = new DataTable("#mytable", {
                 body: [["a1", "b1"], ["a2", "b2"]],
+                bodyClasses: [["class-1", "class-2"], ["class-2", "class-1"]],
                 downIcon: "down-icon HTML",
                 headers: ["header 1", "header 2"],
+                headerClasses: ["class-1", "class-2"],
                 sortable: true,
                 searchQuery: "my query",
                 sortAscending: false,
@@ -61,8 +67,10 @@ describe("DataTable class", function() {
 
             // Assert properties are correct
             expect(dt.body).to.deep.equal([["a1", "b1"], ["a2", "b2"]]);
+            expect(dt.bodyClasses).to.deep.equal([["class-1", "class-2"], ["class-2", "class-1"]]);
             expect(dt.downIcon).to.equal("down-icon HTML");
             expect(dt.headers).to.deep.equal(["header 1", "header 2"]);
+            expect(dt.headerClasses).to.deep.equal(["class-1", "class-2"]);
             expect(dt.sortable).to.be.true;
             expect(dt.searchQuery).to.equal("my query");
             expect(dt.sortAscending).to.be.false;
@@ -91,6 +99,27 @@ describe("DataTable class", function() {
 
             // Assert body not set
             expect(dt.body).to.deep.equal([]);
+        });
+    });
+
+    describe("bodyClasses property", function() {
+        it("Should be null by default", function() {
+            // Create table
+            let dt = new DataTable("#mytable");
+
+            // Assert bodyClasses is correct
+            expect(dt.bodyClasses).to.deep.equal(null);
+        });
+
+        it("Should not be changeable", function() {
+            // Create table
+            let dt = new DataTable("#mytable");
+
+            // Attempt to change bodyClasses
+            dt.bodyClasses = [["class-1", "class-2"], ["class-2", "class-1"]];
+
+            // Assert bodyClasses not set
+            expect(dt.bodyClasses).to.deep.equal(null);
         });
     });
 
@@ -137,6 +166,27 @@ describe("DataTable class", function() {
 
             // Assert headers not set
             expect(dt.headers).to.deep.equal([]);
+        });
+    });
+
+    describe("headerClasses property", function() {
+        it("Should be null by default", function() {
+            // Create table
+            let dt = new DataTable("#mytable");
+
+            // Assert headerClasses is correct
+            expect(dt.headerClasses).to.deep.equal(null);
+        });
+
+        it("Should not be changeable", function() {
+            // Create table
+            let dt = new DataTable("#mytable");
+
+            // Attempt to change headerClasses
+            dt.headerClasses = ["class-1", "class-2"];
+
+            // Assert headerClasses not set
+            expect(dt.headerClasses).to.deep.equal(null);
         });
     });
 
@@ -363,26 +413,26 @@ describe("DataTable class", function() {
             <table>
                 <thead>
                     <tr>
-                        <th>h1</th>
-                        <th>h2</th>
-                        <th>h3</th>
+                        <th class="">h1</th>
+                        <th class="">h2</th>
+                        <th class="">h3</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <td>a1</td>
-                        <td>b1</td>
-                        <td>c1</td>
+                        <td class="">a1</td>
+                        <td class="">b1</td>
+                        <td class="">c1</td>
                     </tr>
                     <tr>
-                        <td>a2</td>
-                        <td>b2</td>
-                        <td>c2</td>
+                        <td class="">a2</td>
+                        <td class="">b2</td>
+                        <td class="">c2</td>
                     </tr>
                     <tr>
-                        <td>a3</td>
-                        <td>b3</td>
-                        <td>c3</td>
+                        <td class="">a3</td>
+                        <td class="">b3</td>
+                        <td class="">c3</td>
                     </tr>
                 </tbody>
             </table>`.replace(/\n\s*/g, "");
@@ -404,19 +454,19 @@ describe("DataTable class", function() {
             <table>
                 <tbody>
                     <tr>
-                        <td>a1</td>
-                        <td>b1</td>
-                        <td>c1</td>
+                        <td class="">a1</td>
+                        <td class="">b1</td>
+                        <td class="">c1</td>
                     </tr>
                     <tr>
-                        <td>a2</td>
-                        <td>b2</td>
-                        <td>c2</td>
+                        <td class="">a2</td>
+                        <td class="">b2</td>
+                        <td class="">c2</td>
                     </tr>
                     <tr>
-                        <td>a3</td>
-                        <td>b3</td>
-                        <td>c3</td>
+                        <td class="">a3</td>
+                        <td class="">b3</td>
+                        <td class="">c3</td>
                     </tr>
                 </tbody>
             </table>`.replace(/\n\s*/g, "");
@@ -434,9 +484,9 @@ describe("DataTable class", function() {
             <table>
                 <thead>
                     <tr>
-                        <th>h1</th>
-                        <th>h2</th>
-                        <th>h3</th>
+                        <th class="">h1</th>
+                        <th class="">h2</th>
+                        <th class="">h3</th>
                     </tr>
                 </thead>
             </table>`.replace(/\n\s*/g, "");
@@ -466,13 +516,13 @@ describe("DataTable class", function() {
             <table>
                 <thead>
                     <tr>
-                        <th>
+                        <th class="">
                             One
                             <button>
                                 ${dt.updownIcon}
                             </button>
                         </th>
-                        <th>
+                        <th class="">
                             Two
                             <button>
                                 ${dt.updownIcon}
@@ -491,13 +541,13 @@ describe("DataTable class", function() {
             <table>
                 <thead>
                     <tr>
-                        <th>
+                        <th class="">
                             One
                             <button>
                                 ${dt.upIcon}
                             </button>
                         </th>
-                        <th>
+                        <th class="">
                             Two
                             <button>
                                 ${dt.updownIcon}
@@ -516,18 +566,62 @@ describe("DataTable class", function() {
             <table>
                 <thead>
                     <tr>
-                        <th>
+                        <th class="">
                             One
                             <button>
                                 ${dt.downIcon}
                             </button>
                         </th>
-                        <th>
+                        <th class="">
                             Two
                             <button>
                                 ${dt.updownIcon}
                             </button>
                         </th>
+                    </tr>
+                </thead>
+            </table>`.replace(/\n\s*/g, "");
+            expect(global.document.querySelector("div.data-table").innerHTML).to.equal(expected);
+        });
+
+        it("Should add body classes if bodyClasses is not null", function() {
+            // Create table (calls render method)
+            new DataTable("#mytable", {
+                body: [["a1", "b1"], ["a2", "b2"]],
+                bodyClasses: [["class-1", "class-2"], ["class-2", "class-1"]]
+            });
+
+            // Assert table is correct
+            let expected = `
+            <table>
+                <tbody>
+                    <tr>
+                        <td class="class-1">a1</td>
+                        <td class="class-2">b1</td>
+                    </tr>
+                    <tr>
+                        <td class="class-2">a2</td>
+                        <td class="class-1">b2</td>
+                    </tr>
+                </tbody>
+            </table>`.replace(/\n\s*/g, "");
+            expect(global.document.querySelector("div.data-table").innerHTML).to.equal(expected);
+        });
+
+        it("Should add header classes if headerClasses is not null", function() {
+            // Create table (calls render method)
+            new DataTable("#mytable", {
+                headers: ["header 1", "header 2"],
+                headerClasses: ["class-1", "class-2"]
+            });
+
+            // Assert table is correct
+            let expected = `
+            <table>
+                <thead>
+                    <tr>
+                        <th class="class-1">header 1</th>
+                        <th class="class-2">header 2</th>
                     </tr>
                 </thead>
             </table>`.replace(/\n\s*/g, "");
@@ -558,18 +652,18 @@ describe("DataTable class", function() {
             <table>
                 <thead>
                     <tr>
-                        <th>English</th>
-                        <th>Spanish</th>
+                        <th class="">English</th>
+                        <th class="">Spanish</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <td>Orange</td>
-                        <td>Anaranjado</td>
+                        <td class="">Orange</td>
+                        <td class="">Anaranjado</td>
                     </tr>
                     <tr>
-                        <td>Purple</td>
-                        <td>Morado</td>
+                        <td class="">Purple</td>
+                        <td class="">Morado</td>
                     </tr>
                 </tbody>
             </table>`.replace(/\n\s*/g, "");
@@ -601,34 +695,34 @@ describe("DataTable class", function() {
             <table>
                 <thead>
                     <tr>
-                        <th>English</th>
-                        <th>Spanish</th>
+                        <th class="">English</th>
+                        <th class="">Spanish</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <td>Red</td>
-                        <td>Rojo</td>
+                        <td class="">Red</td>
+                        <td class="">Rojo</td>
                     </tr>
                     <tr>
-                        <td>Orange</td>
-                        <td>Anaranjado</td>
+                        <td class="">Orange</td>
+                        <td class="">Anaranjado</td>
                     </tr>
                     <tr>
-                        <td>Yellow</td>
-                        <td>Amarillo</td>
+                        <td class="">Yellow</td>
+                        <td class="">Amarillo</td>
                     </tr>
                     <tr>
-                        <td>Green</td>
-                        <td>Verde</td>
+                        <td class="">Green</td>
+                        <td class="">Verde</td>
                     </tr>
                     <tr>
-                        <td>Blue</td>
-                        <td>Azúl</td>
+                        <td class="">Blue</td>
+                        <td class="">Azúl</td>
                     </tr>
                     <tr>
-                        <td>Purple</td>
-                        <td>Morado</td>
+                        <td class="">Purple</td>
+                        <td class="">Morado</td>
                     </tr>
                 </tbody>
             </table>`.replace(/\n\s*/g, "");
@@ -658,6 +752,58 @@ describe("DataTable class", function() {
     });
 
     describe("setData method", function() {
+        it("Should update data properties if a new value is provided", function() {
+            // Create table
+            let dt = new DataTable("#mytable");
+
+            // Call setData method for body data only
+            dt.setData({
+                body: [["a1", "b1"], ["a2", "b2"]],
+                bodyClasses: [["class-1", "class-2"], ["class-2", "class-1"]]
+            });
+
+            // Assert only body data properties were updated
+            expect(dt.body).to.deep.equal([["a1", "b1"], ["a2", "b2"]]);
+            expect(dt.bodyClasses).to.deep.equal([["class-1", "class-2"], ["class-2", "class-1"]]);
+            expect(dt.headers).to.deep.equal([]);
+            expect(dt.headerClasses).to.be.null;
+
+            // Call setData method for header data only
+            dt.setData({
+                headers: ["header 1", "header 2"],
+                headerClasses: ["class-1", "class-2"]
+            });
+
+            // Assert only header data properties were updated
+            expect(dt.body).to.deep.equal([["a1", "b1"], ["a2", "b2"]]);
+            expect(dt.bodyClasses).to.deep.equal([["class-1", "class-2"], ["class-2", "class-1"]]);
+            expect(dt.headers).to.deep.equal(["header 1", "header 2"]);
+            expect(dt.headerClasses).to.deep.equal(["class-1", "class-2"]);
+        });
+
+        it("Should not set data properties if value parameter is undefined or empty", function() {
+            // Create table
+            let dt = new DataTable("#mytable");
+
+            // Call setData method without value parameter
+            dt.setData();
+
+            // Assert properties were not modified
+            expect(dt.body).to.deep.equal([]);
+            expect(dt.bodyClasses).to.be.null;
+            expect(dt.headers).to.deep.equal([]);
+            expect(dt.headerClasses).to.be.null;
+
+            // Call setData method on empty object
+            dt.setData({});
+
+            // Assert properties were not modified
+            expect(dt.body).to.deep.equal([]);
+            expect(dt.bodyClasses).to.be.null;
+            expect(dt.headers).to.deep.equal([]);
+            expect(dt.headerClasses).to.be.null;
+        });
+
         it("Should call render method", function() {
             // Create table
             let dt = new DataTable("#mytable");
@@ -667,17 +813,10 @@ describe("DataTable class", function() {
 
             try {
                 // Call setData method
-                dt.setData({
-                    body: [["a1", "b1", "c1"]],
-                    headers: ["a", "b", "c"]
-                });
+                dt.setData();
 
                 // Assert DataTable.render called
                 expect(render.calledOnce).to.be.true;
-
-                // Assert data properties were updated
-                expect(dt.body).to.deep.equal([["a1", "b1", "c1"]]);
-                expect(dt.headers).to.deep.equal(["a", "b", "c"]);
             }
             finally {
                 // Restore DataTable.render method
@@ -726,18 +865,18 @@ describe("DataTable class", function() {
             <table>
                 <thead>
                     <tr>
-                        <th>English</th>
-                        <th>Español</th>
+                        <th class="">English</th>
+                        <th class="">Español</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <td>Purple</td>
-                        <td>Morada</td>
+                        <td class="">Purple</td>
+                        <td class="">Morada</td>
                     </tr>
                     <tr>
-                        <td>Orange</td>
-                        <td>Anaranjada</td>
+                        <td class="">Orange</td>
+                        <td class="">Anaranjada</td>
                     </tr>
                 </tbody>
             </table>`.replace(/\n\s*/g, "");
@@ -768,34 +907,34 @@ describe("DataTable class", function() {
             <table>
                 <thead>
                     <tr>
-                        <th>English</th>
-                        <th>Spanish</th>
+                        <th class="">English</th>
+                        <th class="">Spanish</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <td>Green</td>
-                        <td>Verde</td>
+                        <td class="">Green</td>
+                        <td class="">Verde</td>
                     </tr>
                     <tr>
-                        <td>Red</td>
-                        <td>Rojo</td>
+                        <td class="">Red</td>
+                        <td class="">Rojo</td>
                     </tr>
                     <tr>
-                        <td>Purple</td>
-                        <td>Morado</td>
+                        <td class="">Purple</td>
+                        <td class="">Morado</td>
                     </tr>
                     <tr>
-                        <td>Blue</td>
-                        <td>Azúl</td>
+                        <td class="">Blue</td>
+                        <td class="">Azúl</td>
                     </tr>
                     <tr>
-                        <td>Orange</td>
-                        <td>Anaranjado</td>
+                        <td class="">Orange</td>
+                        <td class="">Anaranjado</td>
                     </tr>
                     <tr>
-                        <td>Yellow</td>
-                        <td>Amarillo</td>
+                        <td class="">Yellow</td>
+                        <td class="">Amarillo</td>
                     </tr>
                 </tbody>
             </table>`.replace(/\n\s*/g, "");
@@ -831,34 +970,34 @@ describe("DataTable class", function() {
             <table>
                 <thead>
                     <tr>
-                        <th>English</th>
-                        <th>Spanish</th>
+                        <th class="">English</th>
+                        <th class="">Spanish</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <td>Red</td>
-                        <td>Rojo</td>
+                        <td class="">Red</td>
+                        <td class="">Rojo</td>
                     </tr>
                     <tr>
-                        <td>Orange</td>
-                        <td>Anaranjado</td>
+                        <td class="">Orange</td>
+                        <td class="">Anaranjado</td>
                     </tr>
                     <tr>
-                        <td>Yellow</td>
-                        <td>Amarillo</td>
+                        <td class="">Yellow</td>
+                        <td class="">Amarillo</td>
                     </tr>
                     <tr>
-                        <td>Green</td>
-                        <td>Verde</td>
+                        <td class="">Green</td>
+                        <td class="">Verde</td>
                     </tr>
                     <tr>
-                        <td>Blue</td>
-                        <td>Azúl</td>
+                        <td class="">Blue</td>
+                        <td class="">Azúl</td>
                     </tr>
                     <tr>
-                        <td>Purple</td>
-                        <td>Morado</td>
+                        <td class="">Purple</td>
+                        <td class="">Morado</td>
                     </tr>
                 </tbody>
             </table>`.replace(/\n\s*/g, "");

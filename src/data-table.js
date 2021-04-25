@@ -15,11 +15,27 @@ let DataTable = function(selector, options) {
     });
 
     /**
+     * The table body classes
+     */
+    let _bodyClasses = null;
+    Object.defineProperty(this, "bodyClasses", {
+        get: function() { return _bodyClasses; }
+    });
+
+    /**
      * The table headers
      */
     let _headers = [];
     Object.defineProperty(this, "headers", {
         get: function() { return _headers; }
+    });
+
+    /**
+     * The table header classes
+     */
+    let _headerClasses = null;
+    Object.defineProperty(this, "headerClasses", {
+        get: function() { return _headerClasses; }
     });
 
     /**
@@ -126,8 +142,10 @@ let DataTable = function(selector, options) {
         // Set options
         if (options) {
             if (options.body !== undefined) _body = options.body;
+            if (options.bodyClasses !== undefined) _bodyClasses = options.bodyClasses;
             if (options.downIcon !== undefined) icons.down = options.downIcon;
             if (options.headers !== undefined) _headers = options.headers;
+            if (options.headerClasses !== undefined) _headerClasses = options.headerClasses;
             if (options.sortable !== undefined) _sortable = options.sortable;
             if (options.searchQuery !== undefined) _searchQuery = options.searchQuery;
             if (options.sortAscending !== undefined) _sortAscending = options.sortAscending;
@@ -149,16 +167,29 @@ let DataTable = function(selector, options) {
      */
     let loadTableData = function() {
         // Load table headers
-        tableData.headers = _headers;
+        tableData.headers = [];
+        for (let i = 0; i < _headers.length; i++) {
+            tableData.headers.push({
+                value: _headers[i],
+                class: _headerClasses ? _headerClasses[i] : "",
+            });
+        }
 
         // Load table body
         tableData.body = [];
         for (let i = 0; i < _body.length; i++) {
-            tableData.body.push({
+            let row = {
                 visible: true,
-                columns: _body[i],
+                columns: [],
                 row: i,
-            });
+            };
+            for (let j = 0; j < _body[i].length; j++) {
+                row.columns.push({
+                    value: _body[i][j],
+                    class: _bodyClasses ? _bodyClasses[i][j] : "",
+                });
+            }
+            tableData.body.push(row);
         }
 
         // Update row visibilities
@@ -192,7 +223,7 @@ let DataTable = function(selector, options) {
         if (tableData.headers.length > 0) {
             divHTML += "<thead><tr>";
             for (let i = 0; i < tableData.headers.length; i++) {
-                divHTML += `<th>${tableData.headers[i]}`;
+                divHTML += `<th class="${tableData.headers[i].class}">${tableData.headers[i].value}`;
                 if (_sortable) {
                     if (_sortIndex !== i) divHTML += `<button>${icons.updown}</button>`;
                     else if (_sortIndex === i && _sortAscending === true) divHTML += `<button>${icons.up}</button>`;
@@ -213,7 +244,7 @@ let DataTable = function(selector, options) {
                 // Add row
                 divHTML += "<tr>";
                 for (let column of row.columns) {
-                    divHTML += `<td>${column}</td>`;
+                    divHTML += `<td class="${column.class}">${column.value}</td>`;
                 }
                 divHTML += "</tr>";
             }
@@ -247,7 +278,7 @@ let DataTable = function(selector, options) {
         for (let row of tableData.body) {
             row.visible = false;
             for (let column of row.columns) {
-                if (column.toLowerCase().includes(query.toLowerCase())) {
+                if (column.value.toLowerCase().includes(query.toLowerCase())) {
                     row.visible = true;
                     break;
                 }
@@ -272,7 +303,9 @@ let DataTable = function(selector, options) {
     this.setData = function(value) {
         if (value) {
             if (value.body !== undefined) _body = value.body;
+            if (value.bodyClasses !== undefined) _bodyClasses = value.bodyClasses;
             if (value.headers !== undefined) _headers = value.headers;
+            if (value.headerClasses !== undefined) _headerClasses = value.headerClasses;
         }
         loadTableData();
         this.render();
@@ -305,8 +338,8 @@ let DataTable = function(selector, options) {
         else {
             // Data is sorted by incorrect column
             tableData.body.sort((a, b) => {
-                if (a.columns[index] === b.columns[index]) return 0;
-                else if (a.columns[index] < b.columns[index]) return -1;
+                if (a.columns[index].value === b.columns[index].value) return 0;
+                else if (a.columns[index].value < b.columns[index].value) return -1;
                 else return 1;
             });
             if (!ascending) tableData.body.reverse();
