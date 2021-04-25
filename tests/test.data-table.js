@@ -657,7 +657,7 @@ describe("DataTable class", function() {
         });
     });
 
-    describe("setBody method", function() {
+    describe("setData method", function() {
         it("Should call render method", function() {
             // Create table
             let dt = new DataTable("#mytable");
@@ -666,94 +666,17 @@ describe("DataTable class", function() {
             let render = sinon.stub(dt, "render");
 
             try {
-                // Call setBody method
-                dt.setBody([["a1", "b1", "c1"]]);
+                // Call setData method
+                dt.setData({
+                    body: [["a1", "b1", "c1"]],
+                    headers: ["a", "b", "c"]
+                });
 
                 // Assert DataTable.render called
                 expect(render.calledOnce).to.be.true;
 
-                // Assert body property was updated
+                // Assert data properties were updated
                 expect(dt.body).to.deep.equal([["a1", "b1", "c1"]]);
-            }
-            finally {
-                // Restore DataTable.render method
-                render.restore();
-            }
-        });
-
-        it("Should not modify search query or sort properties", function() {
-            // Create table
-            let dt = new DataTable("#mytable", {
-                headers: ["English", "Spanish"],
-                body: [
-                    ["Red",     "Rojo"],
-                    ["Orange",  "Anaranjado"],
-                    ["Yellow",  "Amarillo"],
-                    ["Green",   "Verde"],
-                    ["Blue",    "Azúl"],
-                    ["Purple",  "Morado"]
-                ]
-            });
-
-            // Sort and filter table
-            dt.search("or");
-            dt.sort(1, false);
-
-            // Call setBody method
-            dt.setBody([
-                ["Red",     "Roja"],
-                ["Orange",  "Anaranjada"],
-                ["Yellow",  "Amarilla"],
-                ["Green",   "Verde"],
-                ["Blue",    "Azúl"],
-                ["Purple",  "Morada"]
-            ]);
-
-            // Assert search query and sort properties are correct
-            expect(dt.searchQuery).to.equal("or");
-            expect(dt.sortIndex).to.equal(1);
-            expect(dt.sortAscending).to.be.false;
-
-            // Assert table is correct
-            let expected = `
-            <table>
-                <thead>
-                    <tr>
-                        <th>English</th>
-                        <th>Spanish</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Purple</td>
-                        <td>Morada</td>
-                    </tr>
-                    <tr>
-                        <td>Orange</td>
-                        <td>Anaranjada</td>
-                    </tr>
-                </tbody>
-            </table>`.replace(/\n\s*/g, "");
-            expect(global.document.querySelector("div.data-table").innerHTML).to.equal(expected);
-        });
-    });
-
-    describe("setHeaders method", function() {
-        it("Should call render method", function() {
-            // Create table
-            let dt = new DataTable("#mytable");
-
-            // Mock DataTable.render method
-            let render = sinon.stub(dt, "render");
-
-            try {
-                // Call setHeaders method
-                dt.setHeaders(["a", "b", "c"]);
-
-                // Assert DataTable.render called
-                expect(render.calledOnce).to.be.true;
-
-                // Assert headers property was updated
                 expect(dt.headers).to.deep.equal(["a", "b", "c"]);
             }
             finally {
@@ -780,8 +703,18 @@ describe("DataTable class", function() {
             dt.search("or");
             dt.sort(1, false);
 
-            // Call setHeaders method
-            dt.setHeaders(["English", "Español"]);
+            // Call setData method
+            dt.setData({
+                headers: ["English", "Español"],
+                body: [
+                    ["Red",     "Roja"],
+                    ["Orange",  "Anaranjada"],
+                    ["Yellow",  "Amarilla"],
+                    ["Green",   "Verde"],
+                    ["Blue",    "Azúl"],
+                    ["Purple",  "Morada"]
+                ]
+            });
 
             // Assert search query and sort properties are correct
             expect(dt.searchQuery).to.equal("or");
@@ -800,11 +733,11 @@ describe("DataTable class", function() {
                 <tbody>
                     <tr>
                         <td>Purple</td>
-                        <td>Morado</td>
+                        <td>Morada</td>
                     </tr>
                     <tr>
                         <td>Orange</td>
-                        <td>Anaranjado</td>
+                        <td>Anaranjada</td>
                     </tr>
                 </tbody>
             </table>`.replace(/\n\s*/g, "");

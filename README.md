@@ -62,14 +62,14 @@ let myTable = new DataTable("#my-selector", {
     sortIndex: 1,
     unsortable: false,
 });
-console.log(myTable.selector)       // "#my-selector"
-console.log(myTable.body)           // [["a1", "b1"], ["a2", "b2"]]
-console.log(myTable.headers)        // ["header 1", "header 2"]
-console.log(myTable.sortable)       // true
-console.log(myTable.searchQuery)    // "my query"
-console.log(myTable.sortAscending)  // false
-console.log(myTable.sortIndex)      // 1
-console.log(myTable.unsortable)     // false
+console.log(myTable.selector);       // "#my-selector"
+console.log(myTable.body);           // [["a1", "b1"], ["a2", "b2"]]
+console.log(myTable.headers);        // ["header 1", "header 2"]
+console.log(myTable.sortable);       // true
+console.log(myTable.searchQuery);    // "my query"
+console.log(myTable.sortAscending);  // false
+console.log(myTable.sortIndex);      // 1
+console.log(myTable.unsortable);     // false
 ```
 
 
@@ -77,7 +77,9 @@ console.log(myTable.unsortable)     // false
 #### body
 A two dimensional array that contains the table body data. This property cannot be modified. The default value is an empty array (`[]`).
 ```JS
-let myTable = new DataTable("#my-selector", { body: [["a1", "b1"], ["a2", "b2"]] });
+let myTable = new DataTable("#my-selector", {
+    body: [["a1", "b1"], ["a2", "b2"]]
+});
 console.log(myTable.body);  // [["a1", "b1"], ["a2", "b2"]]
 ```
 
@@ -92,7 +94,9 @@ myTable.downIcon = "my icon";
 #### headers
 An array that contains the table headers. This property cannot be modified. The default value is an empty array (`[]`).
 ```JS
-let myTable = new DataTable("#my-selector", { headers: ["header 1", "header 2"] });
+let myTable = new DataTable("#my-selector", {
+    headers: ["header 1", "header 2"]
+});
 console.log(myTable.headers);  // ["header 1", "header 2"]
 ```
 
@@ -185,21 +189,15 @@ let myTable = new DataTable("#my-selector");
 myTable.search("my query");
 ```
 
-#### setBody
-Sets the table body data. This method takes one argument: `value`. `value` is a two dimensional array that contains the table body data.
+#### setData
+Sets the table data properties (`body` and `headers`). This method takes one argument: `value`. `value` is an object that can contain values for any of the data properties. If no value is provided for a property, it will not be modified.
 ```JS
 let myTable = new DataTable("#my-selector");
-myTable.search("my query");
-myTable.setBody([["a1", "b1"], ["a2", "b2"]]);
-console.log(myTable.body);  // [["a1", "b1"], ["a2", "b2"]]
-```
-
-#### setHeaders
-Sets the table headers. This method takes one argument: `value`. `value` is an array that contains the table headers.
-```JS
-let myTable = new DataTable("#my-selector");
-myTable.search("my query");
-myTable.setHeaders(["header 1", "header 2"]);
+myTable.setData({
+    body: [["a1", "b1"], ["a2", "b2"]],
+    headers: ["header 1", "header 2"]
+});
+console.log(myTable.body);     // [["a1", "b1"], ["a2", "b2"]]
 console.log(myTable.headers);  // ["header 1", "header 2"]
 ```
 

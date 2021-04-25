@@ -266,21 +266,14 @@ let DataTable = function(selector, options) {
     }
 
     /**
-     * Set the table body data
-     * @param {Array} value The table body data
+     * Set the table data
+     * @param {Object} value The table data
      */
-    this.setBody = function(value) {
-        _body = value;
-        loadTableData();
-        this.render();
-    }
-
-    /**
-     * Set the table headers
-     * @param {Array} value The table headers
-     */
-    this.setHeaders = function(value) {
-        _headers = value;
+    this.setData = function(value) {
+        if (value) {
+            if (value.body !== undefined) _body = value.body;
+            if (value.headers !== undefined) _headers = value.headers;
+        }
         loadTableData();
         this.render();
     }
