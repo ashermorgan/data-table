@@ -1008,4 +1008,174 @@ describe("DataTable class", function() {
             expect(dt.sortAscending).to.be.null;
         });
     });
+
+    describe("sort buttons", function() {
+        it("Should correctly sort table when it isn't sorted", function() {
+            // Create table
+            let dt = new DataTable("#mytable", {
+                headers: ["English", "Spanish"],
+                body: [
+                    ["Red",     "Rojo"],
+                    ["Orange",  "Anaranjado"],
+                    ["Yellow",  "Amarillo"],
+                    ["Green",   "Verde"],
+                    ["Blue",    "Azúl"],
+                    ["Purple",  "Morado"]
+                ],
+                sortable: true
+            });
+
+            // Mock DataTable.sort method
+            let sort = sinon.stub(dt, "sort");
+
+            try {
+                // Click 1st header
+                document.querySelectorAll("div.data-table th button")[0].click();
+
+                // Assert table sorted correctly
+                expect(sort.calledOnceWithExactly(0, true)).to.be.true;
+            }
+            finally {
+                // Restore DataTable.sort method
+                sort.restore();
+            }
+        });
+
+        it("Should correctly sort table when it's sorted by a different column", function() {
+            // Create table
+            let dt = new DataTable("#mytable", {
+                headers: ["English", "Spanish"],
+                body: [
+                    ["Red",     "Rojo"],
+                    ["Orange",  "Anaranjado"],
+                    ["Yellow",  "Amarillo"],
+                    ["Green",   "Verde"],
+                    ["Blue",    "Azúl"],
+                    ["Purple",  "Morado"]
+                ],
+                sortable: true
+            });
+
+            // Sort table by 2nd column
+            dt.sort(1, true);
+
+            // Mock DataTable.sort method
+            let sort = sinon.stub(dt, "sort");
+
+            try {
+                // Click 1st header
+                document.querySelectorAll("div.data-table th button")[0].click();
+
+                // Assert table sorted correctly
+                expect(sort.calledOnceWithExactly(0, true)).to.be.true;
+            }
+            finally {
+                // Restore DataTable.sort method
+                sort.restore();
+            }
+        });
+
+        it("Should correctly sort table when it's sorted ascending by the same column", function() {
+            // Create table
+            let dt = new DataTable("#mytable", {
+                headers: ["English", "Spanish"],
+                body: [
+                    ["Red",     "Rojo"],
+                    ["Orange",  "Anaranjado"],
+                    ["Yellow",  "Amarillo"],
+                    ["Green",   "Verde"],
+                    ["Blue",    "Azúl"],
+                    ["Purple",  "Morado"]
+                ],
+                sortable: true
+            });
+
+            // Sort table ascending by 1st column
+            dt.sort(0, true);
+
+            // Mock DataTable.sort method
+            let sort = sinon.stub(dt, "sort");
+
+            try {
+                // Click 1st header
+                document.querySelectorAll("div.data-table th button")[0].click();
+
+                // Assert table sorted correctly
+                expect(sort.calledOnceWithExactly(0, false)).to.be.true;
+            }
+            finally {
+                // Restore DataTable.sort method
+                sort.restore();
+            }
+        });
+
+        it("Should correctly sort table when it's sorted descending by the same column and unsortable is true", function() {
+            // Create table
+            let dt = new DataTable("#mytable", {
+                headers: ["English", "Spanish"],
+                body: [
+                    ["Red",     "Rojo"],
+                    ["Orange",  "Anaranjado"],
+                    ["Yellow",  "Amarillo"],
+                    ["Green",   "Verde"],
+                    ["Blue",    "Azúl"],
+                    ["Purple",  "Morado"]
+                ],
+                sortable: true
+            });
+
+            // Sort table descending by 1st column
+            dt.sort(0, false);
+
+            // Mock DataTable.sort method
+            let sort = sinon.stub(dt, "sort");
+
+            try {
+                // Click 1st header
+                document.querySelectorAll("div.data-table th button")[0].click();
+
+                // Assert table sorted correctly
+                expect(sort.calledOnceWithExactly(0, null)).to.be.true;
+            }
+            finally {
+                // Restore DataTable.sort method
+                sort.restore();
+            }
+        });
+
+        it("Should correctly sort table when it's sorted descending by the same column and unsortable is false", function() {
+            // Create table
+            let dt = new DataTable("#mytable", {
+                headers: ["English", "Spanish"],
+                body: [
+                    ["Red",     "Rojo"],
+                    ["Orange",  "Anaranjado"],
+                    ["Yellow",  "Amarillo"],
+                    ["Green",   "Verde"],
+                    ["Blue",    "Azúl"],
+                    ["Purple",  "Morado"]
+                ],
+                sortable: true,
+                unsortable: false,
+            });
+
+            // Sort table descending by 1st column
+            dt.sort(0, false);
+
+            // Mock DataTable.sort method
+            let sort = sinon.stub(dt, "sort");
+
+            try {
+                // Click 1st header
+                document.querySelectorAll("div.data-table th button")[0].click();
+
+                // Assert table sorted correctly
+                expect(sort.calledOnceWithExactly(0, true)).to.be.true;
+            }
+            finally {
+                // Restore DataTable.sort method
+                sort.restore();
+            }
+        });
+    });
 });
