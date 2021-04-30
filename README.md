@@ -87,24 +87,35 @@ let myTable = new DataTable("#my-selector", {
     body: [["a1", "b1"], ["a2", "b2"]]
 });
 console.log(myTable.body);  // [["a1", "b1"], ["a2", "b2"]]
+myTable.setData({
+    body: [["a3", "b3"], ["a4", "b4"]]
+});
+console.log(myTable.body);  // [["a3", "b3"], ["a4", "b4"]]
 ```
 
 #### bodyClasses
-A two dimensional array that contains classes for the table body data. Classes allow you to apply different CSS styles to different body cells. `bodyClasses` should have the same dimentions as `body`. If `bodyClasses` is `null`, no classes will be added. This property cannot be modified directly, use the `setData` method instead. The default value is `null`.
+A two dimensional array that contains classes for the table body data. Classes allow you to apply different CSS styles to different body cells. `bodyClasses` should have the same dimensions as `body`. If `bodyClasses` is `null`, no classes will be added. This property cannot be modified directly, use the `setData` method instead. The default value is `null`.
 ```JS
 let myTable = new DataTable("#my-selector", {
     body: [["a1", "b1"], ["a2", "b2"]],
     bodyClasses: [["class-1", "class-2"], ["class-2", "class-1"]]
 });
 console.log(myTable.bodyClasses);  // [["class-1", "class-2"], ["class-2", "class-1"]]
+myTable.setData({
+    bodyClasses: [["class-3", "class-4"], ["class-4", "class-3"]]
+});
+console.log(myTable.bodyClasses);  // [["class-3", "class-4"], ["class-4", "class-3"]]
 ```
 
 #### downIcon
 A string containing the HTML code for the down icon, which is used to help the user sort the table.
 ```JS
-let myTable = new DataTable("#my-selector");
-console.log(myTable.downIcon);  // "<svg viewBox=...</svg>"
-myTable.downIcon = "my icon";
+let myTable = new DataTable("#my-selector", {
+    downIcon: `<img src="my-image-1.png">`
+});
+console.log(myTable.downIcon);  // "<img src=\"my-image-1.png\">"
+myTable.downIcon = `<img src="my-image-2.png">`;
+console.log(myTable.downIcon);  // "<img src=\"my-image-2.png\">"
 ```
 
 #### headers
@@ -114,6 +125,10 @@ let myTable = new DataTable("#my-selector", {
     headers: ["header 1", "header 2"]
 });
 console.log(myTable.headers);  // ["header 1", "header 2"]
+myTable.setData({
+    headers: ["header 3", "header 4"]
+});
+console.log(myTable.headers);  // ["header 3", "header 4"]
 ```
 
 #### headerClasses
@@ -124,22 +139,32 @@ let myTable = new DataTable("#my-selector", {
     headerClasses: ["class-1", "class-2"]
 });
 console.log(myTable.headerClasses);  // ["class-1", "class-2"]
+myTable.setData({
+    headerClasses: ["class-3", "class-4"]
+});
+console.log(myTable.headerClasses);  // ["class-3", "class-4"]
 ```
 
 #### sortable
 A boolean that indicates whether the table can currently be sorted by the user. The default value is `false`.
 ```JS
-let myTable = new DataTable("#my-selector");
+let myTable = new DataTable("#my-selector", {
+    sortable: true,
+});
+console.log(myTable.sortable);  // true
+myTable.sortable = false;
 console.log(myTable.sortable);  // false
-myTable.sortable = true;
 ```
 
 #### searchQuery
-A string that contains the current search query. This property cannot be modified. The default value is an empty string (`""`).
+A string that contains the current search query. This property is set by the `search` method and cannot be modified directly. The default value is an empty string (`""`).
 ```JS
-let myTable = new DataTable("#my-selector");
-myTable.search("my query");
-console.log(myTable.searchQuery);  // "my query"
+let myTable = new DataTable("#my-selector", {
+    searchQuery: "my query #1"
+});
+console.log(myTable.searchQuery);  // "my query #1"
+myTable.search("my query #2");
+console.log(myTable.searchQuery);  // "my query #2"
 ```
 
 #### selector
@@ -150,19 +175,25 @@ console.log(myTable.selector);  // "#my-selector"
 ```
 
 #### sortAscending
-A boolean that indicates whether the table is currently sorted in ascending order. If the table isn't sorted, it will be `null`. This property cannot be modified. The default value is `null`.
+A boolean that indicates whether the table is currently sorted in ascending order. If the table isn't sorted, it will be `null`. This property is set by the `sort` method and cannot be modified directly. The default value is `null`.
 ```JS
-let myTable = new DataTable("#my-selector");
-console.log(myTable.sortAscending);  // null
+let myTable = new DataTable("#my-selector", {
+    sortAscending: true
+    sortIndex: 1,
+});
+console.log(myTable.sortAscending);  // true
 myTable.sort(2, false);
 console.log(myTable.sortAscending);  // false
 ```
 
 #### sortIndex
-The (zero-based) index of the column that the table is currently sorted by. If the table isn't sorted, it will be `null`. This property cannot be modified. The default value is `null`.
+The (zero-based) index of the column that the table is currently sorted by. If the table isn't sorted, it will be `null`. This property is set by the `sort` method and cannot be modified directly. The default value is `null`.
 ```JS
-let myTable = new DataTable("#my-selector");
-console.log(myTable.sortIndex);  // null
+let myTable = new DataTable("#my-selector", {
+    sortAscending: true,
+    sortIndex: 1
+});
+console.log(myTable.sortIndex);  // 1
 myTable.sort(2, false);
 console.log(myTable.sortIndex);  // 2
 ```
@@ -170,25 +201,34 @@ console.log(myTable.sortIndex);  // 2
 #### unsortable
 A boolean that indicates whether the table order can currently be reset by the user. This property has no effect when `sortable` is `false`. The default value is `true`.
 ```JS
-let myTable = new DataTable("#my-selector");
+let myTable = new DataTable("#my-selector", {
+    unsortable: false
+});
+console.log(myTable.unsortable);  // false
+myTable.unsortable = true;
 console.log(myTable.unsortable);  // true
-myTable.unsortable = false;
 ```
 
 #### upIcon
 A string containing the HTML code for the up icon, which is used to help the user sort the table.
 ```JS
-let myTable = new DataTable("#my-selector");
-console.log(myTable.upIcon);  // "<svg viewBox=...</svg>"
-myTable.upIcon = "my icon";
+let myTable = new DataTable("#my-selector", {
+    upIcon: `<img src="my-image-1.png">`
+});
+console.log(myTable.upIcon);  // "<img src=\"my-image-1.png\">"
+myTable.upIcon = `<img src="my-image-2.png">`;
+console.log(myTable.upIcon);  // "<img src=\"my-image-2.png\">"
 ```
 
 #### updownIcon
 A string containing the HTML code for the updown icon, which is used to help the user sort the table.
 ```JS
-let myTable = new DataTable("#my-selector");
-console.log(myTable.updownIcon);  // "<svg viewBox=...</svg>"
-myTable.updownIcon = "my icon";
+let myTable = new DataTable("#my-selector", {
+    updownIcon: `<img src="my-image-1.png">`
+});
+console.log(myTable.updownIcon);  // "<img src=\"my-image-1.png\">"
+myTable.updownIcon = `<img src="my-image-2.png">`;
+console.log(myTable.updownIcon);  // "<img src=\"my-image-2.png\">"
 ```
 
 #### version
@@ -209,10 +249,11 @@ myTable.render();
 ```
 
 #### search
-Searches for a query in the table and hides rows that do not contain a match. This method takes one argument: `query`. If the query is an empty string, all rows will be shown.
+Searches for a query in the table and hides rows that do not contain a match. This method takes one argument: `query`. If the query is an empty string, all rows will be shown. This method sets the `searchQuery` property.
 ```JS
 let myTable = new DataTable("#my-selector");
 myTable.search("my query");
+console.log(myTable.searchQuery);  // "my query"
 ```
 
 #### setData
@@ -232,8 +273,10 @@ console.log(myTable.headerClasses);  // ["class-1", "class-2"]
 ```
 
 #### sort
-Sorts the table by the values in a column. This method takes two arguments: `index` and `ascending`. `index` is the (zero-based) index of the column to sort by and `ascending` is whether to sort in ascending order. If `ascending` is `null`, the original table ordering will be restored.
+Sorts the table by the values in a column. This method takes two arguments: `index` and `ascending`. `index` is the (zero-based) index of the column to sort by and `ascending` is whether to sort in ascending order. If `ascending` is `null`, the original table ordering will be restored. This method sets the `sortIndex` and `sortAscending` properties.
 ```JS
 let myTable = new DataTable("#my-selector");
 myTable.sort(2, false);
+console.log(myTable.sortIndex);      // 2
+console.log(myTable.sortAscending);  // false
 ```
