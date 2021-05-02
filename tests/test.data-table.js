@@ -23,8 +23,10 @@ describe("DataTable class", function() {
             // Assert properties are correct
             expect(dt.body).to.deep.equal([]);
             expect(dt.bodyClasses).to.be.null;
+            expect(dt.bodyEventHandlers).to.deep.equal({});
             expect(dt.headers).to.deep.equal([]);
             expect(dt.headerClasses).to.be.null;
+            expect(dt.headerEventHandlers).to.deep.equal({});
             expect(dt.sortable).to.be.false;
             expect(dt.searchQuery).to.equal("");
             expect(dt.sortAscending).to.be.null;
@@ -39,8 +41,10 @@ describe("DataTable class", function() {
             // Assert properties are correct
             expect(dt.body).to.deep.equal([]);
             expect(dt.bodyClasses).to.be.null;
+            expect(dt.bodyEventHandlers).to.deep.equal({});
             expect(dt.headers).to.deep.equal([]);
             expect(dt.headerClasses).to.be.null;
+            expect(dt.headerEventHandlers).to.deep.equal({});
             expect(dt.sortable).to.be.false;
             expect(dt.searchQuery).to.equal("");
             expect(dt.sortAscending).to.be.null;
@@ -49,13 +53,19 @@ describe("DataTable class", function() {
         });
 
         it("Should set properties to values in options parameter", function() {
+            // Declare table event handlers
+            let bodyEventHandler = function(row, column, args) {};
+            let headerEventHandler = function(column, args) {};
+
             // Create table
             let dt = new DataTable("#mytable", {
                 body: [["a1", "b1"], ["a2", "b2"]],
                 bodyClasses: [["class-1", "class-2"], ["class-2", "class-1"]],
+                bodyEventHandlers: { click: bodyEventHandler },
                 downIcon: "down-icon HTML",
                 headers: ["header 1", "header 2"],
                 headerClasses: ["class-1", "class-2"],
+                headerEventHandlers: { click: headerEventHandler },
                 sortable: true,
                 searchQuery: "my query",
                 sortAscending: false,
@@ -68,9 +78,11 @@ describe("DataTable class", function() {
             // Assert properties are correct
             expect(dt.body).to.deep.equal([["a1", "b1"], ["a2", "b2"]]);
             expect(dt.bodyClasses).to.deep.equal([["class-1", "class-2"], ["class-2", "class-1"]]);
+            expect(dt.bodyEventHandlers).to.deep.equal({ click: bodyEventHandler });
             expect(dt.downIcon).to.equal("down-icon HTML");
             expect(dt.headers).to.deep.equal(["header 1", "header 2"]);
             expect(dt.headerClasses).to.deep.equal(["class-1", "class-2"]);
+            expect(dt.headerEventHandlers).to.deep.equal({ click: headerEventHandler });
             expect(dt.sortable).to.be.true;
             expect(dt.searchQuery).to.equal("my query");
             expect(dt.sortAscending).to.be.false;
@@ -108,7 +120,7 @@ describe("DataTable class", function() {
             let dt = new DataTable("#mytable");
 
             // Assert bodyClasses is correct
-            expect(dt.bodyClasses).to.deep.equal(null);
+            expect(dt.bodyClasses).to.be.null;
         });
 
         it("Should not be changeable", function() {
@@ -119,7 +131,28 @@ describe("DataTable class", function() {
             dt.bodyClasses = [["class-1", "class-2"], ["class-2", "class-1"]];
 
             // Assert bodyClasses not set
-            expect(dt.bodyClasses).to.deep.equal(null);
+            expect(dt.bodyClasses).to.be.null;
+        });
+    });
+
+    describe("bodyEventHandlers property", function() {
+        it("Should be empty by default", function() {
+            // Create table
+            let dt = new DataTable("#mytable");
+
+            // Assert bodyEventHandlers is correct
+            expect(dt.bodyEventHandlers).to.deep.equal({});
+        });
+
+        it("Should not be changeable", function() {
+            // Create table
+            let dt = new DataTable("#mytable");
+
+            // Attempt to change bodyEventHandlers
+            dt.bodyEventHandlers = { click: (row, column, args) => {} };
+
+            // Assert bodyEventHandlers not set
+            expect(dt.bodyEventHandlers).to.deep.equal({});
         });
     });
 
@@ -175,7 +208,7 @@ describe("DataTable class", function() {
             let dt = new DataTable("#mytable");
 
             // Assert headerClasses is correct
-            expect(dt.headerClasses).to.deep.equal(null);
+            expect(dt.headerClasses).to.be.null;
         });
 
         it("Should not be changeable", function() {
@@ -186,7 +219,28 @@ describe("DataTable class", function() {
             dt.headerClasses = ["class-1", "class-2"];
 
             // Assert headerClasses not set
-            expect(dt.headerClasses).to.deep.equal(null);
+            expect(dt.headerClasses).to.be.null;
+        });
+    });
+
+    describe("headerEventHandlers property", function() {
+        it("Should be empty by default", function() {
+            // Create table
+            let dt = new DataTable("#mytable");
+
+            // Assert headerEventHandlers is correct
+            expect(dt.headerEventHandlers).to.deep.equal({});
+        });
+
+        it("Should not be changeable", function() {
+            // Create table
+            let dt = new DataTable("#mytable");
+
+            // Attempt to change headerEventHandlers
+            dt.headerEventHandlers = { click: (column, args) => {} };
+
+            // Assert headerEventHandlers not set
+            expect(dt.headerEventHandlers).to.deep.equal({});
         });
     });
 
@@ -657,9 +711,25 @@ describe("DataTable class", function() {
                     </tr>
                 </thead>
                 <tbody>
+                    <tr hidden="">
+                        <td class="">Red</td>
+                        <td class="">Rojo</td>
+                    </tr>
                     <tr>
                         <td class="">Orange</td>
                         <td class="">Anaranjado</td>
+                    </tr>
+                    <tr hidden="">
+                        <td class="">Yellow</td>
+                        <td class="">Amarillo</td>
+                    </tr>
+                    <tr hidden="">
+                        <td class="">Green</td>
+                        <td class="">Verde</td>
+                    </tr>
+                    <tr hidden="">
+                        <td class="">Blue</td>
+                        <td class="">Azúl</td>
                     </tr>
                     <tr>
                         <td class="">Purple</td>
@@ -870,13 +940,29 @@ describe("DataTable class", function() {
                     </tr>
                 </thead>
                 <tbody>
+                    <tr hidden="">
+                        <td class="">Green</td>
+                        <td class="">Verde</td>
+                    </tr>
+                    <tr hidden="">
+                        <td class="">Red</td>
+                        <td class="">Roja</td>
+                    </tr>
                     <tr>
                         <td class="">Purple</td>
                         <td class="">Morada</td>
                     </tr>
+                    <tr hidden="">
+                        <td class="">Blue</td>
+                        <td class="">Azúl</td>
+                    </tr>
                     <tr>
                         <td class="">Orange</td>
                         <td class="">Anaranjada</td>
+                    </tr>
+                    <tr hidden="">
+                        <td class="">Yellow</td>
+                        <td class="">Amarilla</td>
                     </tr>
                 </tbody>
             </table>`.replace(/\n\s*/g, "");
@@ -1176,6 +1262,66 @@ describe("DataTable class", function() {
                 // Restore DataTable.sort method
                 sort.restore();
             }
+        });
+    });
+
+    describe("custom body event handlers", function() {
+        it("Should be called correctly", function() {
+            // Create body event handler
+            let calls = [];
+            let bodyEventHandler = function (row, column, args) {
+                calls.push({row:row, column:column});
+            };
+
+            // Create table
+            new DataTable("#mytable", {
+                headers: ["English", "Spanish"],
+                body: [
+                    ["Red",     "Rojo"],
+                    ["Orange",  "Anaranjado"],
+                    ["Yellow",  "Amarillo"],
+                    ["Green",   "Verde"],
+                    ["Blue",    "Azúl"],
+                    ["Purple",  "Morado"]
+                ],
+                bodyEventHandlers: { click: bodyEventHandler },
+            });
+
+            // Click cell
+            document.querySelectorAll("div.data-table tbody td")[3].click();
+
+            // Assert event handler called correctly
+            expect(calls).to.deep.equal([{row: 1, column: 1}]);
+        });
+    });
+
+    describe("custom header event handlers", function() {
+        it("Should be called correctly", function() {
+            // Create header event handler
+            let calls = [];
+            let headerEventHandler = function (column, args) {
+                calls.push({column:column});
+            };
+
+            // Create table
+            new DataTable("#mytable", {
+                headers: ["English", "Spanish"],
+                header: [
+                    ["Red",     "Rojo"],
+                    ["Orange",  "Anaranjado"],
+                    ["Yellow",  "Amarillo"],
+                    ["Green",   "Verde"],
+                    ["Blue",    "Azúl"],
+                    ["Purple",  "Morado"]
+                ],
+                headerEventHandlers: { click: headerEventHandler },
+            });
+
+            // Click cell
+            document.querySelectorAll("div.data-table thead th")[1].click();
+
+            // Assert event handler called correctly
+            expect(calls).to.deep.equal([{column: 1}]);
         });
     });
 });

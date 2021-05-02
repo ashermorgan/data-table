@@ -23,6 +23,14 @@ let DataTable = function(selector, options) {
     });
 
     /**
+     * The event handlers for table body events
+     */
+    let _bodyEventHandlers = {};
+    Object.defineProperty(this, "bodyEventHandlers", {
+        get: function() { return _bodyEventHandlers; }
+    });
+
+    /**
      * The table headers
      */
     let _headers = [];
@@ -36,6 +44,14 @@ let DataTable = function(selector, options) {
     let _headerClasses = null;
     Object.defineProperty(this, "headerClasses", {
         get: function() { return _headerClasses; }
+    });
+
+    /**
+     * The event handlers for table header events
+     */
+    let _headerEventHandlers = {};
+    Object.defineProperty(this, "headerEventHandlers", {
+        get: function() { return _headerEventHandlers; }
     });
 
     /**
@@ -143,9 +159,11 @@ let DataTable = function(selector, options) {
         if (options) {
             if (options.body !== undefined) _body = options.body;
             if (options.bodyClasses !== undefined) _bodyClasses = options.bodyClasses;
+            if (options.bodyEventHandlers !== undefined) _bodyEventHandlers = options.bodyEventHandlers;
             if (options.downIcon !== undefined) icons.down = options.downIcon;
             if (options.headers !== undefined) _headers = options.headers;
             if (options.headerClasses !== undefined) _headerClasses = options.headerClasses;
+            if (options.headerEventHandlers !== undefined) _headerEventHandlers = options.headerEventHandlers;
             if (options.sortable !== undefined) _sortable = options.sortable;
             if (options.searchQuery !== undefined) _searchQuery = options.searchQuery;
             if (options.sortAscending !== undefined) _sortAscending = options.sortAscending;
@@ -238,11 +256,8 @@ let DataTable = function(selector, options) {
         if (tableData.body.length > 0) {
             divHTML += "<tbody>";
             for (let row of tableData.body) {
-                // Make sure row is visible
-                if (!row.visible) continue;
-
                 // Add row
-                divHTML += "<tr>";
+                divHTML += `<tr${row.visible ? "" : " hidden=\"\""}>`;
                 for (let column of row.columns) {
                     divHTML += `<td class="${column.class}">${column.value}</td>`;
                 }
@@ -255,15 +270,40 @@ let DataTable = function(selector, options) {
         divHTML += "</table>";
         div.innerHTML = divHTML;
 
-        // Add event handlers
+        // Get elements
+        let headers = document.querySelectorAll(`${this.selector} thead th`);
+        let cells = document.querySelectorAll(`${this.selector} tbody td`);
+
+        // Add sort event handlers
         if (_sortable) {
-            let headers = document.querySelectorAll(`${this.selector} th`);
             for (let i = 0; i < headers.length; i++) {
                 headers[i].addEventListener("click", () => {
                     if (_sortIndex !== i) this.sort(i, true);
                     else if (_sortAscending === true) this.sort(i, false);
                     else if (_unsortable) this.sort(i, null);
                     else this.sort(i, true);
+                });
+            }
+        }
+
+        // Add custom body event handlers
+        for (let event in _bodyEventHandlers) {
+            let index = -1;
+            for (let row = 0; row < tableData.body.length; row++) {
+                for (let column = 0; column < tableData.body[row].columns.length; column++) {
+                    index++;
+                    cells[index].addEventListener(event, (args) => {
+                        _bodyEventHandlers[event](tableData.body[row].row, column, args);
+                    });
+                }
+            }
+        }
+
+        // Add custom header event handlers
+        for (let event in _headerEventHandlers) {
+            for (let row = 0; row < tableData.headers.length; row++) {
+                headers[row].addEventListener(event, (args) => {
+                    _headerEventHandlers[event](row, args);
                 });
             }
         }

@@ -43,9 +43,11 @@ Creates a new table. This method takes two arguments, `selector` and `options`.
 Available options:
 - `body`
 - `bodyClasses`
+- `bodyEventHandlers`
 - `downIcon`
 - `headers`
 - `headerClasses`
+- `headerEventHandlers`
 - `sortable`
 - `searchQuery`
 - `sortAscending`
@@ -58,24 +60,28 @@ Available options:
 let myTable = new DataTable("#my-selector", {
     body: [["a1", "b1"], ["a2", "b2"]],
     bodyClasses: [["class-1", "class-2"], ["class-2", "class-1"]],
+    bodyEventHandlers: { click: (row, column, args) => {} },
     headers: ["header 1", "header 2"],
     headerClasses: ["class-1", "class-2"],
+    headerEventHandlers: { click: (column, args) => {} },
     sortable: true,
     searchQuery: "my query",
     sortAscending: false,
     sortIndex: 1,
     unsortable: false
 });
-console.log(myTable.selector);       // "#my-selector"
-console.log(myTable.body);           // [["a1", "b1"], ["a2", "b2"]]
-console.log(myTable.bodyClasses);    // [["class-1", "class-2"], ["class-2", "class-1"]]
-console.log(myTable.headers);        // ["header 1", "header 2"]
-console.log(myTable.headerClasses);  // ["class-1", "class-2"]
-console.log(myTable.sortable);       // true
-console.log(myTable.searchQuery);    // "my query"
-console.log(myTable.sortAscending);  // false
-console.log(myTable.sortIndex);      // 1
-console.log(myTable.unsortable);     // false
+console.log(myTable.selector);             // "#my-selector"
+console.log(myTable.body);                 // [["a1", "b1"], ["a2", "b2"]]
+console.log(myTable.bodyClasses);          // [["class-1", "class-2"], ["class-2", "class-1"]]
+console.log(myTable.bodyEventHandlers);    // { click: click(row, column, args) }
+console.log(myTable.headers);              // ["header 1", "header 2"]
+console.log(myTable.headerClasses);        // ["class-1", "class-2"]
+console.log(myTable.headerEventHandlers);  // { click: click(column, args) }
+console.log(myTable.sortable);             // true
+console.log(myTable.searchQuery);          // "my query"
+console.log(myTable.sortAscending);        // false
+console.log(myTable.sortIndex);            // 1
+console.log(myTable.unsortable);           // false
 ```
 
 
@@ -105,6 +111,15 @@ myTable.setData({
     bodyClasses: [["class-3", "class-4"], ["class-4", "class-3"]]
 });
 console.log(myTable.bodyClasses);  // [["class-3", "class-4"], ["class-4", "class-3"]]
+```
+
+#### bodyEventHandlers
+An object that contains event handlers for table body events. This property cannot be modified. The default value is an empty dictionary (`{}`).
+```JS
+let myTable = new DataTable("#my-selector", {
+    bodyEventHandlers: { click: (row, column, args) => {} }
+});
+console.log(myTable.bodyEventHandlers);  // { click: click(row, column, args) }
 ```
 
 #### downIcon
@@ -143,6 +158,15 @@ myTable.setData({
     headerClasses: ["class-3", "class-4"]
 });
 console.log(myTable.headerClasses);  // ["class-3", "class-4"]
+```
+
+#### headerEventHandlers
+An object that contains event handlers for table header events. This property cannot be modified. The default value is an empty dictionary (`{}`).
+```JS
+let myTable = new DataTable("#my-selector", {
+    headerEventHandlers: { click: (column, args) => {} }
+});
+console.log(myTable.headerEventHandlers);  // { click: click(column, args) }
 ```
 
 #### sortable
