@@ -353,6 +353,39 @@ describe("DataTable class", function() {
         });
     });
 
+    describe("theme property", function() {
+        it("Should be \"basic\" by default", function() {
+            // Create table
+            let dt = new DataTable("#mytable");
+
+            // Assert theme is correct
+            expect(dt.theme).to.equal("basic");
+        });
+
+        it("Should call render method when updated", function() {
+            // Create table
+            let dt = new DataTable("#mytable");
+
+            // Mock DataTable.render method
+            let render = sinon.stub(dt, "render");
+
+            try {
+                // Set theme
+                dt.theme = null;
+
+                // Assert DataTable.render called
+                expect(render.calledOnce).to.be.true;
+
+                // Assert theme is correct
+                expect(dt.theme).to.be.null;
+            }
+            finally {
+                // Restore DataTable.render method
+                render.restore();
+            }
+        });
+    });
+
     describe("upIcon property", function() {
         it("Should call render method when updated", function() {
             // Create table
@@ -464,7 +497,7 @@ describe("DataTable class", function() {
 
             // Assert table is correct
             let expected = `
-            <table>
+            <table class="basic">
                 <thead>
                     <tr>
                         <th class="">h1</th>
@@ -505,7 +538,7 @@ describe("DataTable class", function() {
 
             // Assert table is correct
             let expected = `
-            <table>
+            <table class="basic">
                 <tbody>
                     <tr>
                         <td class="">a1</td>
@@ -535,7 +568,7 @@ describe("DataTable class", function() {
 
             // Assert table is correct
             let expected = `
-            <table>
+            <table class="basic">
                 <thead>
                     <tr>
                         <th class="">h1</th>
@@ -553,7 +586,7 @@ describe("DataTable class", function() {
 
             // Assert table is correct
             let expected = `
-            <table>
+            <table class="basic">
             </table>`.replace(/\n\s*/g, "");
             expect(global.document.querySelector("div.data-table").innerHTML).to.equal(expected);
         });
@@ -567,7 +600,7 @@ describe("DataTable class", function() {
 
             // Assert table is correct
             let expected = `
-            <table>
+            <table class="basic">
                 <thead>
                     <tr>
                         <th class="">
@@ -592,7 +625,7 @@ describe("DataTable class", function() {
 
             // Assert table is correct
             expected = `
-            <table>
+            <table class="basic">
                 <thead>
                     <tr>
                         <th class="">
@@ -617,7 +650,7 @@ describe("DataTable class", function() {
 
             // Assert table is correct
             expected = `
-            <table>
+            <table class="basic">
                 <thead>
                     <tr>
                         <th class="">
@@ -647,7 +680,7 @@ describe("DataTable class", function() {
 
             // Assert table is correct
             let expected = `
-            <table>
+            <table class="basic">
                 <tbody>
                     <tr>
                         <td class="class-1">a1</td>
@@ -671,13 +704,39 @@ describe("DataTable class", function() {
 
             // Assert table is correct
             let expected = `
-            <table>
+            <table class="basic">
                 <thead>
                     <tr>
                         <th class="class-1">header 1</th>
                         <th class="class-2">header 2</th>
                     </tr>
                 </thead>
+            </table>`.replace(/\n\s*/g, "");
+            expect(global.document.querySelector("div.data-table").innerHTML).to.equal(expected);
+        });
+
+        it("Should correctly set table theme class", function() {
+            // Create table (calls render method)
+            new DataTable("#mytable", {
+                theme: "test"
+            });
+
+            // Assert table is correct
+            let expected = `
+            <table class="test">
+            </table>`.replace(/\n\s*/g, "");
+            expect(global.document.querySelector("div.data-table").innerHTML).to.equal(expected);
+        });
+
+        it("Should correctly set table theme class if theme is null", function() {
+            // Create table (calls render method)
+            new DataTable("#mytable", {
+                theme: null
+            });
+
+            // Assert table is correct
+            let expected = `
+            <table class="">
             </table>`.replace(/\n\s*/g, "");
             expect(global.document.querySelector("div.data-table").innerHTML).to.equal(expected);
         });
@@ -703,7 +762,7 @@ describe("DataTable class", function() {
 
             // Assert table is correct
             let expected = `
-            <table>
+            <table class="basic">
                 <thead>
                     <tr>
                         <th class="">English</th>
@@ -762,7 +821,7 @@ describe("DataTable class", function() {
 
             // Assert table is correct
             let expected = `
-            <table>
+            <table class="basic">
                 <thead>
                     <tr>
                         <th class="">English</th>
@@ -932,7 +991,7 @@ describe("DataTable class", function() {
 
             // Assert table is correct
             let expected = `
-            <table>
+            <table class="basic">
                 <thead>
                     <tr>
                         <th class="">English</th>
@@ -990,7 +1049,7 @@ describe("DataTable class", function() {
 
             // Assert table is correct
             let expected = `
-            <table>
+            <table class="basic">
                 <thead>
                     <tr>
                         <th class="">English</th>
@@ -1053,7 +1112,7 @@ describe("DataTable class", function() {
 
             // Assert table is correct
             let expected = `
-            <table>
+            <table class="basic">
                 <thead>
                     <tr>
                         <th class="">English</th>
