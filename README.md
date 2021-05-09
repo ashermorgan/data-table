@@ -226,14 +226,14 @@ console.log(myTable.sortIndex);  // 2
 ```
 
 #### theme
-A string that contains the current table theme name. To remove all table formating, set `theme` to `null`. The default value is `"basic"`.
+A string that contains the current table theme name. Available themes include `basic-light` and `basic-dark`. To remove all table formating, set `theme` to `null`. The default value is `"basic-light"`.
 ```JS
 let myDataTable = new DataTable("#selector", {
-    theme: null,
+    theme: "basic-dark",
 });
+console.log(myDataTable.theme);  // "basic-dark"
+myDataTable.theme = null;
 console.log(myDataTable.theme);  // null
-myDataTable.theme = "basic";
-console.log(myDataTable.theme);  // "basic"
 ```
 
 #### unsortable

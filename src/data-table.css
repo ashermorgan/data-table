@@ -30,21 +30,44 @@
     width: 24px;
 }
 
-/* Basic theme */
-.data-table table.basic {
+
+
+/* basic-light theme */
+.data-table table.basic-light {
     border: 1px solid #000000;
     border-collapse: separate;
 }
-.data-table table.basic td {
+.data-table table.basic-light td {
     border: 1px solid #000000;
     color: #000000;
     background-color: #ffffff;
 }
-.data-table table.basic th {
+.data-table table.basic-light th {
     border: 1px solid #000000;
     color: #000000;
-    background-color: #e8e8e8;
+    background-color: #e0e0e0;
 }
-.data-table table.basic svg {
+.data-table table.basic-light svg {
     color: #000000;
+}
+
+
+
+/* basic-dark theme */
+.data-table table.basic-dark {
+    border: 1px solid #808080;
+    border-collapse: separate;
+}
+.data-table table.basic-dark td {
+    border: 1px solid #808080;
+    color: #e0e0e0;
+    background-color: #202020;
+}
+.data-table table.basic-dark th {
+    border: 1px solid #808080;
+    color: #e0e0e0;
+    background-color: #404040;
+}
+.data-table table.basic-dark svg {
+    color: #e0e0e0;
 }

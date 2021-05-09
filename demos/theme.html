@@ -20,7 +20,8 @@
                 <script src="../src/data-table.js"><\/script>
                 <link rel="stylesheet" href="../src/data-table.css">
                 <select id="themeInput" oninput="table.theme=document.getElementById('themeInput').value">
-                \t<option value="basic">Basic theme (default)</option>
+                \t<option value="basic-light">Basic light theme (default)</option>
+                \t<option value="basic-dark">Basic dark theme</option>
                 \t<option value="">No theme</option>
                 </select>
                 <div id="mytable"></div>
@@ -32,7 +33,8 @@
                 \t\t["a1", "a2", "a3"],
                 \t\t["b1", "b2", "b3"],
                 \t\t["c1", "c2", "c3"]
-                \t]
+                \t],
+                \tsortable: true
                 });
             `;
             let css = `

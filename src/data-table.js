@@ -136,7 +136,7 @@ let DataTable = function(selector, options) {
     /**
      * The current table theme
      */
-    let _theme = "basic";
+    let _theme = "basic-light";
     Object.defineProperty(this, "theme", {
         get: function() { return _theme; },
         set: function(value) {

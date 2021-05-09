@@ -354,12 +354,12 @@ describe("DataTable class", function() {
     });
 
     describe("theme property", function() {
-        it("Should be \"basic\" by default", function() {
+        it("Should be \"basic-light\" by default", function() {
             // Create table
             let dt = new DataTable("#mytable");
 
             // Assert theme is correct
-            expect(dt.theme).to.equal("basic");
+            expect(dt.theme).to.equal("basic-light");
         });
 
         it("Should call render method when updated", function() {
@@ -497,7 +497,7 @@ describe("DataTable class", function() {
 
             // Assert table is correct
             let expected = `
-            <table class="basic">
+            <table class="basic-light">
                 <thead>
                     <tr>
                         <th class="">h1</th>
@@ -538,7 +538,7 @@ describe("DataTable class", function() {
 
             // Assert table is correct
             let expected = `
-            <table class="basic">
+            <table class="basic-light">
                 <tbody>
                     <tr>
                         <td class="">a1</td>
@@ -568,7 +568,7 @@ describe("DataTable class", function() {
 
             // Assert table is correct
             let expected = `
-            <table class="basic">
+            <table class="basic-light">
                 <thead>
                     <tr>
                         <th class="">h1</th>
@@ -586,7 +586,7 @@ describe("DataTable class", function() {
 
             // Assert table is correct
             let expected = `
-            <table class="basic">
+            <table class="basic-light">
             </table>`.replace(/\n\s*/g, "");
             expect(global.document.querySelector("div.data-table").innerHTML).to.equal(expected);
         });
@@ -600,7 +600,7 @@ describe("DataTable class", function() {
 
             // Assert table is correct
             let expected = `
-            <table class="basic">
+            <table class="basic-light">
                 <thead>
                     <tr>
                         <th class="">
@@ -625,7 +625,7 @@ describe("DataTable class", function() {
 
             // Assert table is correct
             expected = `
-            <table class="basic">
+            <table class="basic-light">
                 <thead>
                     <tr>
                         <th class="">
@@ -650,7 +650,7 @@ describe("DataTable class", function() {
 
             // Assert table is correct
             expected = `
-            <table class="basic">
+            <table class="basic-light">
                 <thead>
                     <tr>
                         <th class="">
@@ -680,7 +680,7 @@ describe("DataTable class", function() {
 
             // Assert table is correct
             let expected = `
-            <table class="basic">
+            <table class="basic-light">
                 <tbody>
                     <tr>
                         <td class="class-1">a1</td>
@@ -704,7 +704,7 @@ describe("DataTable class", function() {
 
             // Assert table is correct
             let expected = `
-            <table class="basic">
+            <table class="basic-light">
                 <thead>
                     <tr>
                         <th class="class-1">header 1</th>
@@ -718,12 +718,12 @@ describe("DataTable class", function() {
         it("Should correctly set table theme class", function() {
             // Create table (calls render method)
             new DataTable("#mytable", {
-                theme: "test"
+                theme: "basic-dark"
             });
 
             // Assert table is correct
             let expected = `
-            <table class="test">
+            <table class="basic-dark">
             </table>`.replace(/\n\s*/g, "");
             expect(global.document.querySelector("div.data-table").innerHTML).to.equal(expected);
         });
@@ -762,7 +762,7 @@ describe("DataTable class", function() {
 
             // Assert table is correct
             let expected = `
-            <table class="basic">
+            <table class="basic-light">
                 <thead>
                     <tr>
                         <th class="">English</th>
@@ -821,7 +821,7 @@ describe("DataTable class", function() {
 
             // Assert table is correct
             let expected = `
-            <table class="basic">
+            <table class="basic-light">
                 <thead>
                     <tr>
                         <th class="">English</th>
@@ -991,7 +991,7 @@ describe("DataTable class", function() {
 
             // Assert table is correct
             let expected = `
-            <table class="basic">
+            <table class="basic-light">
                 <thead>
                     <tr>
                         <th class="">English</th>
@@ -1049,7 +1049,7 @@ describe("DataTable class", function() {
 
             // Assert table is correct
             let expected = `
-            <table class="basic">
+            <table class="basic-light">
                 <thead>
                     <tr>
                         <th class="">English</th>
@@ -1112,7 +1112,7 @@ describe("DataTable class", function() {
 
             // Assert table is correct
             let expected = `
-            <table class="basic">
+            <table class="basic-light">
                 <thead>
                     <tr>
                         <th class="">English</th>
