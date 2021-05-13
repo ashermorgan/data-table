@@ -52,6 +52,7 @@ Available options:
 - `searchQuery`
 - `sortAscending`
 - `sortIndex`
+- `theme`
 - `unsortable`
 - `upIcon`
 - `updownIcon`
@@ -68,6 +69,7 @@ let myTable = new DataTable("#my-selector", {
     searchQuery: "my query",
     sortAscending: false,
     sortIndex: 1,
+    theme: null,
     unsortable: false
 });
 console.log(myTable.selector);             // "#my-selector"
@@ -81,6 +83,7 @@ console.log(myTable.sortable);             // true
 console.log(myTable.searchQuery);          // "my query"
 console.log(myTable.sortAscending);        // false
 console.log(myTable.sortIndex);            // 1
+console.log(myTable.theme);                // null
 console.log(myTable.unsortable);           // false
 ```
 
@@ -220,6 +223,17 @@ let myTable = new DataTable("#my-selector", {
 console.log(myTable.sortIndex);  // 1
 myTable.sort(2, false);
 console.log(myTable.sortIndex);  // 2
+```
+
+#### theme
+A string that contains the current table theme name. Available themes include `basic-light` and `basic-dark`. To remove all table formating, set `theme` to `null`. The default value is `"basic-light"`.
+```JS
+let myDataTable = new DataTable("#selector", {
+    theme: "basic-dark",
+});
+console.log(myDataTable.theme);  // "basic-dark"
+myDataTable.theme = null;
+console.log(myDataTable.theme);  // null
 ```
 
 #### unsortable

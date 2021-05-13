@@ -113,18 +113,6 @@ let DataTable = function(selector, options) {
     });
 
     /**
-     * Whether the table order can be reset by the user
-     */
-    let _unsortable = true;
-    Object.defineProperty(this, "unsortable", {
-        get: function() { return _unsortable; },
-        set: function(value) {
-            _unsortable = value;
-            this.render();
-        }
-    });
-
-    /**
      * Whether the table is sorted in ascending order
      */
     let _sortAscending = null;
@@ -144,6 +132,30 @@ let DataTable = function(selector, options) {
      * The processed table data
      */
     let tableData = { headers: [], body: [] };
+
+    /**
+     * The current table theme
+     */
+    let _theme = "basic-light";
+    Object.defineProperty(this, "theme", {
+        get: function() { return _theme; },
+        set: function(value) {
+            _theme = value;
+            this.render();
+        }
+    });
+
+    /**
+     * Whether the table order can be reset by the user
+     */
+    let _unsortable = true;
+    Object.defineProperty(this, "unsortable", {
+        get: function() { return _unsortable; },
+        set: function(value) {
+            _unsortable = value;
+            this.render();
+        }
+    });
 
     /**
      * Initialize the table
@@ -168,6 +180,7 @@ let DataTable = function(selector, options) {
             if (options.searchQuery !== undefined) _searchQuery = options.searchQuery;
             if (options.sortAscending !== undefined) _sortAscending = options.sortAscending;
             if (options.sortIndex !== undefined) _sortIndex = options.sortIndex;
+            if (options.theme !== undefined) _theme = options.theme;
             if (options.unsortable !== undefined) _unsortable = options.unsortable;
             if (options.upIcon !== undefined) icons.up = options.upIcon;
             if (options.updownIcon !== undefined) icons.updown = options.updownIcon;
@@ -235,7 +248,7 @@ let DataTable = function(selector, options) {
         div.classList.add("data-table");
 
         // Create table
-        let divHTML = "<table>";
+        let divHTML = `<table class="${_theme ? _theme.toLowerCase() : ""}">`;
 
         // Add table header
         if (tableData.headers.length > 0) {
