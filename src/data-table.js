@@ -31,6 +31,18 @@ let DataTable = function(selector, options) {
     });
 
     /**
+     * Whether the table data is HTML
+     */
+    let _dataIsHTML = false;
+    Object.defineProperty(this, "dataIsHTML", {
+        get: function() { return _dataIsHTML; },
+        set: function(value) {
+            _dataIsHTML=value;
+            this.render();
+        }
+    });
+
+    /**
      * The table headers
      */
     let _headers = [];
@@ -172,6 +184,7 @@ let DataTable = function(selector, options) {
             if (options.body !== undefined) _body = options.body;
             if (options.bodyClasses !== undefined) _bodyClasses = options.bodyClasses;
             if (options.bodyEventHandlers !== undefined) _bodyEventHandlers = options.bodyEventHandlers;
+            if (options.dataIsHTML !== undefined) _dataIsHTML = options.dataIsHTML;
             if (options.downIcon !== undefined) icons.down = options.downIcon;
             if (options.headers !== undefined) _headers = options.headers;
             if (options.headerClasses !== undefined) _headerClasses = options.headerClasses;
@@ -254,7 +267,7 @@ let DataTable = function(selector, options) {
         if (tableData.headers.length > 0) {
             divHTML += "<thead><tr>";
             for (let i = 0; i < tableData.headers.length; i++) {
-                divHTML += `<th class="${tableData.headers[i].class}">${tableData.headers[i].value}`;
+                divHTML += `<th class="${tableData.headers[i].class}">${_dataIsHTML ? tableData.headers[i].value : sanitize(tableData.headers[i].value)}`;
                 if (_sortable) {
                     if (_sortIndex !== i) divHTML += `<button>${icons.updown}</button>`;
                     else if (_sortIndex === i && _sortAscending === true) divHTML += `<button>${icons.up}</button>`;
@@ -272,7 +285,7 @@ let DataTable = function(selector, options) {
                 // Add row
                 divHTML += `<tr${row.visible ? "" : " hidden=\"\""}>`;
                 for (let column of row.columns) {
-                    divHTML += `<td class="${column.class}">${column.value}</td>`;
+                    divHTML += `<td class="${column.class}">${_dataIsHTML ? column.value : sanitize(column.value)}</td>`;
                 }
                 divHTML += "</tr>";
             }
@@ -321,6 +334,19 @@ let DataTable = function(selector, options) {
             }
         }
     };
+
+    /**
+     * Sanitize and format a string for use in HTML
+     * @param {String} text The text
+     */
+    let sanitize = function(text) {
+        text = text.replace(/&/g, "&amp;");
+        text = text.replace(/</g, "&lt;");
+        text = text.replace(/>/g, "&gt;");
+        text = text.replace(/\n/g, "<br>");
+        text = text.replace(/\t/g, "&emsp;");
+        return text;
+    }
 
     /**
      * Search for a query in the table and hide rows that do not contain a match

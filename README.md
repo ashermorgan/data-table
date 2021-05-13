@@ -9,7 +9,7 @@ Demos of data-table are available [here](https://ashermorgan.github.io/data-tabl
 
 
 ## Getting Started
-1. Download `data-table.min.css` and `data-table.min.js` from the [releases page](https://github.com/ashermorgan/data-table/releases) or the [dist directory](https://github.com/ashermorgan/data-table/tree/master/dist)
+1. Download `data-table.min.css` and `data-table.min.js` from the [releases page](https://github.com/ashermorgan/data-table/releases)
 
 2. Add `data-table.min.css` and `data-table.min.js` to your project
     ```HTML
@@ -44,6 +44,7 @@ Available options:
 - `body`
 - `bodyClasses`
 - `bodyEventHandlers`
+- `dataIsHTML`
 - `downIcon`
 - `headers`
 - `headerClasses`
@@ -62,6 +63,7 @@ let myTable = new DataTable("#my-selector", {
     body: [["a1", "b1"], ["a2", "b2"]],
     bodyClasses: [["class-1", "class-2"], ["class-2", "class-1"]],
     bodyEventHandlers: { click: (row, column, args) => {} },
+    dataIsHTML: true,
     headers: ["header 1", "header 2"],
     headerClasses: ["class-1", "class-2"],
     headerEventHandlers: { click: (column, args) => {} },
@@ -76,6 +78,7 @@ console.log(myTable.selector);             // "#my-selector"
 console.log(myTable.body);                 // [["a1", "b1"], ["a2", "b2"]]
 console.log(myTable.bodyClasses);          // [["class-1", "class-2"], ["class-2", "class-1"]]
 console.log(myTable.bodyEventHandlers);    // { click: click(row, column, args) }
+console.log(myTable.dataIsHTML);           // true
 console.log(myTable.headers);              // ["header 1", "header 2"]
 console.log(myTable.headerClasses);        // ["class-1", "class-2"]
 console.log(myTable.headerEventHandlers);  // { click: click(column, args) }
@@ -123,6 +126,17 @@ let myTable = new DataTable("#my-selector", {
     bodyEventHandlers: { click: (row, column, args) => {} }
 });
 console.log(myTable.bodyEventHandlers);  // { click: click(row, column, args) }
+```
+
+#### dataIsHTML
+A boolean that indicates whether table data is interpreted as HTML. Set `dataIsHTML` to `true` if you want to put custom HTML (images, links, etc.) in your table. If `dataIsHTML` is `false`, table data will be sanitized and/or formatted before being added to the table. The default value is `false`.
+```JS
+let myTable = new DataTable("#my-selector", {
+    dataIsHTML: true,
+});
+console.log(myTable.dataIsHTML);  // true
+myTable.dataIsHTML = false;
+console.log(myTable.dataIsHTML);  // false
 ```
 
 #### downIcon
@@ -226,7 +240,7 @@ console.log(myTable.sortIndex);  // 2
 ```
 
 #### theme
-A string that contains the current table theme name. Available themes include `basic-light` and `basic-dark`. To remove all table formating, set `theme` to `null`. The default value is `"basic-light"`.
+A string that contains the current table theme name. Available themes include `basic-light` and `basic-dark`. To remove all table formatting, set `theme` to `null`. The default value is `"basic-light"`.
 ```JS
 let myDataTable = new DataTable("#selector", {
     theme: "basic-dark",

@@ -24,6 +24,7 @@ describe("DataTable class", function() {
             expect(dt.body).to.deep.equal([]);
             expect(dt.bodyClasses).to.be.null;
             expect(dt.bodyEventHandlers).to.deep.equal({});
+            expect(dt.dataIsHTML).to.be.false;
             expect(dt.headers).to.deep.equal([]);
             expect(dt.headerClasses).to.be.null;
             expect(dt.headerEventHandlers).to.deep.equal({});
@@ -42,6 +43,7 @@ describe("DataTable class", function() {
             expect(dt.body).to.deep.equal([]);
             expect(dt.bodyClasses).to.be.null;
             expect(dt.bodyEventHandlers).to.deep.equal({});
+            expect(dt.dataIsHTML).to.be.false;
             expect(dt.headers).to.deep.equal([]);
             expect(dt.headerClasses).to.be.null;
             expect(dt.headerEventHandlers).to.deep.equal({});
@@ -62,6 +64,7 @@ describe("DataTable class", function() {
                 body: [["a1", "b1"], ["a2", "b2"]],
                 bodyClasses: [["class-1", "class-2"], ["class-2", "class-1"]],
                 bodyEventHandlers: { click: bodyEventHandler },
+                dataIsHTML: true,
                 downIcon: "down-icon HTML",
                 headers: ["header 1", "header 2"],
                 headerClasses: ["class-1", "class-2"],
@@ -79,6 +82,7 @@ describe("DataTable class", function() {
             expect(dt.body).to.deep.equal([["a1", "b1"], ["a2", "b2"]]);
             expect(dt.bodyClasses).to.deep.equal([["class-1", "class-2"], ["class-2", "class-1"]]);
             expect(dt.bodyEventHandlers).to.deep.equal({ click: bodyEventHandler });
+            expect(dt.dataIsHTML).to.be.true;
             expect(dt.downIcon).to.equal("down-icon HTML");
             expect(dt.headers).to.deep.equal(["header 1", "header 2"]);
             expect(dt.headerClasses).to.deep.equal(["class-1", "class-2"]);
@@ -153,6 +157,39 @@ describe("DataTable class", function() {
 
             // Assert bodyEventHandlers not set
             expect(dt.bodyEventHandlers).to.deep.equal({});
+        });
+    });
+
+    describe("dataIsHTML property", function() {
+        it("Should be false by default", function() {
+            // Create table
+            let dt = new DataTable("#mytable");
+
+            // Assert dataIsHTML is correct
+            expect(dt.dataIsHTML).to.be.false;
+        });
+
+        it("Should call render method when updated", function() {
+            // Create table
+            let dt = new DataTable("#mytable");
+
+            // Mock DataTable.render method
+            let render = sinon.stub(dt, "render");
+
+            try {
+                // Set dataIsHTML
+                dt.dataIsHTML = true;
+
+                // Assert DataTable.render called
+                expect(render.calledOnce).to.be.true;
+
+                // Assert dataIsHTML is correct
+                expect(dt.dataIsHTML).to.be.true;
+            }
+            finally {
+                // Restore DataTable.render method
+                render.restore();
+            }
         });
     });
 
@@ -522,7 +559,7 @@ describe("DataTable class", function() {
                         <td class="">c3</td>
                     </tr>
                 </tbody>
-            </table>`.replace(/\n\s*/g, "");
+            </table>`.replace(/\n\s+/g, "");
             expect(global.document.querySelector("div.data-table").innerHTML).to.equal(expected);
         });
 
@@ -556,7 +593,7 @@ describe("DataTable class", function() {
                         <td class="">c3</td>
                     </tr>
                 </tbody>
-            </table>`.replace(/\n\s*/g, "");
+            </table>`.replace(/\n\s+/g, "");
             expect(global.document.querySelector("div.data-table").innerHTML).to.equal(expected);
         });
 
@@ -576,7 +613,7 @@ describe("DataTable class", function() {
                         <th class="">h3</th>
                     </tr>
                 </thead>
-            </table>`.replace(/\n\s*/g, "");
+            </table>`.replace(/\n\s+/g, "");
             expect(global.document.querySelector("div.data-table").innerHTML).to.equal(expected);
         });
 
@@ -587,7 +624,7 @@ describe("DataTable class", function() {
             // Assert table is correct
             let expected = `
             <table class="basic-light">
-            </table>`.replace(/\n\s*/g, "");
+            </table>`.replace(/\n\s+/g, "");
             expect(global.document.querySelector("div.data-table").innerHTML).to.equal(expected);
         });
 
@@ -617,7 +654,7 @@ describe("DataTable class", function() {
                         </th>
                     </tr>
                 </thead>
-            </table>`.replace(/\n\s*/g, "");
+            </table>`.replace(/\n\s+/g, "");
             expect(global.document.querySelector("div.data-table").innerHTML).to.equal(expected);
 
             // Sort table ascending (calls render method)
@@ -642,7 +679,7 @@ describe("DataTable class", function() {
                         </th>
                     </tr>
                 </thead>
-            </table>`.replace(/\n\s*/g, "");
+            </table>`.replace(/\n\s+/g, "");
             expect(global.document.querySelector("div.data-table").innerHTML).to.equal(expected);
 
             // Sort table descending (calls render method)
@@ -667,7 +704,7 @@ describe("DataTable class", function() {
                         </th>
                     </tr>
                 </thead>
-            </table>`.replace(/\n\s*/g, "");
+            </table>`.replace(/\n\s+/g, "");
             expect(global.document.querySelector("div.data-table").innerHTML).to.equal(expected);
         });
 
@@ -691,7 +728,7 @@ describe("DataTable class", function() {
                         <td class="class-1">b2</td>
                     </tr>
                 </tbody>
-            </table>`.replace(/\n\s*/g, "");
+            </table>`.replace(/\n\s+/g, "");
             expect(global.document.querySelector("div.data-table").innerHTML).to.equal(expected);
         });
 
@@ -711,7 +748,60 @@ describe("DataTable class", function() {
                         <th class="class-2">header 2</th>
                     </tr>
                 </thead>
-            </table>`.replace(/\n\s*/g, "");
+            </table>`.replace(/\n\s+/g, "");
+            expect(global.document.querySelector("div.data-table").innerHTML).to.equal(expected);
+        });
+
+        it("Should correctly sanitize table data", function() {
+            // Create table (calls render method)
+            new DataTable("#mytable", {
+                headers: ["\theader 1a\nheader 1b"],
+                body: [
+                    ["<u>content</u>"]
+                ]
+            });
+
+            // Assert table is correct
+            let expected = `
+            <table class="basic-light">
+                <thead>
+                    <tr>
+                        <th class="">\u2003header 1a<br>header 1b</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="">&lt;u&gt;content&lt;/u&gt;</td>
+                    </tr>
+                </tbody>
+            </table>`.replace(/\n\s+/g, "");
+            expect(global.document.querySelector("div.data-table").innerHTML).to.equal(expected);
+        });
+
+        it("Should not sanitize table data if dataIsHTML is true", function() {
+            // Create table (calls render method)
+            new DataTable("#mytable", {
+                headers: ["\theader 1a\nheader 1b"],
+                body: [
+                    ["<u>content</u>"]
+                ],
+                dataIsHTML: true
+            });
+
+            // Assert table is correct
+            let expected = `
+            <table class="basic-light">
+                <thead>
+                    <tr>
+                        <th class="">\theader 1a\nheader 1b</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class=""><u>content</u></td>
+                    </tr>
+                </tbody>
+            </table>`.replace(/\n\s+/g, "");
             expect(global.document.querySelector("div.data-table").innerHTML).to.equal(expected);
         });
 
@@ -724,7 +814,7 @@ describe("DataTable class", function() {
             // Assert table is correct
             let expected = `
             <table class="basic-dark">
-            </table>`.replace(/\n\s*/g, "");
+            </table>`.replace(/\n\s+/g, "");
             expect(global.document.querySelector("div.data-table").innerHTML).to.equal(expected);
         });
 
@@ -737,7 +827,7 @@ describe("DataTable class", function() {
             // Assert table is correct
             let expected = `
             <table class="">
-            </table>`.replace(/\n\s*/g, "");
+            </table>`.replace(/\n\s+/g, "");
             expect(global.document.querySelector("div.data-table").innerHTML).to.equal(expected);
         });
     });
@@ -795,7 +885,7 @@ describe("DataTable class", function() {
                         <td class="">Morado</td>
                     </tr>
                 </tbody>
-            </table>`.replace(/\n\s*/g, "");
+            </table>`.replace(/\n\s+/g, "");
             expect(global.document.querySelector("div.data-table").innerHTML).to.equal(expected);
         });
 
@@ -854,7 +944,7 @@ describe("DataTable class", function() {
                         <td class="">Morado</td>
                     </tr>
                 </tbody>
-            </table>`.replace(/\n\s*/g, "");
+            </table>`.replace(/\n\s+/g, "");
             expect(global.document.querySelector("div.data-table").innerHTML).to.equal(expected);
         });
 
@@ -1024,7 +1114,7 @@ describe("DataTable class", function() {
                         <td class="">Amarilla</td>
                     </tr>
                 </tbody>
-            </table>`.replace(/\n\s*/g, "");
+            </table>`.replace(/\n\s+/g, "");
             expect(global.document.querySelector("div.data-table").innerHTML).to.equal(expected);
         });
     });
@@ -1082,7 +1172,7 @@ describe("DataTable class", function() {
                         <td class="">Amarillo</td>
                     </tr>
                 </tbody>
-            </table>`.replace(/\n\s*/g, "");
+            </table>`.replace(/\n\s+/g, "");
             expect(global.document.querySelector("div.data-table").innerHTML).to.equal(expected);
 
             // Assert sort properties are correct
@@ -1145,7 +1235,7 @@ describe("DataTable class", function() {
                         <td class="">Morado</td>
                     </tr>
                 </tbody>
-            </table>`.replace(/\n\s*/g, "");
+            </table>`.replace(/\n\s+/g, "");
             expect(global.document.querySelector("div.data-table").innerHTML).to.equal(expected);
 
             // Assert sort properties are correct

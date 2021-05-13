@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width">
+        <title>HTML data demo - data-table</title>
+        <link rel="stylesheet" href="demo.css">
+        <script src="demo.js"></script>
+
+        <!-- External scripts aren't loaded by createDemo() method -->
+        <script src="../src/data-table.js"></script>
+    </head>
+    <body>
+        <noscript>
+            <p>This demo requires JavaScript</p>
+        </noscript>
+        <div id="content"></div>
+        <script>
+            let html = `
+                <script src="../src/data-table.js"><\/script>
+                <link rel="stylesheet" href="../src/data-table.css">
+                <div>
+                \t<input type="checkbox" id="dataIsHTML" oninput="table.dataIsHTML = document.getElementById('dataIsHTML').checked">
+                \t<label for="dataIsHTML">dataIsHTML</label>
+                </div>
+                <div id="mytable"></div>
+            `;
+            let js = `
+                window.table = new DataTable("#mytable", {
+                \theaders: ["\\t header 1a \\n header 1b"],
+                \tbody: [
+                \t\t["<u><i>content</i></u>"]
+                \t]
+                });
+            `;
+            let css = `
+                #dataIsHTML {
+                \tmargin-bottom: 10px;
+                }
+                #mytable {
+                \twidth: 250px;
+                }
+            `;
+            createDemo("#content", "data-table HTML data demo", html, js, css);
+        </script>
+    </body>
+</html>
