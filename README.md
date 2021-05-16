@@ -24,7 +24,8 @@ Demos of data-table are available [here](https://ashermorgan.github.io/data-tabl
 
 4. Create the table using the `DataTable` constructor
     ```JS
-    new DataTable("#mytable", {
+    let mytable = new DataTable("#mytable", {
+        headers: ["header 1", "header 2", "header 3"],
         body: [
             ["a1", "a2", "a3"],
             ["b1", "b2", "b3"],
@@ -286,7 +287,7 @@ console.log(myTable.updownIcon);  // "<img src=\"my-image-2.png\">"
 #### version
 The current library version. This is a static property and cannot be modified.
 ```JS
-console.log(DataTable.version);  // "0.2.0"
+console.log(DataTable.version);  // "1.0.0"
 ```
 
 
