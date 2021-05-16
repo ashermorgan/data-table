@@ -6,25 +6,13 @@
 
 /* Table */
 .data-table table {
-    border: 1px solid #000000;
     width: 100%;
-    border-collapse: separate;
     border-spacing: 0;
     text-align: left;
 }
 
-/* Table body cells */
-.data-table table td {
-    border: 1px solid #000000;
-    color: #000000;
-}
-
 /* Table header cells */
 .data-table table th {
-    border: 1px solid #000000;
-    color: #000000;
-    background-color: #e8e8e8;
-    font-weight: bold;
     position: sticky;
     position: -webkit-sticky;
     top: 0;
@@ -40,4 +28,46 @@
 .data-table table th button svg {
     height: 24px;
     width: 24px;
+}
+
+
+
+/* basic-light theme */
+.data-table table.basic-light {
+    border: 1px solid #000000;
+    border-collapse: separate;
+}
+.data-table table.basic-light td {
+    border: 1px solid #000000;
+    color: #000000;
+    background-color: #ffffff;
+}
+.data-table table.basic-light th {
+    border: 1px solid #000000;
+    color: #000000;
+    background-color: #e0e0e0;
+}
+.data-table table.basic-light svg {
+    color: #000000;
+}
+
+
+
+/* basic-dark theme */
+.data-table table.basic-dark {
+    border: 1px solid #808080;
+    border-collapse: separate;
+}
+.data-table table.basic-dark td {
+    border: 1px solid #808080;
+    color: #e0e0e0;
+    background-color: #202020;
+}
+.data-table table.basic-dark th {
+    border: 1px solid #808080;
+    color: #e0e0e0;
+    background-color: #404040;
+}
+.data-table table.basic-dark svg {
+    color: #e0e0e0;
 }

@@ -16,90 +16,96 @@ describe("DataTable class", function() {
     });
 
     describe("Constructor", function() {
-        it("Should set isSortable property", function() {
-            // Create table
-            let dt = new DataTable("#mytable");
-
-            // Assert isSortable property is correct
-            expect(dt.isSortable).to.equal(false);
-        });
-
-        it("Should set searchQuery property", function() {
-            // Create table
-            let dt = new DataTable("#mytable");
-
-            // Assert searchQuery property is correct
-            expect(dt.searchQuery).to.equal("");
-        });
-
-        it("Should set selector property", function() {
-            // Create table
-            let dt = new DataTable("#mytable");
-
-            // Assert selector property is correct
-            expect(dt.selector).to.equal("#mytable");
-        });
-
-        it("Should set sortAscending property", function() {
-            // Create table
-            let dt = new DataTable("#mytable");
-
-            // Assert sortAscending property is correct
-            expect(dt.sortAscending).to.equal(null);
-        });
-
-        it("Should set sortIndex property", function() {
-            // Create table
-            let dt = new DataTable("#mytable");
-
-            // Assert sortIndex property is correct
-            expect(dt.sortIndex).to.equal(null);
-        });
-
-        it("Should set properties to default values if options is undefined", function() {
+        it("Should not set properties if options is undefined", function() {
             // Create table
             let dt = new DataTable("#mytable");
 
             // Assert properties are correct
             expect(dt.body).to.deep.equal([]);
+            expect(dt.bodyClasses).to.be.null;
+            expect(dt.bodyEventHandlers).to.deep.equal({});
+            expect(dt.dataIsHTML).to.be.false;
             expect(dt.headers).to.deep.equal([]);
-            expect(dt.isSortable).to.be.false;
+            expect(dt.headerClasses).to.be.null;
+            expect(dt.headerEventHandlers).to.deep.equal({});
+            expect(dt.sortable).to.be.false;
+            expect(dt.searchQuery).to.equal("");
+            expect(dt.sortAscending).to.be.null;
+            expect(dt.sortIndex).to.be.null;
+            expect(dt.unsortable).to.be.true;
         });
 
-        it("Should set properties to default values if options is empty", function() {
+        it("Should not set properties if options is empty", function() {
             // Create table
             let dt = new DataTable("#mytable", {});
 
             // Assert properties are correct
             expect(dt.body).to.deep.equal([]);
+            expect(dt.bodyClasses).to.be.null;
+            expect(dt.bodyEventHandlers).to.deep.equal({});
+            expect(dt.dataIsHTML).to.be.false;
             expect(dt.headers).to.deep.equal([]);
-            expect(dt.isSortable).to.be.false;
+            expect(dt.headerClasses).to.be.null;
+            expect(dt.headerEventHandlers).to.deep.equal({});
+            expect(dt.sortable).to.be.false;
+            expect(dt.searchQuery).to.equal("");
+            expect(dt.sortAscending).to.be.null;
+            expect(dt.sortIndex).to.be.null;
+            expect(dt.unsortable).to.be.true;
         });
 
         it("Should set properties to values in options parameter", function() {
+            // Declare table event handlers
+            let bodyEventHandler = function(row, column, args) {};
+            let headerEventHandler = function(column, args) {};
+
             // Create table
             let dt = new DataTable("#mytable", {
-                headers: ["a", "b", "c"],
-                body: [
-                    ["a1", "b1", "c1"],
-                    ["a2", "b2", "c2"],
-                    ["a3", "b3", "c3"]
-                ],
-                sortable: true
+                body: [["a1", "b1"], ["a2", "b2"]],
+                bodyClasses: [["class-1", "class-2"], ["class-2", "class-1"]],
+                bodyEventHandlers: { click: bodyEventHandler },
+                dataIsHTML: true,
+                downIcon: "down-icon HTML",
+                headers: ["header 1", "header 2"],
+                headerClasses: ["class-1", "class-2"],
+                headerEventHandlers: { click: headerEventHandler },
+                sortable: true,
+                searchQuery: "my query",
+                sortAscending: false,
+                sortIndex: 1,
+                unsortable: false,
+                upIcon: "up-icon HTML",
+                updownIcon: "up-down-icon HTML"
             });
 
             // Assert properties are correct
-            expect(dt.body).to.deep.equal([
-                ["a1", "b1", "c1"],
-                ["a2", "b2", "c2"],
-                ["a3", "b3", "c3"]
-            ]);
-            expect(dt.headers).to.deep.equal(["a", "b", "c"]);
-            expect(dt.isSortable).to.be.true;
+            expect(dt.body).to.deep.equal([["a1", "b1"], ["a2", "b2"]]);
+            expect(dt.bodyClasses).to.deep.equal([["class-1", "class-2"], ["class-2", "class-1"]]);
+            expect(dt.bodyEventHandlers).to.deep.equal({ click: bodyEventHandler });
+            expect(dt.dataIsHTML).to.be.true;
+            expect(dt.downIcon).to.equal("down-icon HTML");
+            expect(dt.headers).to.deep.equal(["header 1", "header 2"]);
+            expect(dt.headerClasses).to.deep.equal(["class-1", "class-2"]);
+            expect(dt.headerEventHandlers).to.deep.equal({ click: headerEventHandler });
+            expect(dt.sortable).to.be.true;
+            expect(dt.searchQuery).to.equal("my query");
+            expect(dt.sortAscending).to.be.false;
+            expect(dt.sortIndex).to.equal(1);
+            expect(dt.unsortable).to.be.false;
+            expect(dt.upIcon).to.equal("up-icon HTML");
+            expect(dt.updownIcon).to.equal("up-down-icon HTML");
         });
     });
 
     describe("body property", function() {
+        it("Should be empty by default", function() {
+            // Create table
+            let dt = new DataTable("#mytable");
+
+            // Assert body is correct
+            expect(dt.body).to.deep.equal([]);
+        });
+
         it("Should not be changeable", function() {
             // Create table
             let dt = new DataTable("#mytable");
@@ -112,7 +118,115 @@ describe("DataTable class", function() {
         });
     });
 
+    describe("bodyClasses property", function() {
+        it("Should be null by default", function() {
+            // Create table
+            let dt = new DataTable("#mytable");
+
+            // Assert bodyClasses is correct
+            expect(dt.bodyClasses).to.be.null;
+        });
+
+        it("Should not be changeable", function() {
+            // Create table
+            let dt = new DataTable("#mytable");
+
+            // Attempt to change bodyClasses
+            dt.bodyClasses = [["class-1", "class-2"], ["class-2", "class-1"]];
+
+            // Assert bodyClasses not set
+            expect(dt.bodyClasses).to.be.null;
+        });
+    });
+
+    describe("bodyEventHandlers property", function() {
+        it("Should be empty by default", function() {
+            // Create table
+            let dt = new DataTable("#mytable");
+
+            // Assert bodyEventHandlers is correct
+            expect(dt.bodyEventHandlers).to.deep.equal({});
+        });
+
+        it("Should not be changeable", function() {
+            // Create table
+            let dt = new DataTable("#mytable");
+
+            // Attempt to change bodyEventHandlers
+            dt.bodyEventHandlers = { click: (row, column, args) => {} };
+
+            // Assert bodyEventHandlers not set
+            expect(dt.bodyEventHandlers).to.deep.equal({});
+        });
+    });
+
+    describe("dataIsHTML property", function() {
+        it("Should be false by default", function() {
+            // Create table
+            let dt = new DataTable("#mytable");
+
+            // Assert dataIsHTML is correct
+            expect(dt.dataIsHTML).to.be.false;
+        });
+
+        it("Should call render method when updated", function() {
+            // Create table
+            let dt = new DataTable("#mytable");
+
+            // Mock DataTable.render method
+            let render = sinon.stub(dt, "render");
+
+            try {
+                // Set dataIsHTML
+                dt.dataIsHTML = true;
+
+                // Assert DataTable.render called
+                expect(render.calledOnce).to.be.true;
+
+                // Assert dataIsHTML is correct
+                expect(dt.dataIsHTML).to.be.true;
+            }
+            finally {
+                // Restore DataTable.render method
+                render.restore();
+            }
+        });
+    });
+
+    describe("downIcon property", function() {
+        it("Should call render method when updated", function() {
+            // Create table
+            let dt = new DataTable("#mytable");
+
+            // Mock DataTable.render method
+            let render = sinon.stub(dt, "render");
+
+            try {
+                // Set downIcon
+                dt.downIcon = "<svg></svg>";
+
+                // Assert DataTable.render called
+                expect(render.calledOnce).to.be.true;
+
+                // Assert downIcon is correct
+                expect(dt.downIcon).to.equal("<svg></svg>");
+            }
+            finally {
+                // Restore DataTable.render method
+                render.restore();
+            }
+        });
+    });
+
     describe("headers property", function() {
+        it("Should be empty by default", function() {
+            // Create table
+            let dt = new DataTable("#mytable");
+
+            // Assert headers is correct
+            expect(dt.headers).to.deep.equal([]);
+        });
+
         it("Should not be changeable", function() {
             // Create table
             let dt = new DataTable("#mytable");
@@ -125,7 +239,57 @@ describe("DataTable class", function() {
         });
     });
 
-    describe("isSortable property", function() {
+    describe("headerClasses property", function() {
+        it("Should be null by default", function() {
+            // Create table
+            let dt = new DataTable("#mytable");
+
+            // Assert headerClasses is correct
+            expect(dt.headerClasses).to.be.null;
+        });
+
+        it("Should not be changeable", function() {
+            // Create table
+            let dt = new DataTable("#mytable");
+
+            // Attempt to change headerClasses
+            dt.headerClasses = ["class-1", "class-2"];
+
+            // Assert headerClasses not set
+            expect(dt.headerClasses).to.be.null;
+        });
+    });
+
+    describe("headerEventHandlers property", function() {
+        it("Should be empty by default", function() {
+            // Create table
+            let dt = new DataTable("#mytable");
+
+            // Assert headerEventHandlers is correct
+            expect(dt.headerEventHandlers).to.deep.equal({});
+        });
+
+        it("Should not be changeable", function() {
+            // Create table
+            let dt = new DataTable("#mytable");
+
+            // Attempt to change headerEventHandlers
+            dt.headerEventHandlers = { click: (column, args) => {} };
+
+            // Assert headerEventHandlers not set
+            expect(dt.headerEventHandlers).to.deep.equal({});
+        });
+    });
+
+    describe("sortable property", function() {
+        it("Should be false by default", function() {
+            // Create table
+            let dt = new DataTable("#mytable");
+
+            // Assert sortable is correct
+            expect(dt.sortable).to.be.false;
+        });
+
         it("Should call render method when updated", function() {
             // Create table
             let dt = new DataTable("#mytable");
@@ -134,14 +298,14 @@ describe("DataTable class", function() {
             let render = sinon.stub(dt, "render");
 
             try {
-                // Set isSortable
-                dt.isSortable = true;
+                // Set sortable
+                dt.sortable = true;
 
                 // Assert DataTable.render called
                 expect(render.calledOnce).to.be.true;
 
-                // Assert isSortable is correct
-                expect(dt.isSortable).to.be.true;
+                // Assert sortable is correct
+                expect(dt.sortable).to.be.true;
             }
             finally {
                 // Restore DataTable.render method
@@ -151,6 +315,14 @@ describe("DataTable class", function() {
     });
 
     describe("searchQuery property", function() {
+        it("Should be empty by default", function() {
+            // Create table
+            let dt = new DataTable("#mytable");
+
+            // Assert searchQuery is correct
+            expect(dt.searchQuery).to.equal("");
+        });
+
         it("Should not be changeable", function() {
             // Create table
             let dt = new DataTable("#mytable");
@@ -177,6 +349,14 @@ describe("DataTable class", function() {
     });
 
     describe("sortAscending property", function() {
+        it("Should be null by default", function() {
+            // Create table
+            let dt = new DataTable("#mytable");
+
+            // Assert sortAscending is correct
+            expect(dt.sortAscending).to.be.null;
+        });
+
         it("Should not be changeable", function() {
             // Create table
             let dt = new DataTable("#mytable");
@@ -185,11 +365,19 @@ describe("DataTable class", function() {
             dt.sortAscending = false;
 
             // Assert sortAscending not set
-            expect(dt.sortAscending).to.equal(null);
+            expect(dt.sortAscending).to.be.null;
         });
     });
 
     describe("sortIndex property", function() {
+        it("Should be null by default", function() {
+            // Create table
+            let dt = new DataTable("#mytable");
+
+            // Assert sortIndex is correct
+            expect(dt.sortIndex).to.be.null;
+        });
+
         it("Should not be changeable", function() {
             // Create table
             let dt = new DataTable("#mytable");
@@ -198,14 +386,138 @@ describe("DataTable class", function() {
             dt.sortIndex = 2;
 
             // Assert sortIndex not set
-            expect(dt.sortIndex).to.equal(null);
+            expect(dt.sortIndex).to.be.null;
+        });
+    });
+
+    describe("theme property", function() {
+        it("Should be \"basic-light\" by default", function() {
+            // Create table
+            let dt = new DataTable("#mytable");
+
+            // Assert theme is correct
+            expect(dt.theme).to.equal("basic-light");
+        });
+
+        it("Should call render method when updated", function() {
+            // Create table
+            let dt = new DataTable("#mytable");
+
+            // Mock DataTable.render method
+            let render = sinon.stub(dt, "render");
+
+            try {
+                // Set theme
+                dt.theme = null;
+
+                // Assert DataTable.render called
+                expect(render.calledOnce).to.be.true;
+
+                // Assert theme is correct
+                expect(dt.theme).to.be.null;
+            }
+            finally {
+                // Restore DataTable.render method
+                render.restore();
+            }
+        });
+    });
+
+    describe("upIcon property", function() {
+        it("Should call render method when updated", function() {
+            // Create table
+            let dt = new DataTable("#mytable");
+
+            // Mock DataTable.render method
+            let render = sinon.stub(dt, "render");
+
+            try {
+                // Set upIcon
+                dt.upIcon = "<svg></svg>";
+
+                // Assert DataTable.render called
+                expect(render.calledOnce).to.be.true;
+
+                // Assert upIcon is correct
+                expect(dt.upIcon).to.equal("<svg></svg>");
+            }
+            finally {
+                // Restore DataTable.render method
+                render.restore();
+            }
+        });
+    });
+
+    describe("updownIcon property", function() {
+        it("Should call render method when updated", function() {
+            // Create table
+            let dt = new DataTable("#mytable");
+
+            // Mock DataTable.render method
+            let render = sinon.stub(dt, "render");
+
+            try {
+                // Set updownIcon
+                dt.updownIcon = "<svg></svg>";
+
+                // Assert DataTable.render called
+                expect(render.calledOnce).to.be.true;
+
+                // Assert updownIcon is correct
+                expect(dt.updownIcon).to.equal("<svg></svg>");
+            }
+            finally {
+                // Restore DataTable.render method
+                render.restore();
+            }
+        });
+    });
+
+    describe("unsortable property", function() {
+        it("Should be true by default", function() {
+            // Create table
+            let dt = new DataTable("#mytable");
+
+            // Assert unsortable is correct
+            expect(dt.unsortable).to.be.true;
+        });
+
+        it("Should call render method when updated", function() {
+            // Create table
+            let dt = new DataTable("#mytable");
+
+            // Mock DataTable.render method
+            let render = sinon.stub(dt, "render");
+
+            try {
+                // Set unsortable
+                dt.unsortable = false;
+
+                // Assert DataTable.render called
+                expect(render.calledOnce).to.be.true;
+
+                // Assert unsortable is correct
+                expect(dt.unsortable).to.be.false;
+            }
+            finally {
+                // Restore DataTable.render method
+                render.restore();
+            }
         });
     });
 
     describe("version static property", function() {
         it("Should be equal to the version in package.json", function() {
             expect(DataTable.version).to.equal(require("../package.json").version);
-        })
+        });
+
+        it("Should not be changeable", function() {
+            // Attempt to change version
+            DataTable.version = 2;
+
+            // Assert version not set
+            expect(DataTable.version).to.equal(require("../package.json").version);
+        });
     });
 
     describe("render method", function() {
@@ -222,32 +534,32 @@ describe("DataTable class", function() {
 
             // Assert table is correct
             let expected = `
-            <table>
+            <table class="basic-light">
                 <thead>
                     <tr>
-                        <th>h1</th>
-                        <th>h2</th>
-                        <th>h3</th>
+                        <th class="">h1</th>
+                        <th class="">h2</th>
+                        <th class="">h3</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <td>a1</td>
-                        <td>b1</td>
-                        <td>c1</td>
+                        <td class="">a1</td>
+                        <td class="">b1</td>
+                        <td class="">c1</td>
                     </tr>
                     <tr>
-                        <td>a2</td>
-                        <td>b2</td>
-                        <td>c2</td>
+                        <td class="">a2</td>
+                        <td class="">b2</td>
+                        <td class="">c2</td>
                     </tr>
                     <tr>
-                        <td>a3</td>
-                        <td>b3</td>
-                        <td>c3</td>
+                        <td class="">a3</td>
+                        <td class="">b3</td>
+                        <td class="">c3</td>
                     </tr>
                 </tbody>
-            </table>`.replace(/\n\s*/g, "");
+            </table>`.replace(/\n\s+/g, "");
             expect(global.document.querySelector("div.data-table").innerHTML).to.equal(expected);
         });
 
@@ -263,25 +575,25 @@ describe("DataTable class", function() {
 
             // Assert table is correct
             let expected = `
-            <table>
+            <table class="basic-light">
                 <tbody>
                     <tr>
-                        <td>a1</td>
-                        <td>b1</td>
-                        <td>c1</td>
+                        <td class="">a1</td>
+                        <td class="">b1</td>
+                        <td class="">c1</td>
                     </tr>
                     <tr>
-                        <td>a2</td>
-                        <td>b2</td>
-                        <td>c2</td>
+                        <td class="">a2</td>
+                        <td class="">b2</td>
+                        <td class="">c2</td>
                     </tr>
                     <tr>
-                        <td>a3</td>
-                        <td>b3</td>
-                        <td>c3</td>
+                        <td class="">a3</td>
+                        <td class="">b3</td>
+                        <td class="">c3</td>
                     </tr>
                 </tbody>
-            </table>`.replace(/\n\s*/g, "");
+            </table>`.replace(/\n\s+/g, "");
             expect(global.document.querySelector("div.data-table").innerHTML).to.equal(expected);
         });
 
@@ -293,15 +605,15 @@ describe("DataTable class", function() {
 
             // Assert table is correct
             let expected = `
-            <table>
+            <table class="basic-light">
                 <thead>
                     <tr>
-                        <th>h1</th>
-                        <th>h2</th>
-                        <th>h3</th>
+                        <th class="">h1</th>
+                        <th class="">h2</th>
+                        <th class="">h3</th>
                     </tr>
                 </thead>
-            </table>`.replace(/\n\s*/g, "");
+            </table>`.replace(/\n\s+/g, "");
             expect(global.document.querySelector("div.data-table").innerHTML).to.equal(expected);
         });
 
@@ -311,12 +623,12 @@ describe("DataTable class", function() {
 
             // Assert table is correct
             let expected = `
-            <table>
-            </table>`.replace(/\n\s*/g, "");
+            <table class="basic-light">
+            </table>`.replace(/\n\s+/g, "");
             expect(global.document.querySelector("div.data-table").innerHTML).to.equal(expected);
         });
 
-        it("Should add sorting controls if isSortable is true", function() {
+        it("Should add sorting controls if sortable is true", function() {
             // Create table (calls render method)
             let dt = new DataTable("#mytable", {
                 headers: ["One", "Two"],
@@ -325,24 +637,24 @@ describe("DataTable class", function() {
 
             // Assert table is correct
             let expected = `
-            <table>
+            <table class="basic-light">
                 <thead>
                     <tr>
-                        <th>
+                        <th class="">
                             One
                             <button>
-                                <svg viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="updown"><polyline points="15 10 12 6 9 10 15 10"></polyline><polyline points="15 14 12 18 9 14 15 14"></polyline></svg>
+                                ${dt.updownIcon}
                             </button>
                         </th>
-                        <th>
+                        <th class="">
                             Two
                             <button>
-                                <svg viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="updown"><polyline points="15 10 12 6 9 10 15 10"></polyline><polyline points="15 14 12 18 9 14 15 14"></polyline></svg>
+                                ${dt.updownIcon}
                             </button>
                         </th>
                     </tr>
                 </thead>
-            </table>`.replace(/\n\s*/g, "");
+            </table>`.replace(/\n\s+/g, "");
             expect(global.document.querySelector("div.data-table").innerHTML).to.equal(expected);
 
             // Sort table ascending (calls render method)
@@ -350,24 +662,24 @@ describe("DataTable class", function() {
 
             // Assert table is correct
             expected = `
-            <table>
+            <table class="basic-light">
                 <thead>
                     <tr>
-                        <th>
+                        <th class="">
                             One
                             <button>
-                                <svg viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="updown"><polyline points="18 16 12 8 6 16 18 16"></polyline></svg>
+                                ${dt.upIcon}
                             </button>
                         </th>
-                        <th>
+                        <th class="">
                             Two
                             <button>
-                                <svg viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="updown"><polyline points="15 10 12 6 9 10 15 10"></polyline><polyline points="15 14 12 18 9 14 15 14"></polyline></svg>
+                                ${dt.updownIcon}
                             </button>
                         </th>
                     </tr>
                 </thead>
-            </table>`.replace(/\n\s*/g, "");
+            </table>`.replace(/\n\s+/g, "");
             expect(global.document.querySelector("div.data-table").innerHTML).to.equal(expected);
 
             // Sort table descending (calls render method)
@@ -375,24 +687,147 @@ describe("DataTable class", function() {
 
             // Assert table is correct
             expected = `
-            <table>
+            <table class="basic-light">
                 <thead>
                     <tr>
-                        <th>
+                        <th class="">
                             One
                             <button>
-                                <svg viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="updown"><polyline points="18 8 12 16 6 8 18 8"></polyline></svg>
+                                ${dt.downIcon}
                             </button>
                         </th>
-                        <th>
+                        <th class="">
                             Two
                             <button>
-                                <svg viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="updown"><polyline points="15 10 12 6 9 10 15 10"></polyline><polyline points="15 14 12 18 9 14 15 14"></polyline></svg>
+                                ${dt.updownIcon}
                             </button>
                         </th>
                     </tr>
                 </thead>
-            </table>`.replace(/\n\s*/g, "");
+            </table>`.replace(/\n\s+/g, "");
+            expect(global.document.querySelector("div.data-table").innerHTML).to.equal(expected);
+        });
+
+        it("Should add body classes if bodyClasses is not null", function() {
+            // Create table (calls render method)
+            new DataTable("#mytable", {
+                body: [["a1", "b1"], ["a2", "b2"]],
+                bodyClasses: [["class-1", "class-2"], ["class-2", "class-1"]]
+            });
+
+            // Assert table is correct
+            let expected = `
+            <table class="basic-light">
+                <tbody>
+                    <tr>
+                        <td class="class-1">a1</td>
+                        <td class="class-2">b1</td>
+                    </tr>
+                    <tr>
+                        <td class="class-2">a2</td>
+                        <td class="class-1">b2</td>
+                    </tr>
+                </tbody>
+            </table>`.replace(/\n\s+/g, "");
+            expect(global.document.querySelector("div.data-table").innerHTML).to.equal(expected);
+        });
+
+        it("Should add header classes if headerClasses is not null", function() {
+            // Create table (calls render method)
+            new DataTable("#mytable", {
+                headers: ["header 1", "header 2"],
+                headerClasses: ["class-1", "class-2"]
+            });
+
+            // Assert table is correct
+            let expected = `
+            <table class="basic-light">
+                <thead>
+                    <tr>
+                        <th class="class-1">header 1</th>
+                        <th class="class-2">header 2</th>
+                    </tr>
+                </thead>
+            </table>`.replace(/\n\s+/g, "");
+            expect(global.document.querySelector("div.data-table").innerHTML).to.equal(expected);
+        });
+
+        it("Should correctly sanitize table data", function() {
+            // Create table (calls render method)
+            new DataTable("#mytable", {
+                headers: ["\theader 1a\nheader 1b"],
+                body: [
+                    ["<u>content</u>"]
+                ]
+            });
+
+            // Assert table is correct
+            let expected = `
+            <table class="basic-light">
+                <thead>
+                    <tr>
+                        <th class="">\u2003header 1a<br>header 1b</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="">&lt;u&gt;content&lt;/u&gt;</td>
+                    </tr>
+                </tbody>
+            </table>`.replace(/\n\s+/g, "");
+            expect(global.document.querySelector("div.data-table").innerHTML).to.equal(expected);
+        });
+
+        it("Should not sanitize table data if dataIsHTML is true", function() {
+            // Create table (calls render method)
+            new DataTable("#mytable", {
+                headers: ["\theader 1a\nheader 1b"],
+                body: [
+                    ["<u>content</u>"]
+                ],
+                dataIsHTML: true
+            });
+
+            // Assert table is correct
+            let expected = `
+            <table class="basic-light">
+                <thead>
+                    <tr>
+                        <th class="">\theader 1a\nheader 1b</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class=""><u>content</u></td>
+                    </tr>
+                </tbody>
+            </table>`.replace(/\n\s+/g, "");
+            expect(global.document.querySelector("div.data-table").innerHTML).to.equal(expected);
+        });
+
+        it("Should correctly set table theme class", function() {
+            // Create table (calls render method)
+            new DataTable("#mytable", {
+                theme: "basic-dark"
+            });
+
+            // Assert table is correct
+            let expected = `
+            <table class="basic-dark">
+            </table>`.replace(/\n\s+/g, "");
+            expect(global.document.querySelector("div.data-table").innerHTML).to.equal(expected);
+        });
+
+        it("Should correctly set table theme class if theme is null", function() {
+            // Create table (calls render method)
+            new DataTable("#mytable", {
+                theme: null
+            });
+
+            // Assert table is correct
+            let expected = `
+            <table class="">
+            </table>`.replace(/\n\s+/g, "");
             expect(global.document.querySelector("div.data-table").innerHTML).to.equal(expected);
         });
     });
@@ -417,24 +852,40 @@ describe("DataTable class", function() {
 
             // Assert table is correct
             let expected = `
-            <table>
+            <table class="basic-light">
                 <thead>
                     <tr>
-                        <th>English</th>
-                        <th>Spanish</th>
+                        <th class="">English</th>
+                        <th class="">Spanish</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>Orange</td>
-                        <td>Anaranjado</td>
+                    <tr hidden="">
+                        <td class="">Red</td>
+                        <td class="">Rojo</td>
                     </tr>
                     <tr>
-                        <td>Purple</td>
-                        <td>Morado</td>
+                        <td class="">Orange</td>
+                        <td class="">Anaranjado</td>
+                    </tr>
+                    <tr hidden="">
+                        <td class="">Yellow</td>
+                        <td class="">Amarillo</td>
+                    </tr>
+                    <tr hidden="">
+                        <td class="">Green</td>
+                        <td class="">Verde</td>
+                    </tr>
+                    <tr hidden="">
+                        <td class="">Blue</td>
+                        <td class="">Azúl</td>
+                    </tr>
+                    <tr>
+                        <td class="">Purple</td>
+                        <td class="">Morado</td>
                     </tr>
                 </tbody>
-            </table>`.replace(/\n\s*/g, "");
+            </table>`.replace(/\n\s+/g, "");
             expect(global.document.querySelector("div.data-table").innerHTML).to.equal(expected);
         });
 
@@ -460,40 +911,40 @@ describe("DataTable class", function() {
 
             // Assert table is correct
             let expected = `
-            <table>
+            <table class="basic-light">
                 <thead>
                     <tr>
-                        <th>English</th>
-                        <th>Spanish</th>
+                        <th class="">English</th>
+                        <th class="">Spanish</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <td>Red</td>
-                        <td>Rojo</td>
+                        <td class="">Red</td>
+                        <td class="">Rojo</td>
                     </tr>
                     <tr>
-                        <td>Orange</td>
-                        <td>Anaranjado</td>
+                        <td class="">Orange</td>
+                        <td class="">Anaranjado</td>
                     </tr>
                     <tr>
-                        <td>Yellow</td>
-                        <td>Amarillo</td>
+                        <td class="">Yellow</td>
+                        <td class="">Amarillo</td>
                     </tr>
                     <tr>
-                        <td>Green</td>
-                        <td>Verde</td>
+                        <td class="">Green</td>
+                        <td class="">Verde</td>
                     </tr>
                     <tr>
-                        <td>Blue</td>
-                        <td>Azúl</td>
+                        <td class="">Blue</td>
+                        <td class="">Azúl</td>
                     </tr>
                     <tr>
-                        <td>Purple</td>
-                        <td>Morado</td>
+                        <td class="">Purple</td>
+                        <td class="">Morado</td>
                     </tr>
                 </tbody>
-            </table>`.replace(/\n\s*/g, "");
+            </table>`.replace(/\n\s+/g, "");
             expect(global.document.querySelector("div.data-table").innerHTML).to.equal(expected);
         });
 
@@ -519,7 +970,59 @@ describe("DataTable class", function() {
         });
     });
 
-    describe("setBody method", function() {
+    describe("setData method", function() {
+        it("Should update data properties if a new value is provided", function() {
+            // Create table
+            let dt = new DataTable("#mytable");
+
+            // Call setData method for body data only
+            dt.setData({
+                body: [["a1", "b1"], ["a2", "b2"]],
+                bodyClasses: [["class-1", "class-2"], ["class-2", "class-1"]]
+            });
+
+            // Assert only body data properties were updated
+            expect(dt.body).to.deep.equal([["a1", "b1"], ["a2", "b2"]]);
+            expect(dt.bodyClasses).to.deep.equal([["class-1", "class-2"], ["class-2", "class-1"]]);
+            expect(dt.headers).to.deep.equal([]);
+            expect(dt.headerClasses).to.be.null;
+
+            // Call setData method for header data only
+            dt.setData({
+                headers: ["header 1", "header 2"],
+                headerClasses: ["class-1", "class-2"]
+            });
+
+            // Assert only header data properties were updated
+            expect(dt.body).to.deep.equal([["a1", "b1"], ["a2", "b2"]]);
+            expect(dt.bodyClasses).to.deep.equal([["class-1", "class-2"], ["class-2", "class-1"]]);
+            expect(dt.headers).to.deep.equal(["header 1", "header 2"]);
+            expect(dt.headerClasses).to.deep.equal(["class-1", "class-2"]);
+        });
+
+        it("Should not set data properties if value parameter is undefined or empty", function() {
+            // Create table
+            let dt = new DataTable("#mytable");
+
+            // Call setData method without value parameter
+            dt.setData();
+
+            // Assert properties were not modified
+            expect(dt.body).to.deep.equal([]);
+            expect(dt.bodyClasses).to.be.null;
+            expect(dt.headers).to.deep.equal([]);
+            expect(dt.headerClasses).to.be.null;
+
+            // Call setData method on empty object
+            dt.setData({});
+
+            // Assert properties were not modified
+            expect(dt.body).to.deep.equal([]);
+            expect(dt.bodyClasses).to.be.null;
+            expect(dt.headers).to.deep.equal([]);
+            expect(dt.headerClasses).to.be.null;
+        });
+
         it("Should call render method", function() {
             // Create table
             let dt = new DataTable("#mytable");
@@ -528,14 +1031,11 @@ describe("DataTable class", function() {
             let render = sinon.stub(dt, "render");
 
             try {
-                // Call setBody method
-                dt.setBody([["a1", "b1", "c1"]]);
+                // Call setData method
+                dt.setData();
 
                 // Assert DataTable.render called
                 expect(render.calledOnce).to.be.true;
-
-                // Assert body property was updated
-                expect(dt.body).to.deep.equal([["a1", "b1", "c1"]]);
             }
             finally {
                 // Restore DataTable.render method
@@ -561,90 +1061,19 @@ describe("DataTable class", function() {
             dt.search("or");
             dt.sort(1, false);
 
-            // Call setBody method
-            dt.setBody([
-                ["Red",     "Roja"],
-                ["Orange",  "Anaranjada"],
-                ["Yellow",  "Amarilla"],
-                ["Green",   "Verde"],
-                ["Blue",    "Azúl"],
-                ["Purple",  "Morada"]
-            ]);
-
-            // Assert search query and sort properties are correct
-            expect(dt.searchQuery).to.equal("or");
-            expect(dt.sortIndex).to.equal(1);
-            expect(dt.sortAscending).to.be.false;
-
-            // Assert table is correct
-            let expected = `
-            <table>
-                <thead>
-                    <tr>
-                        <th>English</th>
-                        <th>Spanish</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Purple</td>
-                        <td>Morada</td>
-                    </tr>
-                    <tr>
-                        <td>Orange</td>
-                        <td>Anaranjada</td>
-                    </tr>
-                </tbody>
-            </table>`.replace(/\n\s*/g, "");
-            expect(global.document.querySelector("div.data-table").innerHTML).to.equal(expected);
-        });
-    });
-
-    describe("setHeaders method", function() {
-        it("Should call render method", function() {
-            // Create table
-            let dt = new DataTable("#mytable");
-
-            // Mock DataTable.render method
-            let render = sinon.stub(dt, "render");
-
-            try {
-                // Call setHeaders method
-                dt.setHeaders(["a", "b", "c"]);
-
-                // Assert DataTable.render called
-                expect(render.calledOnce).to.be.true;
-
-                // Assert headers property was updated
-                expect(dt.headers).to.deep.equal(["a", "b", "c"]);
-            }
-            finally {
-                // Restore DataTable.render method
-                render.restore();
-            }
-        });
-
-        it("Should not modify search query or sort properties", function() {
-            // Create table
-            let dt = new DataTable("#mytable", {
-                headers: ["English", "Spanish"],
+            // Call setData method
+            dt.setData({
+                headers: ["English", "Español"],
                 body: [
-                    ["Red",     "Rojo"],
-                    ["Orange",  "Anaranjado"],
-                    ["Yellow",  "Amarillo"],
+                    ["Red",     "Roja"],
+                    ["Orange",  "Anaranjada"],
+                    ["Yellow",  "Amarilla"],
                     ["Green",   "Verde"],
                     ["Blue",    "Azúl"],
-                    ["Purple",  "Morado"]
+                    ["Purple",  "Morada"]
                 ]
             });
 
-            // Sort and filter table
-            dt.search("or");
-            dt.sort(1, false);
-
-            // Call setHeaders method
-            dt.setHeaders(["English", "Español"]);
-
             // Assert search query and sort properties are correct
             expect(dt.searchQuery).to.equal("or");
             expect(dt.sortIndex).to.equal(1);
@@ -652,24 +1081,40 @@ describe("DataTable class", function() {
 
             // Assert table is correct
             let expected = `
-            <table>
+            <table class="basic-light">
                 <thead>
                     <tr>
-                        <th>English</th>
-                        <th>Español</th>
+                        <th class="">English</th>
+                        <th class="">Español</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>Purple</td>
-                        <td>Morado</td>
+                    <tr hidden="">
+                        <td class="">Green</td>
+                        <td class="">Verde</td>
+                    </tr>
+                    <tr hidden="">
+                        <td class="">Red</td>
+                        <td class="">Roja</td>
                     </tr>
                     <tr>
-                        <td>Orange</td>
-                        <td>Anaranjado</td>
+                        <td class="">Purple</td>
+                        <td class="">Morada</td>
+                    </tr>
+                    <tr hidden="">
+                        <td class="">Blue</td>
+                        <td class="">Azúl</td>
+                    </tr>
+                    <tr>
+                        <td class="">Orange</td>
+                        <td class="">Anaranjada</td>
+                    </tr>
+                    <tr hidden="">
+                        <td class="">Yellow</td>
+                        <td class="">Amarilla</td>
                     </tr>
                 </tbody>
-            </table>`.replace(/\n\s*/g, "");
+            </table>`.replace(/\n\s+/g, "");
             expect(global.document.querySelector("div.data-table").innerHTML).to.equal(expected);
         });
     });
@@ -694,40 +1139,40 @@ describe("DataTable class", function() {
 
             // Assert table is correct
             let expected = `
-            <table>
+            <table class="basic-light">
                 <thead>
                     <tr>
-                        <th>English</th>
-                        <th>Spanish</th>
+                        <th class="">English</th>
+                        <th class="">Spanish</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <td>Green</td>
-                        <td>Verde</td>
+                        <td class="">Green</td>
+                        <td class="">Verde</td>
                     </tr>
                     <tr>
-                        <td>Red</td>
-                        <td>Rojo</td>
+                        <td class="">Red</td>
+                        <td class="">Rojo</td>
                     </tr>
                     <tr>
-                        <td>Purple</td>
-                        <td>Morado</td>
+                        <td class="">Purple</td>
+                        <td class="">Morado</td>
                     </tr>
                     <tr>
-                        <td>Blue</td>
-                        <td>Azúl</td>
+                        <td class="">Blue</td>
+                        <td class="">Azúl</td>
                     </tr>
                     <tr>
-                        <td>Orange</td>
-                        <td>Anaranjado</td>
+                        <td class="">Orange</td>
+                        <td class="">Anaranjado</td>
                     </tr>
                     <tr>
-                        <td>Yellow</td>
-                        <td>Amarillo</td>
+                        <td class="">Yellow</td>
+                        <td class="">Amarillo</td>
                     </tr>
                 </tbody>
-            </table>`.replace(/\n\s*/g, "");
+            </table>`.replace(/\n\s+/g, "");
             expect(global.document.querySelector("div.data-table").innerHTML).to.equal(expected);
 
             // Assert sort properties are correct
@@ -757,45 +1202,275 @@ describe("DataTable class", function() {
 
             // Assert table is correct
             let expected = `
-            <table>
+            <table class="basic-light">
                 <thead>
                     <tr>
-                        <th>English</th>
-                        <th>Spanish</th>
+                        <th class="">English</th>
+                        <th class="">Spanish</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <td>Red</td>
-                        <td>Rojo</td>
+                        <td class="">Red</td>
+                        <td class="">Rojo</td>
                     </tr>
                     <tr>
-                        <td>Orange</td>
-                        <td>Anaranjado</td>
+                        <td class="">Orange</td>
+                        <td class="">Anaranjado</td>
                     </tr>
                     <tr>
-                        <td>Yellow</td>
-                        <td>Amarillo</td>
+                        <td class="">Yellow</td>
+                        <td class="">Amarillo</td>
                     </tr>
                     <tr>
-                        <td>Green</td>
-                        <td>Verde</td>
+                        <td class="">Green</td>
+                        <td class="">Verde</td>
                     </tr>
                     <tr>
-                        <td>Blue</td>
-                        <td>Azúl</td>
+                        <td class="">Blue</td>
+                        <td class="">Azúl</td>
                     </tr>
                     <tr>
-                        <td>Purple</td>
-                        <td>Morado</td>
+                        <td class="">Purple</td>
+                        <td class="">Morado</td>
                     </tr>
                 </tbody>
-            </table>`.replace(/\n\s*/g, "");
+            </table>`.replace(/\n\s+/g, "");
             expect(global.document.querySelector("div.data-table").innerHTML).to.equal(expected);
 
             // Assert sort properties are correct
-            expect(dt.sortIndex).to.equal(null);
-            expect(dt.sortAscending).to.equal(null);
+            expect(dt.sortIndex).to.be.null;
+            expect(dt.sortAscending).to.be.null;
+        });
+    });
+
+    describe("sort buttons", function() {
+        it("Should correctly sort table when it isn't sorted", function() {
+            // Create table
+            let dt = new DataTable("#mytable", {
+                headers: ["English", "Spanish"],
+                body: [
+                    ["Red",     "Rojo"],
+                    ["Orange",  "Anaranjado"],
+                    ["Yellow",  "Amarillo"],
+                    ["Green",   "Verde"],
+                    ["Blue",    "Azúl"],
+                    ["Purple",  "Morado"]
+                ],
+                sortable: true
+            });
+
+            // Mock DataTable.sort method
+            let sort = sinon.stub(dt, "sort");
+
+            try {
+                // Click 1st header
+                document.querySelectorAll("div.data-table th button")[0].click();
+
+                // Assert table sorted correctly
+                expect(sort.calledOnceWithExactly(0, true)).to.be.true;
+            }
+            finally {
+                // Restore DataTable.sort method
+                sort.restore();
+            }
+        });
+
+        it("Should correctly sort table when it's sorted by a different column", function() {
+            // Create table
+            let dt = new DataTable("#mytable", {
+                headers: ["English", "Spanish"],
+                body: [
+                    ["Red",     "Rojo"],
+                    ["Orange",  "Anaranjado"],
+                    ["Yellow",  "Amarillo"],
+                    ["Green",   "Verde"],
+                    ["Blue",    "Azúl"],
+                    ["Purple",  "Morado"]
+                ],
+                sortable: true
+            });
+
+            // Sort table by 2nd column
+            dt.sort(1, true);
+
+            // Mock DataTable.sort method
+            let sort = sinon.stub(dt, "sort");
+
+            try {
+                // Click 1st header
+                document.querySelectorAll("div.data-table th button")[0].click();
+
+                // Assert table sorted correctly
+                expect(sort.calledOnceWithExactly(0, true)).to.be.true;
+            }
+            finally {
+                // Restore DataTable.sort method
+                sort.restore();
+            }
+        });
+
+        it("Should correctly sort table when it's sorted ascending by the same column", function() {
+            // Create table
+            let dt = new DataTable("#mytable", {
+                headers: ["English", "Spanish"],
+                body: [
+                    ["Red",     "Rojo"],
+                    ["Orange",  "Anaranjado"],
+                    ["Yellow",  "Amarillo"],
+                    ["Green",   "Verde"],
+                    ["Blue",    "Azúl"],
+                    ["Purple",  "Morado"]
+                ],
+                sortable: true
+            });
+
+            // Sort table ascending by 1st column
+            dt.sort(0, true);
+
+            // Mock DataTable.sort method
+            let sort = sinon.stub(dt, "sort");
+
+            try {
+                // Click 1st header
+                document.querySelectorAll("div.data-table th button")[0].click();
+
+                // Assert table sorted correctly
+                expect(sort.calledOnceWithExactly(0, false)).to.be.true;
+            }
+            finally {
+                // Restore DataTable.sort method
+                sort.restore();
+            }
+        });
+
+        it("Should correctly sort table when it's sorted descending by the same column and unsortable is true", function() {
+            // Create table
+            let dt = new DataTable("#mytable", {
+                headers: ["English", "Spanish"],
+                body: [
+                    ["Red",     "Rojo"],
+                    ["Orange",  "Anaranjado"],
+                    ["Yellow",  "Amarillo"],
+                    ["Green",   "Verde"],
+                    ["Blue",    "Azúl"],
+                    ["Purple",  "Morado"]
+                ],
+                sortable: true
+            });
+
+            // Sort table descending by 1st column
+            dt.sort(0, false);
+
+            // Mock DataTable.sort method
+            let sort = sinon.stub(dt, "sort");
+
+            try {
+                // Click 1st header
+                document.querySelectorAll("div.data-table th button")[0].click();
+
+                // Assert table sorted correctly
+                expect(sort.calledOnceWithExactly(0, null)).to.be.true;
+            }
+            finally {
+                // Restore DataTable.sort method
+                sort.restore();
+            }
+        });
+
+        it("Should correctly sort table when it's sorted descending by the same column and unsortable is false", function() {
+            // Create table
+            let dt = new DataTable("#mytable", {
+                headers: ["English", "Spanish"],
+                body: [
+                    ["Red",     "Rojo"],
+                    ["Orange",  "Anaranjado"],
+                    ["Yellow",  "Amarillo"],
+                    ["Green",   "Verde"],
+                    ["Blue",    "Azúl"],
+                    ["Purple",  "Morado"]
+                ],
+                sortable: true,
+                unsortable: false,
+            });
+
+            // Sort table descending by 1st column
+            dt.sort(0, false);
+
+            // Mock DataTable.sort method
+            let sort = sinon.stub(dt, "sort");
+
+            try {
+                // Click 1st header
+                document.querySelectorAll("div.data-table th button")[0].click();
+
+                // Assert table sorted correctly
+                expect(sort.calledOnceWithExactly(0, true)).to.be.true;
+            }
+            finally {
+                // Restore DataTable.sort method
+                sort.restore();
+            }
+        });
+    });
+
+    describe("custom body event handlers", function() {
+        it("Should be called correctly", function() {
+            // Create body event handler
+            let calls = [];
+            let bodyEventHandler = function (row, column, args) {
+                calls.push({row:row, column:column});
+            };
+
+            // Create table
+            new DataTable("#mytable", {
+                headers: ["English", "Spanish"],
+                body: [
+                    ["Red",     "Rojo"],
+                    ["Orange",  "Anaranjado"],
+                    ["Yellow",  "Amarillo"],
+                    ["Green",   "Verde"],
+                    ["Blue",    "Azúl"],
+                    ["Purple",  "Morado"]
+                ],
+                bodyEventHandlers: { click: bodyEventHandler },
+            });
+
+            // Click cell
+            document.querySelectorAll("div.data-table tbody td")[3].click();
+
+            // Assert event handler called correctly
+            expect(calls).to.deep.equal([{row: 1, column: 1}]);
+        });
+    });
+
+    describe("custom header event handlers", function() {
+        it("Should be called correctly", function() {
+            // Create header event handler
+            let calls = [];
+            let headerEventHandler = function (column, args) {
+                calls.push({column:column});
+            };
+
+            // Create table
+            new DataTable("#mytable", {
+                headers: ["English", "Spanish"],
+                header: [
+                    ["Red",     "Rojo"],
+                    ["Orange",  "Anaranjado"],
+                    ["Yellow",  "Amarillo"],
+                    ["Green",   "Verde"],
+                    ["Blue",    "Azúl"],
+                    ["Purple",  "Morado"]
+                ],
+                headerEventHandlers: { click: headerEventHandler },
+            });
+
+            // Click cell
+            document.querySelectorAll("div.data-table thead th")[1].click();
+
+            // Assert event handler called correctly
+            expect(calls).to.deep.equal([{column: 1}]);
         });
     });
 });

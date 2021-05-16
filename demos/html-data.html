@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width">
-        <title>Sort demo - data-table</title>
+        <title>HTML data demo - data-table</title>
         <link rel="stylesheet" href="demo.css">
         <script src="demo.js"></script>
 
@@ -20,38 +20,28 @@
                 <script src="../src/data-table.js"><\/script>
                 <link rel="stylesheet" href="../src/data-table.css">
                 <div>
-                \t<input type="checkbox" id="sortable" oninput="table.sortable = document.getElementById('sortable').checked" checked>
-                \t<label for="sortable">Sortable (the user can sort the table)</label>
-                </div>
-                <div>
-                \t<input type="checkbox" id="unsortable" oninput="table.unsortable = document.getElementById('unsortable').checked" checked>
-                \t<label for="unsortable">Unsortable (the user can reset the table order)</label>
+                \t<input type="checkbox" id="dataIsHTML" oninput="table.dataIsHTML = document.getElementById('dataIsHTML').checked">
+                \t<label for="dataIsHTML">dataIsHTML</label>
                 </div>
                 <div id="mytable"></div>
             `;
             let js = `
                 window.table = new DataTable("#mytable", {
-                \theaders: ["English", "Spanish"], 
+                \theaders: ["\\t header 1a \\n header 1b"],
                 \tbody: [
-                \t\t["Red", "Rojo"],
-                \t\t["Orange", "Anaranjado"],
-                \t\t["Yellow", "Amarillo"],
-                \t\t["Green", "Verde"],
-                \t\t["Blue", "Azúl"],
-                \t\t["Purple", "Morado"]
-                \t],
-                \tsortable: true
+                \t\t["<u><i>content</i></u>"]
+                \t]
                 });
             `;
             let css = `
-                #unsortable {
+                #dataIsHTML {
                 \tmargin-bottom: 10px;
                 }
                 #mytable {
-                \twidth: 300px;
+                \twidth: 250px;
                 }
             `;
-            createDemo("#content", "data-table sort demo", html, js, css);
+            createDemo("#content", "data-table HTML data demo", html, js, css);
         </script>
     </body>
 </html>

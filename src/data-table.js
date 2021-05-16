@@ -4,12 +4,42 @@
  * @param {Array} options The table options
  */
 let DataTable = function(selector, options) {
+    "use strict";
+
     /**
      * The table body data
      */
     let _body = [];
     Object.defineProperty(this, "body", {
         get: function() { return _body; }
+    });
+
+    /**
+     * The table body classes
+     */
+    let _bodyClasses = null;
+    Object.defineProperty(this, "bodyClasses", {
+        get: function() { return _bodyClasses; }
+    });
+
+    /**
+     * The event handlers for table body events
+     */
+    let _bodyEventHandlers = {};
+    Object.defineProperty(this, "bodyEventHandlers", {
+        get: function() { return _bodyEventHandlers; }
+    });
+
+    /**
+     * Whether the table data is HTML
+     */
+    let _dataIsHTML = false;
+    Object.defineProperty(this, "dataIsHTML", {
+        get: function() { return _dataIsHTML; },
+        set: function(value) {
+            _dataIsHTML=value;
+            this.render();
+        }
     });
 
     /**
@@ -21,13 +51,50 @@ let DataTable = function(selector, options) {
     });
 
     /**
+     * The table header classes
+     */
+    let _headerClasses = null;
+    Object.defineProperty(this, "headerClasses", {
+        get: function() { return _headerClasses; }
+    });
+
+    /**
+     * The event handlers for table header events
+     */
+    let _headerEventHandlers = {};
+    Object.defineProperty(this, "headerEventHandlers", {
+        get: function() { return _headerEventHandlers; }
+    });
+
+    /**
      * The table icons
      */
     let icons = {
-        up:     `<svg viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="updown"><polyline points="18 16 12 8 6 16 18 16"></polyline></svg>`,
-        down:   `<svg viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="updown"><polyline points="18 8 12 16 6 8 18 8"></polyline></svg>`,
-        updown: `<svg viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="updown"><polyline points="15 10 12 6 9 10 15 10"></polyline><polyline points="15 14 12 18 9 14 15 14"></polyline></svg>`
+        up:     `<svg viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="data-table-up"><polyline points="18 16 12 8 6 16 18 16"></polyline></svg>`,
+        down:   `<svg viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="data-table-down"><polyline points="18 8 12 16 6 8 18 8"></polyline></svg>`,
+        updown: `<svg viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="data-table-updown"><polyline points="15 10 12 6 9 10 15 10"></polyline><polyline points="15 14 12 18 9 14 15 14"></polyline></svg>`
     };
+    Object.defineProperty(this, "downIcon", {
+        get: function() { return icons.down; },
+        set: function(value) {
+            icons.down = value;
+            this.render();
+        }
+    });
+    Object.defineProperty(this, "upIcon", {
+        get: function() { return icons.up; },
+        set: function(value) {
+            icons.up = value;
+            this.render();
+        }
+    });
+    Object.defineProperty(this, "updownIcon", {
+        get: function() { return icons.updown; },
+        set: function(value) {
+            icons.updown = value;
+            this.render();
+        }
+    });
 
     /**
      * The current search query
@@ -48,11 +115,11 @@ let DataTable = function(selector, options) {
     /**
      * Whether the table can be sorted by the user
      */
-    let _isSortable = false;
-    Object.defineProperty(this, "isSortable", {
-        get: function() { return _isSortable; },
+    let _sortable = false;
+    Object.defineProperty(this, "sortable", {
+        get: function() { return _sortable; },
         set: function(value) {
-            _isSortable=value;
+            _sortable = value;
             this.render();
         }
     });
@@ -79,6 +146,30 @@ let DataTable = function(selector, options) {
     let tableData = { headers: [], body: [] };
 
     /**
+     * The current table theme
+     */
+    let _theme = "basic-light";
+    Object.defineProperty(this, "theme", {
+        get: function() { return _theme; },
+        set: function(value) {
+            _theme = value;
+            this.render();
+        }
+    });
+
+    /**
+     * Whether the table order can be reset by the user
+     */
+    let _unsortable = true;
+    Object.defineProperty(this, "unsortable", {
+        get: function() { return _unsortable; },
+        set: function(value) {
+            _unsortable = value;
+            this.render();
+        }
+    });
+
+    /**
      * Initialize the table
      * @param {DataTable} instance The DataTable instance
      * @param {String} selector The table selector
@@ -90,9 +181,22 @@ let DataTable = function(selector, options) {
 
         // Set options
         if (options) {
-            if (options.body) _body = options.body;
-            if (options.headers) _headers = options.headers;
-            if (options.sortable !== undefined) _isSortable = options.sortable;
+            if (options.body !== undefined) _body = options.body;
+            if (options.bodyClasses !== undefined) _bodyClasses = options.bodyClasses;
+            if (options.bodyEventHandlers !== undefined) _bodyEventHandlers = options.bodyEventHandlers;
+            if (options.dataIsHTML !== undefined) _dataIsHTML = options.dataIsHTML;
+            if (options.downIcon !== undefined) icons.down = options.downIcon;
+            if (options.headers !== undefined) _headers = options.headers;
+            if (options.headerClasses !== undefined) _headerClasses = options.headerClasses;
+            if (options.headerEventHandlers !== undefined) _headerEventHandlers = options.headerEventHandlers;
+            if (options.sortable !== undefined) _sortable = options.sortable;
+            if (options.searchQuery !== undefined) _searchQuery = options.searchQuery;
+            if (options.sortAscending !== undefined) _sortAscending = options.sortAscending;
+            if (options.sortIndex !== undefined) _sortIndex = options.sortIndex;
+            if (options.theme !== undefined) _theme = options.theme;
+            if (options.unsortable !== undefined) _unsortable = options.unsortable;
+            if (options.upIcon !== undefined) icons.up = options.upIcon;
+            if (options.updownIcon !== undefined) icons.updown = options.updownIcon;
         }
 
         // Load tableData
@@ -107,16 +211,29 @@ let DataTable = function(selector, options) {
      */
     let loadTableData = function() {
         // Load table headers
-        tableData.headers = _headers;
+        tableData.headers = [];
+        for (let i = 0; i < _headers.length; i++) {
+            tableData.headers.push({
+                value: _headers[i],
+                class: _headerClasses ? _headerClasses[i] : "",
+            });
+        }
 
         // Load table body
         tableData.body = [];
         for (let i = 0; i < _body.length; i++) {
-            tableData.body.push({
+            let row = {
                 visible: true,
-                columns: _body[i],
+                columns: [],
                 row: i,
-            });
+            };
+            for (let j = 0; j < _body[i].length; j++) {
+                row.columns.push({
+                    value: _body[i][j],
+                    class: _bodyClasses ? _bodyClasses[i][j] : "",
+                });
+            }
+            tableData.body.push(row);
         }
 
         // Update row visibilities
@@ -144,14 +261,14 @@ let DataTable = function(selector, options) {
         div.classList.add("data-table");
 
         // Create table
-        let divHTML = "<table>";
+        let divHTML = `<table class="${_theme ? _theme.toLowerCase() : ""}">`;
 
         // Add table header
         if (tableData.headers.length > 0) {
             divHTML += "<thead><tr>";
             for (let i = 0; i < tableData.headers.length; i++) {
-                divHTML += `<th>${tableData.headers[i]}`;
-                if (_isSortable) {
+                divHTML += `<th class="${tableData.headers[i].class}">${_dataIsHTML ? tableData.headers[i].value : sanitize(tableData.headers[i].value)}`;
+                if (_sortable) {
                     if (_sortIndex !== i) divHTML += `<button>${icons.updown}</button>`;
                     else if (_sortIndex === i && _sortAscending === true) divHTML += `<button>${icons.up}</button>`;
                     else if (_sortIndex === i && _sortAscending === false) divHTML += `<button>${icons.down}</button>`;
@@ -165,13 +282,10 @@ let DataTable = function(selector, options) {
         if (tableData.body.length > 0) {
             divHTML += "<tbody>";
             for (let row of tableData.body) {
-                // Make sure row is visible
-                if (!row.visible) continue;
-
                 // Add row
-                divHTML += "<tr>";
+                divHTML += `<tr${row.visible ? "" : " hidden=\"\""}>`;
                 for (let column of row.columns) {
-                    divHTML += `<td>${column}</td>`;
+                    divHTML += `<td class="${column.class}">${_dataIsHTML ? column.value : sanitize(column.value)}</td>`;
                 }
                 divHTML += "</tr>";
             }
@@ -182,18 +296,57 @@ let DataTable = function(selector, options) {
         divHTML += "</table>";
         div.innerHTML = divHTML;
 
-        // Add event handlers
-        if (_isSortable) {
-            let headers = document.querySelectorAll(`${this.selector} th`);
+        // Get elements
+        let headers = document.querySelectorAll(`${this.selector} thead th`);
+        let cells = document.querySelectorAll(`${this.selector} tbody td`);
+
+        // Add sort event handlers
+        if (_sortable) {
             for (let i = 0; i < headers.length; i++) {
                 headers[i].addEventListener("click", () => {
                     if (_sortIndex !== i) this.sort(i, true);
-                    else if (_sortIndex === i && _sortAscending === true) this.sort(i, false);
-                    else if (_sortIndex === i && _sortAscending === false) this.sort(i, null);
+                    else if (_sortAscending === true) this.sort(i, false);
+                    else if (_unsortable) this.sort(i, null);
+                    else this.sort(i, true);
+                });
+            }
+        }
+
+        // Add custom body event handlers
+        for (let event in _bodyEventHandlers) {
+            let index = -1;
+            for (let row = 0; row < tableData.body.length; row++) {
+                for (let column = 0; column < tableData.body[row].columns.length; column++) {
+                    index++;
+                    cells[index].addEventListener(event, (args) => {
+                        _bodyEventHandlers[event](tableData.body[row].row, column, args);
+                    });
+                }
+            }
+        }
+
+        // Add custom header event handlers
+        for (let event in _headerEventHandlers) {
+            for (let row = 0; row < tableData.headers.length; row++) {
+                headers[row].addEventListener(event, (args) => {
+                    _headerEventHandlers[event](row, args);
                 });
             }
         }
     };
+
+    /**
+     * Sanitize and format a string for use in HTML
+     * @param {String} text The text
+     */
+    let sanitize = function(text) {
+        text = text.replace(/&/g, "&amp;");
+        text = text.replace(/</g, "&lt;");
+        text = text.replace(/>/g, "&gt;");
+        text = text.replace(/\n/g, "<br>");
+        text = text.replace(/\t/g, "&emsp;");
+        return text;
+    }
 
     /**
      * Search for a query in the table and hide rows that do not contain a match
@@ -204,7 +357,7 @@ let DataTable = function(selector, options) {
         for (let row of tableData.body) {
             row.visible = false;
             for (let column of row.columns) {
-                if (column.toLowerCase().includes(query.toLowerCase())) {
+                if (column.value.toLowerCase().includes(query.toLowerCase())) {
                     row.visible = true;
                     break;
                 }
@@ -223,21 +376,16 @@ let DataTable = function(selector, options) {
     }
 
     /**
-     * Set the table body data
-     * @param {Array} value The table body data
+     * Set the table data
+     * @param {Object} value The table data
      */
-    this.setBody = function(value) {
-        _body = value;
-        loadTableData();
-        this.render();
-    }
-
-    /**
-     * Set the table headers
-     * @param {Array} value The table headers
-     */
-    this.setHeaders = function(value) {
-        _headers = value;
+    this.setData = function(value) {
+        if (value) {
+            if (value.body !== undefined) _body = value.body;
+            if (value.bodyClasses !== undefined) _bodyClasses = value.bodyClasses;
+            if (value.headers !== undefined) _headers = value.headers;
+            if (value.headerClasses !== undefined) _headerClasses = value.headerClasses;
+        }
         loadTableData();
         this.render();
     }
@@ -269,8 +417,8 @@ let DataTable = function(selector, options) {
         else {
             // Data is sorted by incorrect column
             tableData.body.sort((a, b) => {
-                if (a.columns[index] === b.columns[index]) return 0;
-                else if (a.columns[index] < b.columns[index]) return -1;
+                if (a.columns[index].value === b.columns[index].value) return 0;
+                else if (a.columns[index].value < b.columns[index].value) return -1;
                 else return 1;
             });
             if (!ascending) tableData.body.reverse();
@@ -298,7 +446,7 @@ let DataTable = function(selector, options) {
  * The library version
  */
 Object.defineProperty(DataTable, "version", {
-    get: function() { return "0.2.0"; }
+    get: function() { return "1.0.0"; }
 });
 
 

@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width">
-        <title>Sort demo - data-table</title>
+        <title>Theme demo - data-table</title>
         <link rel="stylesheet" href="demo.css">
         <script src="demo.js"></script>
 
@@ -19,39 +19,33 @@
             let html = `
                 <script src="../src/data-table.js"><\/script>
                 <link rel="stylesheet" href="../src/data-table.css">
-                <div>
-                \t<input type="checkbox" id="sortable" oninput="table.sortable = document.getElementById('sortable').checked" checked>
-                \t<label for="sortable">Sortable (the user can sort the table)</label>
-                </div>
-                <div>
-                \t<input type="checkbox" id="unsortable" oninput="table.unsortable = document.getElementById('unsortable').checked" checked>
-                \t<label for="unsortable">Unsortable (the user can reset the table order)</label>
-                </div>
+                <select id="themeInput" oninput="table.theme=document.getElementById('themeInput').value">
+                \t<option value="basic-light">Basic light theme (default)</option>
+                \t<option value="basic-dark">Basic dark theme</option>
+                \t<option value="">No theme</option>
+                </select>
                 <div id="mytable"></div>
             `;
             let js = `
                 window.table = new DataTable("#mytable", {
-                \theaders: ["English", "Spanish"], 
+                \theaders: ["header 1", "header 2", "header 3"],
                 \tbody: [
-                \t\t["Red", "Rojo"],
-                \t\t["Orange", "Anaranjado"],
-                \t\t["Yellow", "Amarillo"],
-                \t\t["Green", "Verde"],
-                \t\t["Blue", "Azúl"],
-                \t\t["Purple", "Morado"]
+                \t\t["a1", "a2", "a3"],
+                \t\t["b1", "b2", "b3"],
+                \t\t["c1", "c2", "c3"]
                 \t],
                 \tsortable: true
                 });
             `;
             let css = `
-                #unsortable {
+                #themeInput {
                 \tmargin-bottom: 10px;
                 }
                 #mytable {
                 \twidth: 300px;
                 }
             `;
-            createDemo("#content", "data-table sort demo", html, js, css);
+            createDemo("#content", "data-table theme demo", html, js, css);
         </script>
     </body>
 </html>
